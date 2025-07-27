@@ -5,6 +5,11 @@
 
 Personal organizer that helps you plan and organize your days and months efficiently.
 
+## Overview
+
+**[Perga API](https://github.com/dbtiunov/perga-api)** is the core of the product.  
+**Perga Web** is a standalone **browser client** that connects to the backend to provide a user-friendly web interface.
+
 ## Features
 
 - Daily planner
@@ -52,6 +57,12 @@ npm run dev
 ```
 
 This will start the Vite development server, typically at http://localhost:5173.
+
+```bash
+npm run lint
+```
+Run ESLint
+
 
 ### Building for Production
 
