@@ -1,6 +1,9 @@
 # Perga Web
 
-Perga API is an open-source **personal organizer** that helps you plan and organize your days and months efficiently.
+![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
+![Build](https://github.com/dbtiunov/perga-web/actions/workflows/ci.yml/badge.svg)
+
+Personal organizer that helps you plan and organize your days and months efficiently.
 
 ## Features
 
@@ -114,10 +117,6 @@ The project uses path aliases to simplify imports:
 - `@auth`: src/sections/auth
 - `@planner`: src/sections/planner
 - `@settings`: src/sections/settings
-
-## Environment Variables
-
-- `VITE_API_BASE_URL`: Base URL for API requests (default: http://127.0.0.1:8080/api/v1)
 
 ## Tech stack
 
