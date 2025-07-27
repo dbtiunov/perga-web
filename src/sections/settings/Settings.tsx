@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import { WeekStartDay } from '@api/auth';
-import { useAuth } from '@contexts/AuthContext.tsx';
+import { useAuth } from '@contexts/hooks/useAuth.ts';
 
 const Settings = () => {
   const { user, updateUser } = useAuth();

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 import { PlannerItemState } from '@api/planner_base';
 import {
@@ -20,7 +20,7 @@ export const usePlannerDays = (selectedDate: Date) => {
   const [dragDayItem, setDragDayItem] = useState<PlannerDayItem | null>(null);
 
   // Fetch todos for today and tomorrow
-  const fetchDaysItems = async () => {
+  const fetchDaysItems = useCallback(async () => {
     try {
       const nextDate = getNextDate(selectedDate);
       const selectedDateStr = formatDate(selectedDate);
@@ -37,7 +37,7 @@ export const usePlannerDays = (selectedDate: Date) => {
     } catch (error) {
       console.error('Error fetching all days:', error);
     }
-  };
+  }, [selectedDate]);
 
 
   const handleAddDayItem = async (date: Date, itemText: string, setItemText: React.Dispatch<React.SetStateAction<string>>) => {
@@ -144,7 +144,7 @@ export const usePlannerDays = (selectedDate: Date) => {
   // Fetch items when selected date changes
   useEffect(() => {
     fetchDaysItems();
-  }, [selectedDate]);
+  }, [selectedDate, fetchDaysItems]);
 
   return {
     daysItems,

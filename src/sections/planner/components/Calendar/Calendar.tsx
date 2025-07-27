@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 
 import { Icon } from '@common/Icon';
-import { useAuth } from '@contexts/AuthContext.tsx';
+import { useAuth } from '@contexts/hooks/useAuth.ts';
 import { DAY_NAMES } from '@planner/const.ts';
 import { formatDateForDisplayShort } from '@planner/utils/dateUtils.ts';
 

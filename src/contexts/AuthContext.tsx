@@ -1,21 +1,9 @@
-import React, {createContext, useContext, useState, useEffect, ReactNode, useCallback} from 'react';
+import React, { useState, useEffect, ReactNode, useCallback } from 'react';
 import {
   signin, signup, storeToken, removeToken, isAuthenticated, UserSignin, UserSignup,
   UserUpdate, updateUser, getUser, User
-} from '../api';
-
-interface AuthContextType {
-  isAuthenticated: boolean;
-  user: User | null;
-  signin: (credentials: UserSignin) => Promise<void>;
-  signup: (userData: UserSignup) => Promise<void>;
-  logout: () => void;
-  fetchUser: () => void;
-  updateUser: (userData: UserUpdate) => Promise<void>;
-  isLoading: boolean;
-}
-
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+} from '@/api';
+import { AuthContext } from './AuthContext.types';
 
 interface AuthProviderProps {
   children: ReactNode;
@@ -24,6 +12,15 @@ interface AuthProviderProps {
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+
+  const handleFetchUser = useCallback(async () => {
+    const response = await getUser();
+    setUser({
+      username: response.data.username,
+      email: response.data.email,
+      week_start_day: response.data.week_start_day,
+    });
+  }, []);
 
   // Check if user is authenticated on initial load
   useEffect(() => {
@@ -43,7 +40,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     };
 
     checkAuth();
-  }, []);
+  }, [handleFetchUser]);
 
   const handleSignin = async (credentials: UserSignin) => {
     setIsLoading(true);
@@ -78,15 +75,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     setUser(null);
   };
 
-  const handleFetchUser = useCallback(async () => {
-    const response = await getUser();
-    setUser({
-      username: response.data.username,
-      email: response.data.email,
-      week_start_day: response.data.week_start_day,
-    });
-  }, []);
-
   const handleUpdateUser = async (userData: UserUpdate) => {
     setIsLoading(true);
     try {
@@ -110,12 +98,4 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
-};
-
-export const useAuth = (): AuthContextType => {
-  const context = useContext(AuthContext);
-  if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
-  return context;
 };

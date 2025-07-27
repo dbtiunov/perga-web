@@ -1,7 +1,13 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { AxiosError } from 'axios';
 
-import { useAuth } from '@contexts/AuthContext';
+import { useAuth } from '@contexts/hooks/useAuth.ts';
+
+interface ErrorResponse {
+  detail?: string;
+  [key: string]: unknown;
+}
 
 const Signup: React.FC = () => {
   const [username, setUsername] = useState('');
@@ -29,9 +35,10 @@ const Signup: React.FC = () => {
     try {
       await signup({ username, email, password });
       navigate('/planner/');
-    } catch (err: any) {
-      if (err.response && err.response.data) {
-        setError(err.response.data.detail || 'Signup failed');
+    } catch (err) {
+      const axiosError = err as AxiosError<ErrorResponse>;
+      if (axiosError.response && axiosError.response.data) {
+        setError(axiosError.response.data.detail || 'Signup failed');
       } else {
         setError('Signup failed. Please try again.');
       }

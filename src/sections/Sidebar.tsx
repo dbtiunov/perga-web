@@ -1,6 +1,6 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
-import { useAuth } from '@contexts/AuthContext';
+import { useAuth } from '@contexts/hooks/useAuth.ts';
 import { Icon } from "@common/Icon";
 
 const Sidebar = () => {
@@ -10,19 +10,9 @@ const Sidebar = () => {
 
   const navItems = [
     { 
-      path: '/planner', 
+      path: '/planner/',
       label: 'Planner', 
       icon: <Icon name="planner" size="20" fill="white" className="h-8 w-8" />
-    },
-    {
-      path: '/projects',
-      label: 'Projects',
-      icon: <Icon name="projects" size="20" fill="white" className="h-8 w-8" />
-    },
-    {
-      path: '/notes',
-      label: 'Notes',
-      icon: <Icon name="notes" size="20" fill="white" className="h-8 w-8" />
     },
   ];
 

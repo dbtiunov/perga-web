@@ -24,10 +24,10 @@ function App() {
           {/* Protected routes */}
           <Route path="/" element={<ProtectedRoute />}>
             <Route element={<Layout />}>
-              <Route index element={<Navigate to="/planner" replace />} />
+              <Route index element={<Navigate to="/planner/" replace />} />
               <Route path="planner" element={<Planner />} />
-              <Route path="projects" element={<Navigate to="/planner" replace />} />
-              <Route path="notes" element={<Navigate to="/planner" replace />} />
+              <Route path="projects" element={<Navigate to="/planner/" replace />} />
+              <Route path="notes" element={<Navigate to="/planner/" replace />} />
               <Route path="settings" element={<Settings />} />
             </Route>
           </Route>
