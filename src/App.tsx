@@ -9,6 +9,9 @@ import Layout from '@sections/Layout';
 import Planner from '@planner/Planner';
 import Settings from '@settings/Settings';
 
+// Get the signup disabled flag from environment variables
+const isSignupDisabled = import.meta.env.VITE_IS_SIGNUP_DISABLED === 'true';
+
 // Setup axios interceptors for token inclusion before mounting the App
 setupAxiosInterceptors();
 
@@ -19,7 +22,8 @@ function App() {
         <Routes>
           {/* Auth routes */}
           <Route path="/signin/" element={<Signin />} />
-          <Route path="/signup/" element={<Signup />} />
+          {!isSignupDisabled && <Route path="/signup/" element={<Signup />} />}
+          {isSignupDisabled && <Route path="/signup/" element={<Navigate to="/signin/" replace />} />}
 
           {/* Protected routes */}
           <Route path="/" element={<ProtectedRoute />}>

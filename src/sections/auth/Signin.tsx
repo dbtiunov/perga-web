@@ -3,6 +3,9 @@ import { useNavigate, Link } from 'react-router-dom';
 
 import { useAuth } from '@contexts/hooks/useAuth.ts';
 
+// Get the signup disabled flag from environment variables
+const isSignupDisabled = import.meta.env.VITE_IS_SIGNUP_DISABLED === 'true';
+
 const Signin: React.FC = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -35,12 +38,14 @@ const Signin: React.FC = () => {
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-600">
             Sign in to your account
           </h2>
-          <p className="mt-2 text-center text-sm text-gray-400">
-            Or&nbsp;
-            <Link to="/signup/" className="font-medium text-indigo-600 hover:text-indigo-500">
-              create a new account
-            </Link>
-          </p>
+          {!isSignupDisabled && (
+            <p className="mt-2 text-center text-sm text-gray-400">
+              Or&nbsp;
+              <Link to="/signup/" className="font-medium text-indigo-600 hover:text-indigo-500">
+                create a new account
+              </Link>
+            </p>
+          )}
         </div>
 
         {error && (

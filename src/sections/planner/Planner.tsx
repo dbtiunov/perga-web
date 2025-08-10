@@ -39,7 +39,7 @@ const Planner = () => {
   } = usePlannerDays(selectedDate);
 
   return (
-    <div className="flex flex-col md:flex-row w-full bg-white">
+    <div className="min-h-screen flex flex-col md:flex-row w-full bg-white">
       <div className="w-full md:w-2/3 flex flex-col">
         <PlannerDay
           date={selectedDate}
