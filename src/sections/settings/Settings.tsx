@@ -3,6 +3,8 @@ import { useEffect, useState } from 'react';
 import { WeekStartDay } from '@api/auth';
 import { useAuth } from '@contexts/hooks/useAuth.ts';
 
+const isDemo = import.meta.env.VITE_IS_DEMO === 'true';
+
 const Settings = () => {
   const { user, updateUser } = useAuth();
   const [error, setError] = useState<string | null>(null);
@@ -87,24 +89,33 @@ const Settings = () => {
               <label className="block text-gray-700 text-sm font-semibold mb-1" htmlFor="username">Username</label>
               <input id="username" type="text" value={username} required
                      onChange={(e) => setUsername(e.target.value)}
-                     className="shadow appearance-none border rounded w-full py-1.5 px-2 text-gray-700
-                                leading-tight focus:outline-none focus:shadow-outline text-sm" />
+                     disabled={isDemo}
+                     className={`shadow appearance-none border rounded w-full py-1.5 px-2 text-gray-700
+                                leading-tight focus:outline-none focus:shadow-outline text-sm
+                                ${isDemo ? 'bg-gray-100 cursor-not-allowed' : ''}`} />
+              {isDemo && <p className="text-xs text-gray-500 mt-1">Username cannot be changed in demo mode</p>}
             </div>
 
             <div className="mb-6">
               <label className="block text-gray-700 text-sm font-semibold mb-1" htmlFor="email">Email</label>
               <input id="email" type="email" value={email} required
                      onChange={(e) => setEmail(e.target.value)}
-                     className="shadow appearance-none border rounded w-full py-1.5 px-2 text-gray-700
-                                leading-tight focus:outline-none focus:shadow-outline text-sm" />
+                     disabled={isDemo}
+                     className={`shadow appearance-none border rounded w-full py-1.5 px-2 text-gray-700
+                                leading-tight focus:outline-none focus:shadow-outline text-sm
+                                ${isDemo ? 'bg-gray-100 cursor-not-allowed' : ''}`} />
+              {isDemo && <p className="text-xs text-gray-500 mt-1">Email cannot be changed in demo mode</p>}
             </div>
 
             <div className="mb-6">
               <label className="block text-gray-700 text-sm font-semibold mb-1" htmlFor="password">Password</label>
               <input id="password" type="password" value={password}
                      onChange={(e) => setPassword(e.target.value)}
-                     className="shadow appearance-none border rounded w-full py-1.5 px-2 text-gray-700
-                                leading-tight focus:outline-none focus:shadow-outline text-sm" />
+                     disabled={isDemo}
+                     className={`shadow appearance-none border rounded w-full py-1.5 px-2 text-gray-700
+                                leading-tight focus:outline-none focus:shadow-outline text-sm
+                                ${isDemo ? 'bg-gray-100 cursor-not-allowed' : ''}`} />
+              {isDemo && <p className="text-xs text-gray-500 mt-1">Password cannot be changed in demo mode</p>}
             </div>
 
             <h4 className="text-gray-700 text-sm font-semibold">Week Starts On</h4>
