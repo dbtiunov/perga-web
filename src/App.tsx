@@ -3,14 +3,15 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { setupAxiosInterceptors } from '@api/auth';
 import ProtectedRoute from '@auth/ProtectedRoute';
 import Signin from '@auth/Signin';
+import DemoSignin from '@auth/DemoSignin';
 import Signup from '@auth/Signup';
 import { AuthProvider } from '@contexts/AuthContext';
 import Layout from '@sections/Layout';
 import Planner from '@planner/Planner';
 import Settings from '@settings/Settings';
 
-// Get the signup disabled flag from environment variables
 const isSignupDisabled = import.meta.env.VITE_IS_SIGNUP_DISABLED === 'true';
+const isDemo = import.meta.env.VITE_IS_DEMO === 'true';
 
 // Setup axios interceptors for token inclusion before mounting the App
 setupAxiosInterceptors();
@@ -21,7 +22,7 @@ function App() {
       <Router>
         <Routes>
           {/* Auth routes */}
-          <Route path="/signin/" element={<Signin />} />
+          <Route path="/signin/" element={isDemo ? <DemoSignin /> : <Signin />} />
           {!isSignupDisabled && <Route path="/signup/" element={<Signup />} />}
           {isSignupDisabled && <Route path="/signup/" element={<Navigate to="/signin/" replace />} />}
 
