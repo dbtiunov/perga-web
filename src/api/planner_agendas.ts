@@ -2,7 +2,7 @@ import axios from "axios";
 
 import { PlannerItemState, BasePlannerItem } from "./planner_base.ts";
 
-type PlannerAgendaType = 'monthly' | 'backlog' | 'custom';
+export type PlannerAgendaType = 'monthly' | 'backlog' | 'custom';
 
 export interface PlannerAgenda {
   id: number;

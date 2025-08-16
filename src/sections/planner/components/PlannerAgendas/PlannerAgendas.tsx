@@ -74,6 +74,7 @@ const PlannerAgendas: React.FC<PlannerAgendasProps> = ({
                          onReorderAgendaItems(agenda.id, newItems);
                       }}>
                     <AgendaItem item={item}
+                                agendaType={agenda.agenda_type}
                                 onUpdateItem={(itemId, changes) => {
                                   onUpdateAgendaItem(itemId, agenda.id, changes)
                                 }}
@@ -94,6 +95,7 @@ const PlannerAgendas: React.FC<PlannerAgendasProps> = ({
                                 state: 'todo',
                                 index: -1
                               }}
+                              agendaType={agenda.agenda_type}
                               onUpdateItem={(_, changes) => {
                                 if (changes.text && changes.text.trim()) {
                                   onAddAgendaItem(agenda.id, changes.text);
