@@ -17,6 +17,11 @@ Personal organizer that helps you plan and organize your days and months efficie
 - User authentication and settings
 - Responsive design with mobile support
 
+## Demo
+
+You can try out Perga without installation by visiting demo version at [https://demo.getperga.me/](https://demo.getperga.me/).
+
+
 ## Documentation
 
 For detailed documentation, please visit:
