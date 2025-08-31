@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { useToast } from '@contexts/hooks/useToast';
 
 import {
   PlannerAgenda,
@@ -17,6 +18,10 @@ export const usePlannerAgendas = (selectedDate: Date) => {
   const [plannerAgendaItems, setPlannerAgendaItems] = useState<Record<number, PlannerAgendaItem[]>>({});
 
   const [dragAgendaItem, setDragAgendaItem] = useState<PlannerAgendaItem | null>(null);
+
+  // Lock to prevent multiple updates for the same item
+  const updatingItemsRef = useRef<Set<number>>(new Set());
+  const { showError } = useToast();
 
   // Fetch planner agendas and their items
   const fetchAgendasWithItems = useCallback(async (date: Date) => {
@@ -55,9 +60,24 @@ export const usePlannerAgendas = (selectedDate: Date) => {
   };
 
   const handleUpdateAgendaItem = async (itemId: number, agendaId: number, changes: { text?: string }) => {
+    // prevent multiple execution for the same item
+    if (updatingItemsRef.current.has(itemId)) {
+      return;
+    }
+    updatingItemsRef.current.add(itemId);
+
+    // use optimistic update for better ui interactivity
+    const previousAgendaItems = plannerAgendaItems[agendaId];
+    const previousState = { ...plannerAgendaItems };
+    const previousItem = previousAgendaItems.find((item) => item.id === itemId);
+    const optimisticItem = { ...previousItem, ...changes } as PlannerAgendaItem;
+    setPlannerAgendaItems({
+      ...plannerAgendaItems,
+      [agendaId]: previousAgendaItems.map(item => (item.id === itemId ? optimisticItem : item))
+    });
+
     try {
       const response = await updatePlannerAgendaItem(itemId, { agenda_id: agendaId, ...changes });
-
       setPlannerAgendaItems({
         ...plannerAgendaItems,
         [agendaId]: plannerAgendaItems[agendaId].map(item =>
@@ -66,6 +86,10 @@ export const usePlannerAgendas = (selectedDate: Date) => {
       });
     } catch (error) {
       console.error('Error updating planner agenda item:', error);
+      setPlannerAgendaItems(previousState);  // restoring previous state
+      showError('Failed to update item, please try again');
+    } finally {
+      updatingItemsRef.current.delete(itemId);
     }
   };
 

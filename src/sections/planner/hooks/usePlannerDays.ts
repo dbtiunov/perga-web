@@ -1,4 +1,5 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
+import { useToast } from '@contexts/hooks/useToast';
 
 import { PlannerItemState } from '@api/planner_base';
 import {
@@ -18,6 +19,10 @@ export const usePlannerDays = (selectedDate: Date) => {
   const [todayItems, setTodayItems] = useState('');
   const [tomorrowItems, setTomorrowItems] = useState('');
   const [dragDayItem, setDragDayItem] = useState<PlannerDayItem | null>(null);
+
+  // Lock to prevent multiple updates for the same item
+  const updatingItemsRef = useRef<Set<number>>(new Set());
+  const { showError } = useToast();
 
   // Fetch todos for today and tomorrow
   const fetchDaysItems = useCallback(async () => {
@@ -66,12 +71,28 @@ export const usePlannerDays = (selectedDate: Date) => {
     }
   };
 
-  const handleUpdateDayItem = async (id: number, changes: { text?: string; day?: string, state?: PlannerItemState }) => {
+  const handleUpdateDayItem = async (itemId: number, changes: { text?: string; day?: string, state?: PlannerItemState }) => {
+    // prevent multiple execution for the same item
+    if (updatingItemsRef.current.has(itemId)) {
+      return;
+    }
+    updatingItemsRef.current.add(itemId);
+
+    // use optimistic update for better ui interactivity
+    const previousItems = daysItems;
+    const prevItem = previousItems.find((item) => item.id === itemId);
+    const optimisticItem = { ...prevItem, ...changes } as PlannerDayItem;
+    setDaysItems(daysItems.map(item => item.id === itemId ? optimisticItem : item));
+
     try {
-      const response = await updatePlannerDayItem(id, changes);
-      setDaysItems(daysItems.map(item => item.id === id ? response.data : item));
+      const response = await updatePlannerDayItem(itemId, changes);
+      setDaysItems(daysItems.map(item => item.id === itemId ? response.data : item));
     } catch (error) {
       console.error('Error updating day item:', error);
+      setDaysItems(previousItems);  // restoring previous state
+      showError('Failed to update item, please try again');
+    } finally {
+      updatingItemsRef.current.delete(itemId);
     }
   };
 
@@ -79,7 +100,6 @@ export const usePlannerDays = (selectedDate: Date) => {
     try {
       const response = await copyPlannerDayItem(itemId, formatDate(day));
 
-      // Add the new item to the todos state if its date matches tomorrow's date
       const tomorrowDateStr = formatDate(getNextDate(selectedDate));
       if (response.data.day === tomorrowDateStr) {
         setDaysItems([...daysItems, response.data]);

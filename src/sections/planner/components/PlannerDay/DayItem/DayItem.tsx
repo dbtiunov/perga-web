@@ -134,8 +134,7 @@ const DayItem = ({
         onUpdateItem(item.id, { text: value });
         setValue(''); // Clear the input after adding
       }
-    }
-    if (e.key === 'Escape') {
+    } else if (e.key === 'Escape') {
       if (item.id >= 0) {
         setIsEditing(false);
         setValue(item.text);
