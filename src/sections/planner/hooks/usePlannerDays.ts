@@ -24,6 +24,10 @@ export const usePlannerDays = (selectedDate: Date) => {
   const updatingItemsRef = useRef<Set<number>>(new Set());
   const { showError } = useToast();
 
+  // Reorder management refs (for optimistic reorder + single API request)
+  const currentItemsOrder = useRef<number[] | null>(null);
+  const updatedItemsOrder = useRef<number[] | null>(null);
+
   // Fetch todos for today and tomorrow
   const fetchDaysItems = useCallback(async () => {
     try {
@@ -109,50 +113,73 @@ export const usePlannerDays = (selectedDate: Date) => {
     }
   };
 
-    const handleSnoozeDayItem = async (itemId: number, day: Date) => {
-      try {
-        const response = await snoozePlannerDayItem(itemId, formatDate(day));
+  const handleSnoozeDayItem = async (itemId: number, day: Date) => {
+    try {
+      const response = await snoozePlannerDayItem(itemId, formatDate(day));
 
-        // Update the original item's state to 'snoozed'
-        const updatedItems = daysItems.map(item =>
-          item.id === itemId ? { ...item, state: 'snoozed' as PlannerItemState } : item
-        );
+      // Update the original item's state to 'snoozed'
+      const updatedItems = daysItems.map(item =>
+        item.id === itemId ? { ...item, state: 'snoozed' as PlannerItemState } : item
+      );
 
-        // Add the new item to the current state if its date is currently shown
-        const todayDateStr = formatDate(selectedDate);
-        const tomorrowDateStr = formatDate(getNextDate(selectedDate));
+      // Add the new item to the current state if its date is currently shown
+      const todayDateStr = formatDate(selectedDate);
+      const tomorrowDateStr = formatDate(getNextDate(selectedDate));
 
-        if (response.data.day === todayDateStr || response.data.day === tomorrowDateStr) {
-          setDaysItems([...updatedItems, response.data]);
-        } else {
-          setDaysItems(updatedItems);
-        }
-      } catch (error) {
-        console.error('Error snoozing day item:', error);
+      if (response.data.day === todayDateStr || response.data.day === tomorrowDateStr) {
+        setDaysItems([...updatedItems, response.data]);
+      } else {
+        setDaysItems(updatedItems);
       }
-    };
-
+    } catch (error) {
+      console.error('Error snoozing day item:', error);
+    }
+  };
 
   const handleDayItemDragStart = (item: PlannerDayItem) => {
     setDragDayItem(item);
   };
 
   const handleDayItemDragEnd = () => {
-    fetchDaysItems();
+    if (!dragDayItem) {
+      return;
+    }
+
     setDragDayItem(null);
+    void applyUpdatedItemsOrder();
   };
 
-  const handleReorderDayItems = async (items: PlannerDayItem[]) => {
-    const orderedItemIds: number[] = [];
-    items.forEach((item) => {
-      orderedItemIds.push(item.id);
-    });
+  // Optimistic reorder that is called frequently during item drag
+  // Update state without API request and save it to ref
+  const handleReorderDayItems = (items: PlannerDayItem[]) => {
+    currentItemsOrder.current = daysItems.map(item => item.id);
+    setDaysItems(items);
+    updatedItemsOrder.current = items.map(item => item.id);
+  };
+
+  const applyUpdatedItemsOrder = async () => {
+    const updatedOrder = updatedItemsOrder.current;
+    if (!updatedOrder) {
+      return;
+    }
+
+    // Skip if items order hasn't changed
+    const currentOrder = currentItemsOrder.current;
+    if (
+        currentOrder
+        && currentOrder.length === updatedOrder.length
+        && currentOrder.every((id, index) => id === updatedOrder[index])
+    ) {
+      return;
+    }
 
     try {
-      await reorderPlannerDayItems(orderedItemIds);
-      setDaysItems(items);
+      await reorderPlannerDayItems(updatedOrder);
+      currentItemsOrder.current = updatedOrder;
     } catch (error) {
       console.error('Error reordering items:', error);
+      showError('Failed to save new order, restoring…');
+      await fetchDaysItems();
     }
   };
 

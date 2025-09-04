@@ -23,6 +23,10 @@ export const usePlannerAgendas = (selectedDate: Date) => {
   const updatingItemsRef = useRef<Set<number>>(new Set());
   const { showError } = useToast();
 
+  // Reorder management refs (per-agenda) for optimistic reorder + single commit
+  const currentItemsOrder = useRef<Map<number, number[]>>(new Map());
+  const updatedItemsOrder = useRef<Map<number, number[]>>(new Map());
+
   // Fetch planner agendas and their items
   const fetchAgendasWithItems = useCallback(async (date: Date) => {
     try {
@@ -110,21 +114,48 @@ export const usePlannerAgendas = (selectedDate: Date) => {
   };
 
   const handleDragEndAgendaItem = () => {
-    fetchAgendasWithItems(selectedDate);
+    if (!dragAgendaItem) {
+      return;
+    }
+
     setDragAgendaItem(null);
+    void applyUpdatedItemsOrder(dragAgendaItem.agenda_id);
   };
 
-  const handleReorderAgendaItems = async (agendaId: number, items: PlannerAgendaItem[]) => {
-    const orderedItemIds = items.map(item => item.id);
+  // Optimistic reorder that is called frequently during item drag
+  // Update state without API request and save it to ref
+  const handleReorderAgendaItems = (agendaId: number, items: PlannerAgendaItem[]) => {
+    currentItemsOrder.current.set(agendaId, (plannerAgendaItems[agendaId] || []).map(item => item.id));
+    setPlannerAgendaItems({
+      ...plannerAgendaItems,
+      [agendaId]: items,
+    });
+    updatedItemsOrder.current.set(agendaId, items.map(item => item.id));
+  };
+
+  const applyUpdatedItemsOrder = async (agendaId: number) => {
+    const updatedOrder = updatedItemsOrder.current.get(agendaId);
+    if (!updatedOrder) {
+        return;
+    }
+
+    // Skip if items order hasn't changed
+    const currentOrder = currentItemsOrder.current.get(agendaId);
+    if (
+        currentOrder
+        && currentOrder.length === updatedOrder.length
+        && currentOrder.every((id, index) => id === updatedOrder[index])
+    ){
+        return;
+    }
 
     try {
-      await reorderPlannerAgendaItems(agendaId, orderedItemIds);
-      setPlannerAgendaItems({
-        ...plannerAgendaItems,
-        [agendaId]: items
-      });
+      await reorderPlannerAgendaItems(agendaId, updatedOrder);
+      currentItemsOrder.current.set(agendaId, updatedOrder);
     } catch (error) {
       console.error('Error reordering planner agenda items:', error);
+      showError('Failed to save agenda order, restoring…');
+      await fetchAgendasWithItems(selectedDate);
     }
   };
 
