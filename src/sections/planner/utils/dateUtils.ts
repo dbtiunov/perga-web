@@ -16,13 +16,15 @@ export const formatDate = (date: Date): string => {
 export const formatDateForDisplay = (date: Date): string => {
   const formattedDate = date.toLocaleDateString('en-US', { weekday: 'short', month: 'long', day: 'numeric' });
 
-  // Add "Today" or "Tomorrow" to the title when applicable
+  // Add "Today", "Yesterday", "Tomorrow" to the title when applicable
   const today = new Date();
-  const tomorrow = new Date(today);
-  tomorrow.setDate(tomorrow.getDate() + 1);
+  const yesterday = getPrevDay(today);
+  const tomorrow = getNextDay(today);
 
   if (date.toDateString() === today.toDateString()) {
     return `${formattedDate} (Today)`;
+  } else if (date.toDateString() === yesterday.toDateString()) {
+    return `${formattedDate} (Yesterday)`;
   } else if (date.toDateString() === tomorrow.toDateString()) {
     return `${formattedDate} (Tomorrow)`;
   }
@@ -37,28 +39,26 @@ export const formatDateForDisplayShort = (date: Date): string => {
   return date.toLocaleDateString('en-US', { weekday: 'short', month: 'long', day: 'numeric' });
 };
 
-
-/**
- * Get the next day from a given date
- */
-export const getNextDate = (date: Date): Date => {
-  const nextDate = new Date(date);
-  nextDate.setDate(nextDate.getDate() + 1);
-  return nextDate;
+export const getPrevDay = (date: Date): Date => {
+  const prevDay = new Date(date);
+  prevDay.setDate(prevDay.getDate() + 1);
+  return prevDay;
 };
 
-/**
- * Check if a date is today
- */
-export const isToday = (date: Date): boolean => {
-  return date.toDateString() === new Date().toDateString();
+export const getNextDay = (date: Date): Date => {
+  const nextDay = new Date(date);
+  nextDay.setDate(nextDay.getDate() + 1);
+  return nextDay;
 };
 
-/**
- * Check if a date is tomorrow
- */
-export const isTomorrow = (date: Date): boolean => {
-  const tomorrow = new Date();
-  tomorrow.setDate(tomorrow.getDate() + 1);
-  return date.toDateString() === tomorrow.toDateString();
+export const getNextWeek = (date: Date): Date => {
+  const nextWeek = new Date(date);
+  nextWeek.setDate(nextWeek.getDate() + 7);
+  return nextWeek;
+};
+
+export const getNextMonth = (date: Date): Date => {
+  const nextMonth = new Date(date);
+  nextMonth.setMonth(nextMonth.getMonth() + 1);
+  return nextMonth;
 };

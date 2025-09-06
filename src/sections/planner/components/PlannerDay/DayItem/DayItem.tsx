@@ -6,6 +6,7 @@ import { PlannerItemState } from '@api/planner_base';
 import { PlannerDayItem } from '@api/planner_days';
 import { Icon } from "@common/Icon.tsx";
 import { ITEM_TEXT_MAX_LENGTH } from "@planner/const.ts";
+import { getNextDay, getNextMonth, getNextWeek } from "@planner/utils/dateUtils.ts";
 
 interface DayItemProps {
   item: PlannerDayItem;
@@ -64,19 +65,10 @@ const DayItem = ({
     setIsDropdownOpen(false);
   };
 
-  const tomorrow = new Date(itemDate);
-  tomorrow.setDate(itemDate.getDate() + 1);
-
-  const nextWeek = new Date(itemDate);
-  nextWeek.setDate(itemDate.getDate() + 7);
-
-  const nextMonth = new Date(itemDate);
-  nextMonth.setMonth(itemDate.getMonth() + 1);
-
   const predefinedDates: Array<{label: string; date: Date}> = [
-    {label: 'Next day', date: tomorrow},
-    {label: 'Next week', date: nextWeek},
-    {label: 'Next month', date: nextMonth},
+    { label: 'Next day', date: getNextDay(itemDate) },
+    { label: 'Next week', date: getNextWeek(itemDate) },
+    { label: 'Next month', date: getNextMonth(itemDate) },
   ];
 
   const handleCopyItem = (day: Date) => {
