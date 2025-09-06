@@ -76,7 +76,7 @@ const PlannerDay: React.FC<PlannerDayProps> = ({
   };
 
   return (
-    <div className='px-8 py-10 flex-1 basis-1/2 relative'>
+    <div className='px-8 py-10 flex-none basis-1/3 relative'>
       <div className="flex justify-between items-center mb-4 border-b-1 border-gray-600">
         <h3 className='text-lg font-semibold text-gray-600'>{formatDateForDisplay(date)}</h3>
         {onDateChange && <DateSelector selectedDate={date} onDateChange={onDateChange} />}
