@@ -8,16 +8,12 @@ import { formatDateForDisplay } from '@planner/utils/dateUtils.ts';
 interface PlannerDayProps {
   date: Date;
   dayItems: PlannerDayItem[];
-  todayItems: string;
-  setTodayItems: React.Dispatch<React.SetStateAction<string>>;
-  tomorrowItems: string;
-  setTomorrowItems: React.Dispatch<React.SetStateAction<string>>;
   dragDayItem: PlannerDayItem | null;
   onDragStartDayItem: (item: PlannerDayItem) => void;
   onDragEndDayItem: () => void;
   getItemsForDate: (date: Date) => PlannerDayItem[];
   onReorderDayItems: (items: PlannerDayItem[]) => void;
-  onAddDayItem: (date: Date, itemText: string, setItemText: React.Dispatch<React.SetStateAction<string>>) => void;
+  onAddDayItem: (date: Date, itemText: string) => void;
   onUpdateDayItem: (itemId: number, changes: { text?: string; day?: string }) => void;
   onDeleteDayItem: (itemId: number) => void;
   onCopyDayItem: (itemId: number, date: Date) => void;
@@ -28,10 +24,6 @@ interface PlannerDayProps {
 const PlannerDay: React.FC<PlannerDayProps> = ({
   date,
   dayItems,
-  todayItems,
-  tomorrowItems,
-  setTodayItems,
-  setTomorrowItems,
   dragDayItem,
   onDragStartDayItem,
   onDragEndDayItem,
@@ -44,23 +36,6 @@ const PlannerDay: React.FC<PlannerDayProps> = ({
   onSnoozeDayItem,
   onDateChange,
 }) => {
-  const getItemsStateForDate = () => {
-    const today = new Date();
-    const tomorrow = new Date(today);
-    tomorrow.setDate(tomorrow.getDate() + 1);
-
-    if (date.toDateString() === today.toDateString()) {
-      return { value: todayItems, setValue: setTodayItems };
-    } else if (date.toDateString() === tomorrow.toDateString()) {
-      return { value: tomorrowItems, setValue: setTomorrowItems };
-    }
-
-    // Default to today's state if the date doesn't match any of the above
-    return { value: todayItems, setValue: setTodayItems };
-  };
-
-  const { setValue: setDayItemValue } = getItemsStateForDate();
-
   const emptyDayItem: PlannerDayItem = {
     id: -1,
     day: date.toISOString().split('T')[0],
@@ -71,12 +46,12 @@ const PlannerDay: React.FC<PlannerDayProps> = ({
 
   const handleEmptyItemEdit = (_itemId: number, changes: { text?: string }) => {
     if (changes.text && changes.text.trim()) {
-      onAddDayItem(date, changes.text, setDayItemValue);
+      onAddDayItem(date, changes.text);
     }
   };
 
   return (
-    <div className='px-8 py-10 flex-1 basis-1/2 relative'>
+    <div className='px-8 py-10 flex-none basis-1/3 relative'>
       <div className="flex justify-between items-center mb-4 border-b-1 border-gray-600">
         <h3 className='text-lg font-semibold text-gray-600'>{formatDateForDisplay(date)}</h3>
         {onDateChange && <DateSelector selectedDate={date} onDateChange={onDateChange} />}

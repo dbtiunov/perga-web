@@ -6,3 +6,5 @@ export const MONTH_NAMES: string[] = [
 export const DAY_NAMES: string[] = [
   'Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'
 ];
+
+export const ITEM_TEXT_MAX_LENGTH: number = 64;

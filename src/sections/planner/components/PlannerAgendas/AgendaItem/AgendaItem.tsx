@@ -4,6 +4,7 @@ import * as React from 'react';
 import { PlannerAgendaItem, PlannerAgendaType } from '@api/planner_agendas';
 import { PlannerItemState } from '@api/planner_base';
 import { Icon } from "@common/Icon.tsx";
+import { ITEM_TEXT_MAX_LENGTH } from "@planner/const.ts";
 
 interface AgendaItemProps {
   item: PlannerAgendaItem;
@@ -152,6 +153,7 @@ const AgendaItem = ({
 
       {isEditing ? (
         <input ref={inputRef} type="text" value={value} autoFocus
+               maxLength={ITEM_TEXT_MAX_LENGTH}
                onChange={(e) => setValue(e.target.value)}
                onBlur={() => {
                  if (!isEmptyItem) {
@@ -160,17 +162,20 @@ const AgendaItem = ({
                  }
                }}
                onKeyDown={handleKeyDown}
-               className={`min-w-0 flex-1 bg-transparent border-none focus:outline-none focus:ring-0 ${isEmptyItem ? 'px-14' : 'px-1'}`}
+               className={`min-w-0 flex-1 bg-transparent border-none focus:outline-none focus:ring-0 
+                           ${isEmptyItem ? 'px-14' : 'px-1'}`}
                placeholder={isEmptyItem ? (isBacklog ? "Keep it here for the future" : "Plan ahead for the month") : ""} />
         ) : (
           <div onClick={() => !isEmptyItem && setIsEditing(true)}
-               className={`flex-1 px-1 cursor-text ${item.state === 'completed' ? 'line-through text-gray-400' : 'text-gray-600'}`}>
+               className={`flex-1 px-1 cursor-text break-all
+                           ${item.state === 'completed' ? 'line-through text-gray-400' : 'text-gray-600'}`}>
             {item.text}
           </div>
         )
       }
 
-      {showExtraActions && <div className="inline-flex ml-2 relative" ref={dropdownRef}>
+      {showExtraActions && <div className="inline-flex ml-2 relative opacity-100 md:opacity-0
+                                           md:group-hover:opacity-100 transition-opacity" ref={dropdownRef}>
         <button onClick={onExtraActionsClick}
                 aria-label="Extra actions" title="Extra actions">
           <Icon name="dots" size={48} className="h-6 w-6" />
