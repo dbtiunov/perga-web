@@ -5,6 +5,7 @@ import Calendar from '@planner/components/Calendar/Calendar';
 import { PlannerItemState } from '@api/planner_base';
 import { PlannerDayItem } from '@api/planner_days';
 import { Icon } from "@common/Icon.tsx";
+import { ITEM_TEXT_MAX_LENGTH } from "@planner/const.ts";
 
 interface DayItemProps {
   item: PlannerDayItem;
@@ -197,6 +198,7 @@ const DayItem = ({
 
       {isEditing ? (
         <input ref={inputRef} type="text" value={value} autoFocus
+               maxLength={ITEM_TEXT_MAX_LENGTH}
                onKeyDown={handleKeyDown}
                onChange={(e) => setValue(e.target.value)}
                onBlur={() => {
