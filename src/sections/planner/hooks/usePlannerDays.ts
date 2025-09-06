@@ -12,12 +12,10 @@ import {
   copyPlannerDayItem,
   snoozePlannerDayItem
 } from '@api/planner_days';
-import { formatDate, getNextDate } from '../utils/dateUtils';
+import { formatDate, getNextDay } from '../utils/dateUtils';
 
 export const usePlannerDays = (selectedDate: Date) => {
   const [daysItems, setDaysItems] = useState<PlannerDayItem[]>([]);
-  const [todayItems, setTodayItems] = useState('');
-  const [tomorrowItems, setTomorrowItems] = useState('');
   const [dragDayItem, setDragDayItem] = useState<PlannerDayItem | null>(null);
 
   // Lock to prevent multiple updates for the same item
@@ -28,18 +26,18 @@ export const usePlannerDays = (selectedDate: Date) => {
   const currentItemsOrder = useRef<number[] | null>(null);
   const updatedItemsOrder = useRef<number[] | null>(null);
 
-  // Fetch todos for today and tomorrow
+  // Fetch todos for selected date and next day
   const fetchDaysItems = useCallback(async () => {
     try {
-      const nextDate = getNextDate(selectedDate);
+      const nextDay = getNextDay(selectedDate);
       const selectedDateStr = formatDate(selectedDate);
-      const nextDateStr = formatDate(nextDate);
+      const nextDayStr = formatDate(nextDay);
 
-      const response = await getItemsByDays([selectedDateStr, nextDateStr]);
+      const response = await getItemsByDays([selectedDateStr, nextDayStr]);
 
       const combinedItems = [
         ...(response.data[selectedDateStr] || []),
-        ...(response.data[nextDateStr] || [])
+        ...(response.data[nextDayStr] || [])
       ];
 
       setDaysItems(combinedItems);
@@ -49,7 +47,7 @@ export const usePlannerDays = (selectedDate: Date) => {
   }, [selectedDate]);
 
 
-  const handleAddDayItem = async (date: Date, itemText: string, setItemText: React.Dispatch<React.SetStateAction<string>>) => {
+  const handleAddDayItem = async (date: Date, itemText: string) => {
     if (!itemText.trim()) {
       return;
     }
@@ -60,7 +58,6 @@ export const usePlannerDays = (selectedDate: Date) => {
         day: formatDate(date)
       });
       setDaysItems([...daysItems, response.data]);
-      setItemText('');
     } catch (error) {
       console.error('Error adding day item:', error);
     }
@@ -104,8 +101,8 @@ export const usePlannerDays = (selectedDate: Date) => {
     try {
       const response = await copyPlannerDayItem(itemId, formatDate(day));
 
-      const tomorrowDateStr = formatDate(getNextDate(selectedDate));
-      if (response.data.day === tomorrowDateStr) {
+      const nextDayStr = formatDate(getNextDay(selectedDate));
+      if (response.data.day === nextDayStr) {
         setDaysItems([...daysItems, response.data]);
       }
     } catch (error) {
@@ -123,10 +120,10 @@ export const usePlannerDays = (selectedDate: Date) => {
       );
 
       // Add the new item to the current state if its date is currently shown
-      const todayDateStr = formatDate(selectedDate);
-      const tomorrowDateStr = formatDate(getNextDate(selectedDate));
+      const selectedDateStr = formatDate(selectedDate);
+      const nextDayStr = formatDate(getNextDay(selectedDate));
 
-      if (response.data.day === todayDateStr || response.data.day === tomorrowDateStr) {
+      if (response.data.day === selectedDateStr || response.data.day === nextDayStr) {
         setDaysItems([...updatedItems, response.data]);
       } else {
         setDaysItems(updatedItems);
@@ -195,10 +192,6 @@ export const usePlannerDays = (selectedDate: Date) => {
 
   return {
     daysItems,
-    todayItems,
-    setTodayItems,
-    tomorrowItems,
-    setTomorrowItems,
     dragDayItem,
     handleDayItemDragStart,
     handleDayItemDragEnd,

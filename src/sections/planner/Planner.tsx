@@ -1,7 +1,7 @@
 import { useSelectedDate } from '@planner/hooks/useSelectedDate.ts';
 import { usePlannerDays } from '@planner/hooks/usePlannerDays.ts';
 import { usePlannerAgendas } from '@planner/hooks/usePlannerAgendas.ts';
-import { getNextDate } from '@planner/utils/dateUtils';
+import { getNextDay } from '@planner/utils/dateUtils';
 import PlannerDay from '@planner/components/PlannerDay/PlannerDay.tsx';
 import PlannerAgendas from '@planner/components/PlannerAgendas/PlannerAgendas.tsx';
 
@@ -22,10 +22,6 @@ const Planner = () => {
 
   const {
     daysItems,
-    todayItems,
-    setTodayItems,
-    tomorrowItems,
-    setTomorrowItems,
     dragDayItem,
     handleDayItemDragStart,
     handleDayItemDragEnd,
@@ -44,10 +40,6 @@ const Planner = () => {
         <PlannerDay
           date={selectedDate}
           dayItems={daysItems}
-          todayItems={todayItems}
-          setTodayItems={setTodayItems}
-          tomorrowItems={tomorrowItems}
-          setTomorrowItems={setTomorrowItems}
           dragDayItem={dragDayItem}
           onDragStartDayItem={handleDayItemDragStart}
           onDragEndDayItem={handleDayItemDragEnd}
@@ -61,12 +53,8 @@ const Planner = () => {
           onDateChange={setSelectedDate}
         />
         <PlannerDay
-          date={getNextDate(selectedDate)}
+          date={getNextDay(selectedDate)}
           dayItems={daysItems}
-          todayItems={todayItems}
-          setTodayItems={setTodayItems}
-          tomorrowItems={tomorrowItems}
-          setTomorrowItems={setTomorrowItems}
           dragDayItem={dragDayItem}
           onDragStartDayItem={handleDayItemDragStart}
           onDragEndDayItem={handleDayItemDragEnd}
