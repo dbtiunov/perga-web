@@ -1,12 +1,40 @@
+import type React from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 import { useAuth } from '@contexts/hooks/useAuth.ts';
 import { Icon } from "@common/Icon";
+import { triggerRefresh } from '@common/events';
 
 const Sidebar = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { logout } = useAuth();
+
+  const [isSpinning, setIsSpinning] = useState(false);
+  const spinTimeoutRef = useRef<number | null>(null);
+
+  const handleRefreshClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    triggerRefresh();
+    e.currentTarget.blur();
+
+    setIsSpinning(true);
+    if (spinTimeoutRef.current) {
+      window.clearTimeout(spinTimeoutRef.current);
+    }
+    spinTimeoutRef.current = window.setTimeout(() => {
+      setIsSpinning(false);
+      spinTimeoutRef.current = null;
+    }, 1000);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (spinTimeoutRef.current) {
+        window.clearTimeout(spinTimeoutRef.current);
+      }
+    };
+  }, []);
 
   const navItems = [
     { 
@@ -38,6 +66,16 @@ const Sidebar = () => {
       </nav>
 
       <div className="mt-auto">
+        <button onClick={handleRefreshClick}
+                aria-label="Refresh data" title="Refresh data"
+                className="flex flex-col items-center py-4 w-full hover:bg-gray-800 focus:bg-gray-800
+                         text-gray-300 hover:text-white focus:text-white transition-colors">
+          <div>
+            <Icon name="refresh" size="20" className={`w-6 h-6 ${isSpinning ? 'motion-safe:animate-spin' : ''}`} />
+          </div>
+          <div className='text-sm hidden md:block'>Refresh</div>
+        </button>
+
         <Link to="/settings"
               aria-label="Settings" title="Settings"
               className={`flex flex-col items-center py-4 hover:bg-gray-800 focus:bg-gray-800 text-gray-300 

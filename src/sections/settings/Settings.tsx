@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
 
 import { WeekStartDay } from '@api/auth';
+import { REFRESH_EVENT } from '@common/events';
 import { useAuth } from '@contexts/hooks/useAuth.ts';
 
 const Settings = () => {
-  const { user, updateUser } = useAuth();
+  const { user, updateUser, fetchUser } = useAuth();
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
@@ -36,6 +37,17 @@ const Settings = () => {
       setHasChanges(hasFieldChanges);
     }
   }, [user, username, email, weekStartDay, password]);
+
+  // Refresh listener to refetch user data when on settings page
+  useEffect(() => {
+    const handler = () => {
+      void fetchUser();
+    };
+    window.addEventListener(REFRESH_EVENT, handler);
+    return () => {
+      window.removeEventListener(REFRESH_EVENT, handler);
+    };
+  }, [fetchUser]);
 
   const handleSettingsUpdate = async (e: React.FormEvent) => {
     e.preventDefault();

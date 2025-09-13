@@ -11,6 +11,7 @@ import {
   deletePlannerAgendaItem,
   reorderPlannerAgendaItems,
 } from '@api/planner_agendas';
+import { REFRESH_EVENT } from '@common/events';
 import { formatDate } from "@planner/utils/dateUtils.ts";
 
 export const usePlannerAgendas = (selectedDate: Date) => {
@@ -173,6 +174,17 @@ export const usePlannerAgendas = (selectedDate: Date) => {
 
     // Update the previous month ref
     previousMonthRef.current = currentMonth;
+  }, [selectedDate, fetchAgendasWithItems]);
+
+  // Refresh listener
+  useEffect(() => {
+    const handler = () => {
+      void fetchAgendasWithItems(selectedDate);
+    };
+    window.addEventListener(REFRESH_EVENT, handler);
+    return () => {
+      window.removeEventListener(REFRESH_EVENT, handler);
+    };
   }, [selectedDate, fetchAgendasWithItems]);
 
   return {

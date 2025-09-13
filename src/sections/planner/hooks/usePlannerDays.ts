@@ -12,7 +12,8 @@ import {
   copyPlannerDayItem,
   snoozePlannerDayItem
 } from '@api/planner_days';
-import { formatDate, getNextDay } from '../utils/dateUtils';
+import { REFRESH_EVENT } from '@common/events';
+import { formatDate, getNextDay } from '@planner/utils/dateUtils';
 
 export const usePlannerDays = (selectedDate: Date) => {
   const [daysItems, setDaysItems] = useState<PlannerDayItem[]>([]);
@@ -189,6 +190,17 @@ export const usePlannerDays = (selectedDate: Date) => {
   useEffect(() => {
     fetchDaysItems();
   }, [selectedDate, fetchDaysItems]);
+
+  // Refresh listener
+  useEffect(() => {
+    const handler = () => {
+      void fetchDaysItems();
+    };
+    window.addEventListener(REFRESH_EVENT, handler);
+    return () => {
+      window.removeEventListener(REFRESH_EVENT, handler);
+    };
+  }, [fetchDaysItems]);
 
   return {
     daysItems,
