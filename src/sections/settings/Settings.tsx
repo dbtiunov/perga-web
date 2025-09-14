@@ -13,15 +13,15 @@ const Settings = () => {
 
 
   return (
-    <div className="container px-4 py-6">
+    <div className="container">
       <div className="flex">
         {/* Sidebar */}
-        <aside className="w-40 md:w-56 pr-4">
+        <aside className="min-h-screen w-40 md:w-56 bg-gray-100 px-4 py-6 border-r-1 border-gray-200">
           <nav className="space-y-1" aria-label="Settings sections">
             <h3 className="text-2xl font-light mb-6">Settings</h3>
 
             {Object.values(SettingsSections).map((section) => (
-                <button type="button"
+                <button type="button" key={section}
                         onClick={() => setActiveTab(section)}
                         className={`w-full text-left mb-2 px-3 py-2 rounded transition-colors text-sm ${
                           activeTab === section ? 'bg-gray-200 text-gray-900' : 'text-gray-700 hover:bg-gray-100'
@@ -34,7 +34,7 @@ const Settings = () => {
         </aside>
 
         {/* Content */}
-        <section className="flex-1">
+        <section className="flex-1 px-10 py-6">
           {activeTab === SettingsSections.Profile && <SettingsProfile />}
           {activeTab === SettingsSections.Planner && <SettingsPlanner />}
         </section>
