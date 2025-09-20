@@ -24,7 +24,9 @@ const Settings = () => {
                 <button type="button" key={section}
                         onClick={() => setActiveTab(section)}
                         className={`w-full text-left mb-2 px-3 py-2 rounded transition-colors text-sm ${
-                          activeTab === section ? 'bg-gray-200 text-gray-900' : 'text-gray-700 hover:bg-gray-100'
+                          activeTab === section 
+                            ? 'text-gray-100 bg-gray-600 font-semibold' 
+                            : 'text-gray-600 hover:bg-gray-200'
                         }`}
                         aria-current={activeTab === section ? 'page' : undefined}>
                     {section}

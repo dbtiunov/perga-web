@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import type { WeekStartDay } from '@api/auth';
-import { updatePassword, type UpdatePasswordRequest } from '@api/auth';
+import { updateUser, type UserUpdate, updatePassword, type UpdatePasswordRequest, type WeekStartDay } from '@api/auth';
 import { REFRESH_EVENT } from '@common/events';
 import { useAuth } from '@contexts/hooks/useAuth.ts';
+import { useToast } from '@contexts/hooks/useToast';
 
 const SettingsProfile: React.FC = () => {
-  const { user, updateUser, fetchUser } = useAuth();
-
-  const [error, setError] = useState<string | null>(null);
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const { user, fetchUser } = useAuth();
+  const { showToast, showError } = useToast();
 
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
@@ -39,14 +37,12 @@ const SettingsProfile: React.FC = () => {
         email !== user.email ||
         weekStartDay !== user.week_start_day;
 
-      console.log('setHasChanges')
       setHasChanges(hasFieldChanges);
     }
   }, [user, username, email, weekStartDay]);
 
   // Check if password fields have values to enable password update
   useEffect(() => {
-    console.log('setHasPasswordChanges')
     setHasPasswordChanges(Boolean(currentPassword) && Boolean(newPassword));
   }, [currentPassword, newPassword]);
 
@@ -66,9 +62,8 @@ const SettingsProfile: React.FC = () => {
 
     try {
       setIsUpdatingSettings(true);
-      setError(null);
 
-      const settingsData = {
+      const settingsData: UserUpdate = {
         username: username !== user?.username ? username : undefined,
         email: email !== user?.email ? email : undefined,
         week_start_day: weekStartDay !== user?.week_start_day ? weekStartDay : undefined,
@@ -77,16 +72,13 @@ const SettingsProfile: React.FC = () => {
       // Only proceed if there are changes to make
       if (Object.values(settingsData).some((value) => value !== undefined)) {
         await updateUser(settingsData);
-        setSuccessMessage('Settings updated successfully!');
-
-        setTimeout(() => {
-          setSuccessMessage(null);
-        }, 3000);
+        showToast('Settings updated successfully!', 'success');
+        fetchUser();
       } else {
-        setError('No changes to update.');
+        showError('No changes to update.');
       }
     } catch (err) {
-      setError('Failed to update settings. Please check your information and try again.');
+      showError('Failed to update settings. Please check your information and try again.');
       console.error('Error updating settings:', err);
     } finally {
       setIsUpdatingSettings(false);
@@ -98,10 +90,9 @@ const SettingsProfile: React.FC = () => {
 
     try {
       setIsUpdatingPassword(true);
-      setError(null);
 
       if (!currentPassword || !newPassword) {
-        setError('Please provide both current and new password.');
+        showError('Please provide both current and new password.');
         return;
       }
 
@@ -111,15 +102,12 @@ const SettingsProfile: React.FC = () => {
       };
 
       await updatePassword(payload);
-      setSuccessMessage('Password updated successfully!');
+      showToast('Password updated successfully!', 'success');
 
       setCurrentPassword('');
       setNewPassword('');
-      setTimeout(() => {
-        setSuccessMessage(null);
-      }, 3000);
     } catch (err) {
-      setError('Failed to update password. Please check your information and try again.');
+      showError('Failed to update password. Please check your information and try again.');
       console.error('Error updating password:', err);
     } finally {
       setIsUpdatingPassword(false);
@@ -128,20 +116,8 @@ const SettingsProfile: React.FC = () => {
 
   return (
     <div className="px-0 md:px-6 mb-4 w-full md:max-w-2/5">
-      {error && (
-        <div className="bg-red-100 border border-red-400 text-red-700 px-3 py-2 rounded mb-3 text-sm">
-          {error}
-        </div>
-      )}
-
-      {successMessage && (
-        <div className="bg-green-100 border border-green-400 text-green-700 px-3 py-2 rounded mb-3 text-sm">
-          {successMessage}
-        </div>
-      )}
-
       <form onSubmit={handleProfileUpdate}>
-        <fieldset className="border border-gray-600 rounded-md p-8 mb-6">
+        <fieldset className="border border-gray-400 rounded-md p-8 mb-6">
           <legend className="px-2 text-gray-600">Edit Profile</legend>
 
           <div className="space-y-5">
@@ -149,15 +125,15 @@ const SettingsProfile: React.FC = () => {
               <label className="block text-gray-600 text-sm font-medium mb-1" htmlFor="username">Username</label>
               <input id="username" type="text" value={username} required
                      onChange={(e) => setUsername(e.target.value)}
-                     className="shadow appearance-none border border-gray-600 rounded w-full py-1.5 px-2 text-gray-600 leading-tight
+                     className="shadow appearance-none border border-gray-400 rounded w-full py-1.5 px-2 text-gray-600 leading-tight
                                 focus:outline-none focus:shadow-outline text-sm"/>
             </div>
 
             <div className="mb-6">
-              <label className="block text-gray-700 text-sm font-medium mb-1" htmlFor="email">Email</label>
+              <label className="block text-gray-600 text-sm font-medium mb-1" htmlFor="email">Email</label>
               <input id="email" type="email" value={email} required
                      onChange={(e) => setEmail(e.target.value)}
-                     className="shadow appearance-none border rounded w-full py-1.5 px-2 text-gray-700 leading-tight
+                     className="shadow appearance-none border rounded w-full py-1.5 px-2 text-gray-600 leading-tight
                                 focus:outline-none focus:shadow-outline text-sm"/>
             </div>
 
@@ -170,14 +146,14 @@ const SettingsProfile: React.FC = () => {
                          checked={weekStartDay === 'sunday'}
                          onChange={() => setWeekStartDay('sunday')}
                          className="h-4 w-4 text-blue-600 focus:ring-blue-500" />
-                  <label htmlFor="sunday" className="ml-2 block text-sm text-gray-700">Sunday</label>
+                  <label htmlFor="sunday" className="ml-2 block text-sm text-gray-600">Sunday</label>
                 </div>
                 <div className="flex items-center">
                   <input id="monday" type="radio" name="weekStartDay" value="monday"
                          checked={weekStartDay === 'monday'}
                          onChange={() => setWeekStartDay('monday')}
                          className="h-4 w-4 text-blue-600 focus:ring-blue-500" />
-                  <label htmlFor="monday" className="ml-2 block text-sm text-gray-700">Monday</label>
+                  <label htmlFor="monday" className="ml-2 block text-sm text-gray-600">Monday</label>
                 </div>
               </div>
             </div>
@@ -196,7 +172,7 @@ const SettingsProfile: React.FC = () => {
       </form>
 
       <form onSubmit={handlePasswordUpdate}>
-        <fieldset className="border border-gray-600 rounded-md p-8 mb-6">
+        <fieldset className="border border-gray-400 rounded-md p-8 mb-6">
           <legend className="px-2 text-gray-600">Change Password</legend>
 
           <div className="space-y-5">
@@ -206,7 +182,7 @@ const SettingsProfile: React.FC = () => {
               </label>
               <input id="currentPassword" type="password" value={currentPassword}
                      onChange={(e) => setCurrentPassword(e.target.value)}
-                     className="shadow appearance-none border rounded w-full py-1.5 px-2 text-gray-700 leading-tight
+                     className="shadow appearance-none border rounded w-full py-1.5 px-2 text-gray-600 leading-tight
                                 focus:outline-none focus:shadow-outline text-sm"/>
             </div>
 
@@ -214,7 +190,7 @@ const SettingsProfile: React.FC = () => {
               <label className="text-gray-600 text-sm font-medium mb-1" htmlFor="newPassword">New Password</label>
               <input id="newPassword" type="password" value={newPassword}
                      onChange={(e) => setNewPassword(e.target.value)}
-                     className="shadow appearance-none border rounded w-full py-1.5 px-2 text-gray-700 leading-tight
+                     className="shadow appearance-none border rounded w-full py-1.5 px-2 text-gray-600 leading-tight
                                 focus:outline-none focus:shadow-outline text-sm"/>
             </div>
 
