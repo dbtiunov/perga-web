@@ -1,16 +1,10 @@
-import { useState } from 'react';
-
-import SettingsProfile from '@settings/SettingsProfile';
-import SettingsPlanner from '@settings/SettingsPlanner';
+import { NavLink, Outlet } from 'react-router-dom';
 
 const Settings = () => {
-  enum SettingsSections {
-    Profile = "Profile",
-    Planner = "Planner",
-  }
-
-  const [activeTab, setActiveTab] = useState<SettingsSections>(SettingsSections.Profile);
-
+  const sections = [
+    { label: 'Profile', to: '/settings/profile/' },
+    { label: 'Planner', to: '/settings/planner/' },
+  ];
 
   return (
     <div className="container">
@@ -20,25 +14,24 @@ const Settings = () => {
           <nav className="space-y-1" aria-label="Settings sections">
             <h3 className="text-2xl font-light mb-6">Settings</h3>
 
-            {Object.values(SettingsSections).map((section) => (
-                <button type="button" key={section}
-                        onClick={() => setActiveTab(section)}
-                        className={`w-full text-left mb-2 px-3 py-2 rounded transition-colors text-sm ${
-                          activeTab === section 
-                            ? 'text-gray-100 bg-gray-600 font-semibold' 
-                            : 'text-gray-600 hover:bg-gray-200'
-                        }`}
-                        aria-current={activeTab === section ? 'page' : undefined}>
-                    {section}
-                </button>
+            {sections.map((section) => (
+              <NavLink key={section.to} to={section.to}
+                       className={({ isActive }: { isActive: boolean }) =>
+                         `block w-full text-left mb-2 px-3 py-2 rounded transition-colors text-sm ${
+                           isActive
+                             ? 'text-gray-100 bg-gray-600 font-semibold'
+                             : 'text-gray-600 hover:bg-gray-200'
+                         }`
+                       }>
+                {section.label}
+              </NavLink>
             ))}
           </nav>
         </aside>
 
         {/* Content */}
         <section className="flex-1 px-10 py-6">
-          {activeTab === SettingsSections.Profile && <SettingsProfile />}
-          {activeTab === SettingsSections.Planner && <SettingsPlanner />}
+          <Outlet />
         </section>
       </div>
     </div>

@@ -41,7 +41,7 @@ export const formatDateForDisplayShort = (date: Date): string => {
 
 export const getPrevDay = (date: Date): Date => {
   const prevDay = new Date(date);
-  prevDay.setDate(prevDay.getDate() + 1);
+  prevDay.setDate(prevDay.getDate() - 1);
   return prevDay;
 };
 

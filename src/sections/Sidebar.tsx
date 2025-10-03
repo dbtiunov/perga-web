@@ -76,11 +76,11 @@ const Sidebar = () => {
           <div className='text-sm hidden md:block'>Refresh</div>
         </button>
 
-        <Link to="/settings"
+        <Link to="/settings/profile/"
               aria-label="Settings" title="Settings"
               className={`flex flex-col items-center py-4 hover:bg-gray-800 focus:bg-gray-800 text-gray-300 
                         hover:text-white focus:text-white transition-colors 
-                          ${location.pathname === '/settings' ? 'bg-gray-800 text-white' : ''}`}>
+                          ${location.pathname.startsWith('/settings') ? 'bg-gray-800 text-white' : ''}`}>
           <div>
             <Icon name="settings" size="20" className="w-8 h-8" />
           </div>

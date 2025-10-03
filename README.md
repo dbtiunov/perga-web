@@ -13,7 +13,7 @@ Personal organizer that helps you plan and organize your days and months efficie
 ## Features
 
 - Daily planner
-- Monthly agenda and backlog
+- Monthly and custom agendas
 - User authentication and settings
 - Responsive design with mobile support
 

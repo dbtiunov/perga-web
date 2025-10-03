@@ -45,7 +45,7 @@ const PlannerDay: React.FC<PlannerDayProps> = ({
   };
 
   const handleEmptyItemEdit = (_itemId: number, changes: { text?: string }) => {
-    if (changes.text && changes.text.trim()) {
+    if (changes.text?.trim()) {
       onAddDayItem(date, changes.text);
     }
   };

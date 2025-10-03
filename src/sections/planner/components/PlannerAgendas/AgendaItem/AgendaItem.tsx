@@ -1,14 +1,13 @@
 import { useState, useRef, KeyboardEvent, useEffect } from 'react';
 import * as React from 'react';
 
-import { PlannerAgendaItem, PlannerAgendaType } from '@api/planner_agendas';
+import { PlannerAgendaItem } from '@api/planner_agendas';
 import { PlannerItemState } from '@api/planner_base';
 import { Icon } from "@common/Icon.tsx";
 import { ITEM_TEXT_MAX_LENGTH } from "@planner/const.ts";
 
 interface AgendaItemProps {
   item: PlannerAgendaItem;
-  agendaType?: PlannerAgendaType;
   onDragStartItem?: () => void;
   onDragEndItem?: () => void;
   onUpdateItem: (itemId: number, changes: { text?: string; day?: string; state?: PlannerItemState }) => void;
@@ -17,13 +16,11 @@ interface AgendaItemProps {
 
 const AgendaItem = ({
   item,
-  agendaType,
   onDragStartItem,
   onDragEndItem,
   onUpdateItem,
   onDeleteItem
 }: AgendaItemProps) => {
-  const isBacklog = agendaType === 'backlog';
   const isEmptyItem: boolean = item.id === -1;
 
   const [isEditing, setIsEditing] = useState(isEmptyItem);
@@ -164,7 +161,7 @@ const AgendaItem = ({
                onKeyDown={handleKeyDown}
                className={`min-w-0 flex-1 bg-transparent border-none focus:outline-none focus:ring-0 
                            ${isEmptyItem ? 'px-14' : 'px-1'}`}
-               placeholder={isEmptyItem ? (isBacklog ? "Keep it here for the future" : "Plan ahead for the month") : ""} />
+               placeholder={isEmptyItem ? "Plan ahead for the month" : ""} />
         ) : (
           <div onClick={() => !isEmptyItem && setIsEditing(true)}
                className={`flex-1 px-1 cursor-text break-all

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { updateUser, type UserUpdate, updatePassword, type UpdatePasswordRequest, type WeekStartDay } from '@api/auth';
-import { REFRESH_EVENT } from '@common/events';
+import { updateUser, type UserUpdate, updatePassword, type UpdatePasswordRequest, type WeekStartDay } from '@api/auth.ts';
+import { REFRESH_EVENT } from '@common/events.ts';
 import { useAuth } from '@contexts/hooks/useAuth.ts';
-import { useToast } from '@contexts/hooks/useToast';
+import { useToast } from '@contexts/hooks/useToast.ts';
 
 const SettingsProfile: React.FC = () => {
   const { user, fetchUser } = useAuth();
@@ -72,7 +72,7 @@ const SettingsProfile: React.FC = () => {
       // Only proceed if there are changes to make
       if (Object.values(settingsData).some((value) => value !== undefined)) {
         await updateUser(settingsData);
-        showToast('Settings updated successfully!', 'success');
+        showToast('Settings updated successfully', 'success');
         fetchUser();
       } else {
         showError('No changes to update.');
@@ -102,7 +102,7 @@ const SettingsProfile: React.FC = () => {
       };
 
       await updatePassword(payload);
-      showToast('Password updated successfully!', 'success');
+      showToast('Password updated successfully', 'success');
 
       setCurrentPassword('');
       setNewPassword('');

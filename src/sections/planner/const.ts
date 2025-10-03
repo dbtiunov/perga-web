@@ -8,6 +8,7 @@ export const DAY_NAMES: string[] = [
 ];
 
 export const ITEM_TEXT_MAX_LENGTH: number = 64;
+export const AGENDA_NAME_MAX_LENGTH: number = 64;
 
 export enum PlannerLocalStorage {
   LeftPaneWidthKey = 'planner:left_pane_width'

@@ -2,7 +2,7 @@ import axios from "axios";
 
 import { PlannerItemState, BasePlannerItem } from "./planner_base.ts";
 
-export type PlannerAgendaType = 'monthly' | 'backlog' | 'custom';
+export type PlannerAgendaType = 'monthly' | 'custom';
 
 export interface PlannerAgenda {
   id: number;
@@ -33,9 +33,15 @@ const PLANNER_API_BASE_URL = `${import.meta.env.VITE_API_BASE_URL}/planner`;
 const AGENDAS_API_URL = `${PLANNER_API_BASE_URL}/agendas/`;
 
 // Planner agenda endpoints
-export const getPlannerAgendasByDay = (day: string) =>
+export const getPlannerAgendas = (agendaTypes: string[], day: string | null = null) =>
   axios.get<PlannerAgenda[]>(AGENDAS_API_URL, {
-    params: { day },
+    params: {
+      agenda_types: agendaTypes,
+      day
+    },
+    paramsSerializer: {
+      indexes: null // Prevents using square brackets in array params
+    }
   });
 
 export const getItemsByAgendas = (agendaIds: number[]) =>
@@ -57,3 +63,23 @@ export const deletePlannerAgendaItem = (itemId: number) =>
 
 export const reorderPlannerAgendaItems = (agendaId: number, orderedItemIds: number[]) =>
   axios.post(`${AGENDAS_API_URL}items/reorder/`, { agenda_id: agendaId, ordered_item_ids: orderedItemIds });
+
+export interface PlannerAgendaCreate {
+  name: string;
+  agenda_type: PlannerAgendaType;
+  index?: number;
+}
+
+export interface PlannerAgendaUpdate {
+  name?: string;
+  index?: number;
+}
+
+export const createPlannerAgenda = (agenda: PlannerAgendaCreate) =>
+  axios.post<PlannerAgenda>(AGENDAS_API_URL, agenda);
+
+export const updatePlannerAgenda = (agendaId: number, changes: PlannerAgendaUpdate) =>
+  axios.put<PlannerAgenda>(`${AGENDAS_API_URL}${agendaId}/`, changes);
+
+export const deletePlannerAgenda = (agendaId: number) =>
+  axios.delete(`${AGENDAS_API_URL}${agendaId}/`);

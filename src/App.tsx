@@ -8,6 +8,8 @@ import { AuthProvider } from '@contexts/AuthContext';
 import Layout from '@sections/Layout';
 import Planner from '@planner/Planner';
 import Settings from '@settings/Settings';
+import SettingsProfile from '@settings/components/SettingsProfile/SettingsProfile.tsx';
+import SettingsPlanner from '@settings/components/SettingsPlanner/SettingsPlanner.tsx';
 
 // Get the signup disabled flag from environment variables
 const isSignupDisabled = import.meta.env.VITE_IS_SIGNUP_DISABLED === 'true';
@@ -32,7 +34,11 @@ function App() {
               <Route path="planner" element={<Planner />} />
               <Route path="projects" element={<Navigate to="/planner/" replace />} />
               <Route path="notes" element={<Navigate to="/planner/" replace />} />
-              <Route path="settings" element={<Settings />} />
+              <Route path="settings" element={<Settings />}>
+                <Route index element={<Navigate to="/settings/profile/" replace />} />
+                <Route path="profile" element={<SettingsProfile />} />
+                <Route path="planner" element={<SettingsPlanner />} />
+              </Route>
             </Route>
           </Route>
         </Routes>

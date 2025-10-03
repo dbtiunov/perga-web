@@ -74,8 +74,8 @@ export const usePlannerDays = (selectedDate: Date) => {
   };
 
   const handleUpdateDayItem = async (itemId: number, changes: { text?: string; day?: string, state?: PlannerItemState }) => {
-    // prevent multiple execution for the same item
-    if (updatingItemsRef.current.has(itemId)) {
+    // prevent multiple execution for the same item and empty text
+    if (updatingItemsRef.current.has(itemId) || !changes.text?.trim()) {
       return;
     }
     updatingItemsRef.current.add(itemId);
@@ -188,7 +188,7 @@ export const usePlannerDays = (selectedDate: Date) => {
 
   // Fetch items when selected date changes
   useEffect(() => {
-    fetchDaysItems();
+    void fetchDaysItems();
   }, [selectedDate, fetchDaysItems]);
 
   // Refresh listener
