@@ -108,7 +108,12 @@ export const setupAxiosInterceptors = () => {
       const originalRequest = error.config;
 
       // If the error is a 401 Unauthorized and we haven't tried to refresh the token yet
-      if (error.response && error.response.status === 401 && !originalRequest._retry) {
+      // Also, avoid attempting refresh for the refresh endpoint itself to prevent infinite loop
+      if (
+        error.response?.status === 401
+        && !originalRequest?._retry
+        && !originalRequest?.url?.includes('/auth/refresh_token/')
+      ) {
         originalRequest._retry = true;
 
         const token = getToken();
