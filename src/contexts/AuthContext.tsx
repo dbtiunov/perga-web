@@ -1,7 +1,7 @@
 import React, { useState, useEffect, ReactNode, useCallback } from 'react';
 import {
   signin, signup, storeToken, removeToken, isAuthenticated, UserSignin, UserSignup,
-  UserUpdate, updateUser, getUser, User
+  UserUpdate, updateUser, getUser, User, updatePassword, UpdatePasswordRequest
 } from '@/api';
 import { AuthContext } from './AuthContext.types';
 
@@ -76,14 +76,14 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   const handleUpdateUser = async (userData: UserUpdate) => {
-    setIsLoading(true);
-    try {
-      await updateUser(userData);
-      // Fetch updated user data to refresh the local state
-      await handleFetchUser();
-    } finally {
-      setIsLoading(false);
-    }
+    await updateUser(userData);
+    // Fetch updated user data to refresh the local state
+    await handleFetchUser();
+  };
+
+  const handleUpdatePassword = async (data: UpdatePasswordRequest) => {
+    await updatePassword(data);
+    // No need to refetch user as password change doesn't alter user profile fields
   };
 
   const value = {
@@ -94,6 +94,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     logout: handleLogout,
     fetchUser: handleFetchUser,
     updateUser: handleUpdateUser,
+    updatePassword: handleUpdatePassword,
     isLoading
   };
 

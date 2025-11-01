@@ -13,8 +13,12 @@ export interface User {
 export interface UserUpdate {
   username?: string;
   email?: string;
-  password?: string;
   week_start_day?: WeekStartDay;
+}
+
+export interface UpdatePasswordRequest {
+  current_password: string;
+  new_password: string;
 }
 
 export interface UserSignin {
@@ -83,6 +87,9 @@ export const getUser = () =>
 
 export const updateUser = (userData: UserUpdate) =>
   axios.put<User>(`${AUTH_API_URL}/user/`, userData);
+
+export const updatePassword = (data: UpdatePasswordRequest) =>
+  axios.put<void>(`${AUTH_API_URL}/user/password/`, data);
 
 // Configure axios to include the token in all requests
 export const setupAxiosInterceptors = () => {

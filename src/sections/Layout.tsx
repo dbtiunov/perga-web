@@ -15,15 +15,6 @@ const Layout = () => {
   return (
     <ToastProvider>
       <div className="h-screen max-w-full overflow-x-hidden">
-        {/* Overlay for mobile when sidebar is open */}
-        {isSidebarVisible && (
-          <div 
-            className="fixed inset-0 bg-black bg-opacity-50 z-10 md:hidden" 
-            onClick={toggleSidebar}
-            aria-label="Close sidebar"
-          />
-        )}
-
         <div className={`${isSidebarVisible ? 'block' : 'hidden'} md:block z-30 relative`}>
           <Sidebar />
         </div>

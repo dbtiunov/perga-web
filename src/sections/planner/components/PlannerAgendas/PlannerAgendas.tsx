@@ -48,7 +48,7 @@ const PlannerAgendas: React.FC<PlannerAgendasProps> = ({
                 <Icon name="rightChevron" size="24" className="h-4 w-4 text-gray-600" />
               </div>
               <h3 className='font-medium'>
-                {agenda.agenda_type === 'backlog' ? 'Backlog' : `${agenda.name} Agenda`}
+                {agenda.name} ({agenda.completed_items_cnt}/{agenda.completed_items_cnt + agenda.todo_items_cnt})
               </h3>
             </div>
           </div>
@@ -74,7 +74,6 @@ const PlannerAgendas: React.FC<PlannerAgendasProps> = ({
                          onReorderAgendaItems(agenda.id, newItems);
                       }}>
                     <AgendaItem item={item}
-                                agendaType={agenda.agenda_type}
                                 onUpdateItem={(itemId, changes) => {
                                   onUpdateAgendaItem(itemId, agenda.id, changes)
                                 }}
@@ -95,7 +94,6 @@ const PlannerAgendas: React.FC<PlannerAgendasProps> = ({
                                 state: 'todo',
                                 index: -1
                               }}
-                              agendaType={agenda.agenda_type}
                               onUpdateItem={(_, changes) => {
                                 if (changes.text && changes.text.trim()) {
                                   onAddAgendaItem(agenda.id, changes.text);

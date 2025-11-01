@@ -4,13 +4,14 @@ import { useToast } from '@contexts/hooks/useToast';
 import {
   PlannerAgenda,
   PlannerAgendaItem,
-  getPlannerAgendasByDay,
+  getPlannerAgendas,
   getItemsByAgendas,
   createPlannerAgendaItem,
   updatePlannerAgendaItem,
   deletePlannerAgendaItem,
   reorderPlannerAgendaItems,
 } from '@api/planner_agendas';
+import { REFRESH_EVENT } from '@common/events';
 import { formatDate } from "@planner/utils/dateUtils.ts";
 
 export const usePlannerAgendas = (selectedDate: Date) => {
@@ -30,7 +31,7 @@ export const usePlannerAgendas = (selectedDate: Date) => {
   // Fetch planner agendas and their items
   const fetchAgendasWithItems = useCallback(async (date: Date) => {
     try {
-      const response = await getPlannerAgendasByDay(formatDate(date));
+      const response = await getPlannerAgendas(['monthly', 'custom'], formatDate(date));
       const agendas = response.data;
       setPlannerAgendas(agendas);
 
@@ -64,8 +65,8 @@ export const usePlannerAgendas = (selectedDate: Date) => {
   };
 
   const handleUpdateAgendaItem = async (itemId: number, agendaId: number, changes: { text?: string }) => {
-    // prevent multiple execution for the same item
-    if (updatingItemsRef.current.has(itemId)) {
+    // prevent multiple execution for the same item and empty text
+    if (updatingItemsRef.current.has(itemId) || !changes.text?.trim()) {
       return;
     }
     updatingItemsRef.current.add(itemId);
@@ -173,6 +174,17 @@ export const usePlannerAgendas = (selectedDate: Date) => {
 
     // Update the previous month ref
     previousMonthRef.current = currentMonth;
+  }, [selectedDate, fetchAgendasWithItems]);
+
+  // Refresh listener
+  useEffect(() => {
+    const handler = () => {
+      void fetchAgendasWithItems(selectedDate);
+    };
+    window.addEventListener(REFRESH_EVENT, handler);
+    return () => {
+      window.removeEventListener(REFRESH_EVENT, handler);
+    };
   }, [selectedDate, fetchAgendasWithItems]);
 
   return {
