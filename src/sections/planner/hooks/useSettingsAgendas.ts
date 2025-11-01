@@ -7,6 +7,7 @@ import {
   createPlannerAgenda,
   updatePlannerAgenda,
   deletePlannerAgenda,
+  reorderPlannerAgendas,
 } from '@api/planner_agendas';
 import { REFRESH_EVENT } from '@common/events';
 import { useToast } from '@contexts/hooks/useToast';
@@ -102,10 +103,23 @@ export const useSettingsAgendas = () => {
     };
   }, [fetchSettingsAgendas]);
 
+  const handleReorderAgendas = async (agendas: PlannerAgenda[]) => {
+    const prev = [...settingsAgendas];
+    setSettingsAgendas(agendas);
+    try {
+      await reorderPlannerAgendas(agendas.map(a => a.id));
+    } catch (error) {
+      console.error('Error reordering agendas:', error);
+      showError('Failed to save new order, restoring…');
+      setSettingsAgendas(prev);
+    }
+  };
+
   return {
     settingsAgendas,
     handleCreateAgenda,
     handleUpdateAgenda,
     handleDeleteAgenda,
+    handleReorderAgendas,
   };
 };

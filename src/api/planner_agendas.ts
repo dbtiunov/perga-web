@@ -9,6 +9,8 @@ export interface PlannerAgenda {
   name: string;
   agenda_type: PlannerAgendaType;
   index: number;
+  todo_items_cnt: number;
+  completed_items_cnt: number;
 }
 
 export interface PlannerAgendaItem extends BasePlannerItem {
@@ -83,3 +85,6 @@ export const updatePlannerAgenda = (agendaId: number, changes: PlannerAgendaUpda
 
 export const deletePlannerAgenda = (agendaId: number) =>
   axios.delete(`${AGENDAS_API_URL}${agendaId}/`);
+
+export const reorderPlannerAgendas = (orderedAgendaIds: number[]) =>
+  axios.post(`${AGENDAS_API_URL}reorder/`, { ordered_agenda_ids: orderedAgendaIds });

@@ -159,10 +159,8 @@ const DayItem = ({
   const showExtraActions: boolean = !isEmptyItem;
 
   return (
-    <div className={`group flex items-center gap-2 min-h-[2.5rem]
-                     ${item.id > 0 ? 'hover:bg-gray-100 rounded' : ''}
-                     ${isDragging ? 'opacity-50' : 'opacity-100'}
-                     transition-opacity duration-200`}
+    <div className={`group flex items-center gap-2 min-h-[2.5rem] transition-opacity duration-200
+                     ${isDragging ? 'opacity-50' : 'opacity-100'}`}
          draggable={canDrag}
          onDragStart={canDrag ? handleDragStart : undefined}
          onDragEnd={canDrag ? handleDragEnd : undefined}>

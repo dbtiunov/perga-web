@@ -8,12 +8,18 @@ interface AgendaLineProps {
   agenda: PlannerAgenda;
   onUpdateAgenda: (agendaId: number, changes: PlannerAgendaUpdate) => void;
   onDeleteAgenda?: (agendaId: number) => void;
+  onDragStart?: (agenda: PlannerAgenda) => void;
+  onDragEnd?: () => void;
+  onDragOverAgenda?: (agenda: PlannerAgenda) => void;
 }
 
 const AgendaLine: React.FC<AgendaLineProps> = ({
   agenda,
   onUpdateAgenda,
-  onDeleteAgenda
+  onDeleteAgenda,
+  onDragStart,
+  onDragEnd,
+  onDragOverAgenda,
 }) => {
   const isEmptyLine: boolean = agenda.id === -1;
   const [isEditing, setIsEditing] = useState(isEmptyLine);
@@ -43,7 +49,20 @@ const AgendaLine: React.FC<AgendaLineProps> = ({
   }
 
   return (
-    <div className="group flex items-center gap-2 min-h-[2.5rem] hover:bg-gray-100 rounded">
+    <div
+      className="group flex items-center gap-2 min-h-[2.5rem]"
+      draggable={!isEmptyLine}
+      onDragStart={!isEmptyLine ? () => onDragStart?.(agenda) : undefined}
+      onDragEnd={!isEmptyLine ? () => onDragEnd?.() : undefined}
+      onDragOver={!isEmptyLine ? (e) => { e.preventDefault(); onDragOverAgenda?.(agenda); } : undefined}
+    >
+      {!isEmptyLine && (
+        <div className="flex-none cursor-grab opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity"
+             aria-label="Drag to reorder" title="Drag to reorder">
+          <Icon name="drag" size={24} className="h-4 w-4 text-gray-600" />
+        </div>
+      )}
+
       {isEditing ? (
         <input ref={inputRef} type="text" value={value} autoFocus
                maxLength={AGENDA_NAME_MAX_LENGTH}
@@ -63,12 +82,11 @@ const AgendaLine: React.FC<AgendaLineProps> = ({
       ) : (
         <div onClick={() => !isEmptyLine && setIsEditing(true)}
              className="flex-1 px-2 cursor-text text-gray-600 truncate hover:cursor-text">
-          {agenda.name}
+          {agenda.name} ({agenda.completed_items_cnt}/{agenda.completed_items_cnt + agenda.todo_items_cnt})
         </div>
       )}
 
-      {!isEmptyLine && <div className="flex-none opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity
-                                       p-2 text-gray-600">
+      {!isEmptyLine && <div className="flex-none opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity p-2 text-gray-600 flex items-center gap-2">
         <button type="button"
                 onClick={() => onDeleteAgenda?.(agenda.id)}
                 aria-label="Delete agenda" title="Delete agenda"
