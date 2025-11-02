@@ -110,13 +110,10 @@ const PlannerAgendas: React.FC<PlannerAgendasProps> = ({
                                 index: -1
                               }}
                               onUpdateItem={(_, changes) => {
-                                if (changes.text && changes.text.trim()) {
+                                if (changes.text?.trim()) {
                                   onAddAgendaItem(agenda.id, changes.text);
                                 }
-                              }}
-                              onDeleteItem={() => {}}
-                              onDragStartItem={() => {}}
-                              onDragEndItem={() => {}} />
+                              }} />
                 </div>
               </div>
             </div>

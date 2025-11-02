@@ -75,7 +75,7 @@ export const usePlannerDays = (selectedDate: Date) => {
 
   const handleUpdateDayItem = async (itemId: number, changes: { text?: string; day?: string, state?: PlannerItemState }) => {
     // prevent multiple execution for the same item and empty text
-    if (updatingItemsRef.current.has(itemId) || !changes.text?.trim()) {
+    if (updatingItemsRef.current.has(itemId) || changes.text?.trim() === '') {
       return;
     }
     updatingItemsRef.current.add(itemId);

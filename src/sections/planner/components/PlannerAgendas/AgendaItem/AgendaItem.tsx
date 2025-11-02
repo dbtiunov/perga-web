@@ -45,7 +45,7 @@ const AgendaItem = ({
   const snoozeDropdownRef = useRef<HTMLDivElement>(null);
 
   const onToggleCheckbox = () => {
-    let newState: PlannerItemState
+    let newState: PlannerItemState;
 
     if (item.state === 'todo') {
       newState = 'completed';

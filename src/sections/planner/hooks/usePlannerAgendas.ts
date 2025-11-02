@@ -70,7 +70,7 @@ export const usePlannerAgendas = (selectedDate: Date) => {
     itemId: number, agendaId: number, changes: { text?: string }
   ) => {
     // prevent multiple execution for the same item and empty text
-    if (updatingItemsRef.current.has(itemId) || !changes.text?.trim()) {
+    if (updatingItemsRef.current.has(itemId) || changes.text?.trim() === '') {
       return;
     }
     updatingItemsRef.current.add(itemId);
