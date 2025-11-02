@@ -88,3 +88,9 @@ export const deletePlannerAgenda = (agendaId: number) =>
 
 export const reorderPlannerAgendas = (orderedAgendaIds: number[]) =>
   axios.post(`${AGENDAS_API_URL}reorder/`, { ordered_agenda_ids: orderedAgendaIds });
+
+export const copyPlannerAgendaItem = (itemId: number, agendaId: number) =>
+  axios.post<PlannerAgendaItem>(`${AGENDAS_API_URL}items/${itemId}/copy/`, { agenda_id: agendaId });
+
+export const snoozePlannerAgendaItem = (itemId: number, agendaId: number) =>
+  axios.post<PlannerAgendaItem>(`${AGENDAS_API_URL}items/${itemId}/snooze/`, { agenda_id: agendaId });

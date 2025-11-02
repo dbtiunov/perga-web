@@ -221,7 +221,7 @@ const DayItem = ({
                 <div className="absolute right-0 mt-8 w-40 bg-white rounded-md shadow-lg z-10">
                   <Calendar selectedDate={new Date()}
                             onDateChange={handleCopyItem}
-                            title="Copy to:"
+                            title="Copy to"
                             predefinedDates={predefinedDates} />
                 </div>
             )}
@@ -238,7 +238,7 @@ const DayItem = ({
                 <div className="absolute right-0 mt-8 w-40 bg-white rounded-md shadow-lg z-10">
                   <Calendar selectedDate={new Date()}
                             onDateChange={handleSnoozeItem}
-                            title="Snooze to:"
+                            title="Snooze to"
                             predefinedDates={predefinedDates} />
                 </div>
             )}

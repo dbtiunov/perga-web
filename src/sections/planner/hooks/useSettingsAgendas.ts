@@ -39,7 +39,7 @@ export const useSettingsAgendas = () => {
         agenda_type: 'custom'
       });
       const newAgenda = response.data;
-      setSettingsAgendas(prev => [...prev, newAgenda]);
+      setSettingsAgendas((prev) => [...prev, newAgenda]);
     } catch (error) {
       console.error('Error creating planner agenda:', error);
       showError('Failed to create agenda');
@@ -54,21 +54,24 @@ export const useSettingsAgendas = () => {
     updatingItemsRef.current.add(agendaId);
 
    // use optimistic update for better ui interactivity
-    const previousAgendas = settingsAgendas;
-    const prevAgenda = previousAgendas.find((agenda) => agenda.id === agendaId);
+    const prev = settingsAgendas;
+    const prevAgenda = prev.find((agenda) => agenda.id === agendaId);
     const optimisticAgenda = { ...prevAgenda, ...changes } as PlannerAgenda;
-    setSettingsAgendas(settingsAgendas.map(agenda => agenda.id === agendaId ? optimisticAgenda : agenda));
+    setSettingsAgendas(
+      settingsAgendas.map((agenda) => agenda.id === agendaId ? optimisticAgenda : agenda)
+    );
 
     try {
       const response = await updatePlannerAgenda(agendaId, changes);
       const updated = response.data;
-      setSettingsAgendas(prev => prev.map(
+
+      setSettingsAgendas((prev) => prev.map(
         agenda => (agenda.id === agendaId ? updated : agenda))
       );
       return updated;
     } catch (error) {
       console.error('Error updating planner agenda:', error);
-      setSettingsAgendas(previousAgendas);
+      setSettingsAgendas(prev);
       showError('Failed to update agenda');
     } finally {
       updatingItemsRef.current.delete(agendaId);
@@ -77,7 +80,7 @@ export const useSettingsAgendas = () => {
 
   const handleDeleteAgenda = async (agendaId: number) => {
     const prevAgendas = [...settingsAgendas];
-    setSettingsAgendas(prev => prev.filter(agenda => agenda.id !== agendaId));
+    setSettingsAgendas((prev) => prev.filter((agenda) => agenda.id !== agendaId));
     try {
       await deletePlannerAgenda(agendaId);
     } catch (error) {

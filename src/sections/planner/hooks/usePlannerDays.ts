@@ -81,17 +81,21 @@ export const usePlannerDays = (selectedDate: Date) => {
     updatingItemsRef.current.add(itemId);
 
     // use optimistic update for better ui interactivity
-    const previousItems = daysItems;
-    const prevItem = previousItems.find((item) => item.id === itemId);
+    const prev = [...daysItems];
+    const prevItem = prev.find((item) => item.id === itemId);
     const optimisticItem = { ...prevItem, ...changes } as PlannerDayItem;
-    setDaysItems(daysItems.map(item => item.id === itemId ? optimisticItem : item));
+    setDaysItems(
+      daysItems.map((item) => item.id === itemId ? optimisticItem : item)
+    );
 
     try {
       const response = await updatePlannerDayItem(itemId, changes);
-      setDaysItems(daysItems.map(item => item.id === itemId ? response.data : item));
+      setDaysItems(
+        daysItems.map((item) => item.id === itemId ? response.data : item)
+      );
     } catch (error) {
       console.error('Error updating day item:', error);
-      setDaysItems(previousItems);  // restoring previous state
+      setDaysItems(prev);  // restoring previous state
       showError('Failed to update item, please try again');
     } finally {
       updatingItemsRef.current.delete(itemId);

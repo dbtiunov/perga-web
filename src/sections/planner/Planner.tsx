@@ -8,8 +8,8 @@ import { useSelectedDate } from '@planner/hooks/useSelectedDate.ts';
 import { getNextDay } from '@planner/utils/dateUtils';
 
 const DEFAULT_LEFT_PANE_WIDTH_PERCENT = 66.6667; // w-2/3
-const MIN_LEFT_PANE_WIDTH_PERCENT = 40;
-const MAX_LEFT_PANE_WIDTH_PERCENT = 80;
+const MIN_LEFT_PANE_WIDTH_PERCENT = 30;
+const MAX_LEFT_PANE_WIDTH_PERCENT = 70;
 const RESIZE_HANDLE_WIDTH_PX = 6;
 
 const Planner = () => {
@@ -26,6 +26,11 @@ const Planner = () => {
     handleAddAgendaItem,
     handleUpdateAgendaItem,
     handleDeleteAgendaItem,
+    handleCopyAgendaItem,
+    handleSnoozeAgendaItem,
+    currentMonthAgenda,
+    nextMonthAgenda,
+    customAgendas,
   } = usePlannerAgendas(selectedDate);
 
   const {
@@ -186,7 +191,12 @@ const Planner = () => {
                         onReorderAgendaItems={handleReorderAgendaItems}
                         onAddAgendaItem={handleAddAgendaItem}
                         onUpdateAgendaItem={handleUpdateAgendaItem}
-                        onDeleteAgendaItem={handleDeleteAgendaItem} />
+                        onDeleteAgendaItem={handleDeleteAgendaItem}
+                        onCopyAgendaItem={handleCopyAgendaItem}
+                        onSnoozeAgendaItem={handleSnoozeAgendaItem}
+                        currentMonthAgenda={currentMonthAgenda}
+                        nextMonthAgenda={nextMonthAgenda}
+                        customAgendas={customAgendas} />
       </div>
     </div>
   );

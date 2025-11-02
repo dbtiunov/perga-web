@@ -39,6 +39,13 @@ export const formatDateForDisplayShort = (date: Date): string => {
   return date.toLocaleDateString('en-US', { weekday: 'short', month: 'long', day: 'numeric' });
 };
 
+/**
+ * Format date to display month name
+ */
+export const formatDateMonthName = (date: Date): string => {
+  return date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+};
+
 export const getPrevDay = (date: Date): Date => {
   const prevDay = new Date(date);
   prevDay.setDate(prevDay.getDate() - 1);

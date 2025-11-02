@@ -54,13 +54,18 @@ const SettingsPlanner: React.FC = () => {
 
   const handleDragOverAgenda = (target: PlannerAgenda) => {
     const dragging = draggingAgendaRef.current;
-    if (!dragging || dragging.id === target.id) return;
+    if (!dragging || dragging.id === target.id) {
+      return;
+    }
 
-    setAgendasView(prev => {
+    setAgendasView((prev) => {
       const current = [...prev];
-      const fromIndex = current.findIndex(a => a.id === dragging.id);
-      const toIndex = current.findIndex(a => a.id === target.id);
-      if (fromIndex === -1 || toIndex === -1 || fromIndex === toIndex) return prev;
+      const fromIndex = current.findIndex((agenda) => agenda.id === dragging.id);
+      const toIndex = current.findIndex((agenda) => agenda.id === target.id);
+      if (fromIndex === -1 || toIndex === -1 || fromIndex === toIndex) {
+        return prev;
+      }
+
       const updated = [...current];
       const [moved] = updated.splice(fromIndex, 1);
       updated.splice(toIndex, 0, moved);

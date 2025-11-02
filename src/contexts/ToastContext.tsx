@@ -29,13 +29,13 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const [messages, setMessages] = useState<ToastMessage[]>([]);
 
   const remove = useCallback((id: number) => {
-    setMessages(prev => prev.filter(m => m.id !== id));
+    setMessages((prev) => prev.filter((message) => message.id !== id));
   }, []);
 
   const showToast: ToastContextValue['showToast'] = useCallback((text, type = 'info', durationMs = 4000) => {
     // Generate a reasonably unique id
     const id = Date.now() + Math.random();
-    setMessages(prev => [...prev, { id, type, text, duration: durationMs }]);
+    setMessages((prev) => [...prev, { id, type, text, duration: durationMs }]);
   }, []);
 
   const showError: ToastContextValue['showError'] = useCallback((text, durationMs = 4000) => {

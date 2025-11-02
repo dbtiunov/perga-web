@@ -3,7 +3,7 @@ import React, { useState, useMemo } from 'react';
 import { Icon } from '@common/Icon';
 import { useAuth } from '@contexts/hooks/useAuth.ts';
 import { DAY_NAMES } from '@planner/const.ts';
-import { formatDateForDisplayShort } from '@planner/utils/dateUtils.ts';
+import { formatDateForDisplayShort, formatDateMonthName } from '@planner/utils/dateUtils.ts';
 
 interface CalendarProps {
   selectedDate: Date;
@@ -77,7 +77,7 @@ const Calendar: React.FC<CalendarProps> = ({
 
   return <div className="bg-white absolute right-0 mt-1 shadow-lg z-10 w-64 origin-top-right border-gray-200 border-1">
     {(title || predefinedDates?.length) && <div className="border-gray-200 border-b-1">
-      {title && <div className="text-md font-medium p-4 text-left border-gray-200 border-1">{title}</div>}
+      {title && <div className="p-4 pb-2 text-xs uppercase text-gray-500">{title}</div>}
 
       {predefinedDates?.length && <div className="p-2 grid grid-cols-1 gap-2">
         {predefinedDates.map((predefinedDate: {label: string; date: Date}) => (
@@ -97,9 +97,9 @@ const Calendar: React.FC<CalendarProps> = ({
             <Icon name="rightChevron" size={16} />
           </div>
         </button>
-        <div>
-          {currentMonth.toLocaleString('default', { month: 'long' })} {currentMonth.getFullYear()}
-        </div>
+
+        <div>{formatDateMonthName(currentMonth)}</div>
+
         <button onClick={handleNextMonth} className="p-1">
           <Icon name="rightChevron" size={16} />
         </button>
