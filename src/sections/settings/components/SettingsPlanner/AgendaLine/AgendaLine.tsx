@@ -22,6 +22,7 @@ const AgendaLine: React.FC<AgendaLineProps> = ({
   onDragOverAgenda,
 }) => {
   const isEmptyLine: boolean = agenda.id === -1;
+  const isArchived: boolean = agenda.agenda_type === 'archived';
   const [isEditing, setIsEditing] = useState(isEmptyLine);
   const [value, setValue] = useState(agenda.name);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -50,13 +51,17 @@ const AgendaLine: React.FC<AgendaLineProps> = ({
 
   return (
     <div
-      className="group flex items-center gap-2 min-h-[2.5rem]"
-      draggable={!isEmptyLine}
-      onDragStart={!isEmptyLine ? () => onDragStart?.(agenda) : undefined}
-      onDragEnd={!isEmptyLine ? () => onDragEnd?.() : undefined}
-      onDragOver={!isEmptyLine ? (e) => { e.preventDefault(); onDragOverAgenda?.(agenda); } : undefined}
-    >
-      {!isEmptyLine && (
+      className={`group flex items-center gap-2 min-h-[2.5rem] rounded 
+                  ${isArchived ? 'bg-gray-100 italic opacity-80' : ''}`}
+      draggable={!isEmptyLine && !isArchived}
+      onDragStart={!isEmptyLine && !isArchived ? () => onDragStart?.(agenda) : undefined}
+      onDragEnd={!isEmptyLine && !isArchived ? () => onDragEnd?.() : undefined}
+      onDragOver={!isEmptyLine && !isArchived
+                    ? (e) => {
+                      e.preventDefault();
+                      onDragOverAgenda?.(agenda);
+                    } : undefined} >
+      {!isEmptyLine && !isArchived && (
         <div className="flex-none cursor-grab opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity"
              aria-label="Drag to reorder" title="Drag to reorder">
           <Icon name="drag" size={24} className="h-4 w-4 text-gray-600" />
@@ -81,12 +86,20 @@ const AgendaLine: React.FC<AgendaLineProps> = ({
         />
       ) : (
         <div onClick={() => !isEmptyLine && setIsEditing(true)}
-             className="flex-1 px-2 cursor-text text-gray-600 truncate hover:cursor-text">
+             className={`flex-1 px-2 cursor-text truncate hover:cursor-text ${isArchived ? 'text-gray-500' : 'text-gray-600'}`}>
           {agenda.name} ({agenda.completed_items_cnt}/{agenda.completed_items_cnt + agenda.todo_items_cnt})
         </div>
       )}
 
       {!isEmptyLine && <div className="flex-none opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity p-2 text-gray-600 flex items-center gap-2">
+        <button type="button"
+                onClick={() => onUpdateAgenda(agenda.id, { agenda_type: isArchived ? 'custom' : 'archived' })}
+                aria-label={isArchived ? 'Unarchive agenda' : 'Archive agenda'}
+                title={isArchived ? 'Unarchive agenda' : 'Archive agenda'}
+                className="text-sm text-current hover:underline focus:outline-none focus-visible:ring-2
+                          focus-visible:ring-gray-400 rounded">
+          {isArchived ? 'Unarchive' : 'Archive'}
+        </button>
         <button type="button"
                 onClick={() => onDeleteAgenda?.(agenda.id)}
                 aria-label="Delete agenda" title="Delete agenda"

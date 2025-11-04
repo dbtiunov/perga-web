@@ -118,4 +118,10 @@ export const icons = {
             d="M10 4a6 6 0 100 12 6 6 0 000-12zm-8 6a8 8 0 1116 0 8 8 0 01-16 0z" />
     </svg>
   ),
+  filter: (
+    <svg xmlns="http://www.w3.org/2000/svg" stroke="currentColor" viewBox="0 0 24 24" fill="none">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
+            d="M3 4h18L13 12v6l-2-1v-5L3 4z" />
+    </svg>
+  ),
 };

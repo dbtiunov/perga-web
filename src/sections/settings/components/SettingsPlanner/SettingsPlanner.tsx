@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 
 import { type PlannerAgenda } from '@api/planner_agendas.ts';
+import { Icon } from '@common/Icon.tsx';
 import { useSettingsAgendas } from "@planner/hooks/useSettingsAgendas.ts";
 import AgendaLine from '@settings/components/SettingsPlanner/AgendaLine/AgendaLine.tsx';
 
@@ -12,6 +13,8 @@ const SettingsPlanner: React.FC = () => {
     handleDeleteAgenda,
     handleReorderAgendas,
   } = useSettingsAgendas();
+
+  const [showArchived, setShowArchived] = useState(false);
 
   const emptyAgendaLine: PlannerAgenda = {
     id: -1,
@@ -43,13 +46,13 @@ const SettingsPlanner: React.FC = () => {
   useEffect(() => {
     if (!draggingAgendaRef.current) {
       setAgendasView(settingsAgendas);
-      initialOrderRef.current = settingsAgendas.map(a => a.id);
+      initialOrderRef.current = settingsAgendas.map(agenda => agenda.id);
     }
   }, [settingsAgendas]);
 
   const handleDragStart = (agenda: PlannerAgenda) => {
     draggingAgendaRef.current = agenda;
-    initialOrderRef.current = agendasView.map(a => a.id);
+    initialOrderRef.current = agendasView.map(agenda => agenda.id);
   };
 
   const handleDragOverAgenda = (target: PlannerAgenda) => {
@@ -74,7 +77,7 @@ const SettingsPlanner: React.FC = () => {
   };
 
   const handleDragEnd = () => {
-    const updatedOrder = agendasView.map(a => a.id);
+    const updatedOrder = agendasView.map(agenda => agenda.id);
     const initialOrder = initialOrderRef.current;
     draggingAgendaRef.current = null;
 
@@ -97,20 +100,57 @@ const SettingsPlanner: React.FC = () => {
 
         <p className="text-sm text-gray-500 mb-4">
           Create and manage custom agendas to organize your tasks. A Monthly agenda is created automatically for each
-          month. Below is a list of your custom agendas showing how many items each contains.
+          month.
         </p>
 
+        <div className="flex items-center justify-between mb-3">
+          <div>Custom Agendas</div>
+          <button type="button"
+                  onClick={() => setShowArchived((prev) => !prev)}
+                  className="text-sm text-gray-500 hover:underline focus:outline-none focus-visible:ring-2
+                           focus-visible:ring-gray-400">
+            <span className="inline-flex items-center gap-1">
+              <Icon name="filter" size={16} className="h-4 w-4" />
+              <span className="grid">
+                <span className={`col-start-1 row-start-1 ${showArchived ? 'opacity-0' : 'opacity-100'}`}
+                      aria-hidden={showArchived}>
+                  Show archived
+                </span>
+                <span className={`col-start-1 row-start-1 ${showArchived ? 'opacity-100' : 'opacity-0'}`}
+                      aria-hidden={!showArchived}>
+                  Hide archived
+                </span>
+              </span>
+            </span>
+          </button>
+        </div>
+
         <div className="space-y-1">
-          {agendasView.map((agenda: PlannerAgenda) => (
-            <div key={agenda.id}>
-              <AgendaLine agenda={agenda}
-                          onUpdateAgenda={handleUpdateAgenda}
-                          onDeleteAgenda={confirmAndDelete}
-                          onDragStart={handleDragStart}
-                          onDragEnd={handleDragEnd}
-                          onDragOverAgenda={handleDragOverAgenda} />
-            </div>
-          ))}
+          {agendasView
+            .filter((agenda) => agenda.agenda_type === 'custom')
+            .map((agenda: PlannerAgenda) => (
+              <div key={agenda.id}>
+                <AgendaLine agenda={agenda}
+                            onUpdateAgenda={handleUpdateAgenda}
+                            onDeleteAgenda={confirmAndDelete}
+                            onDragStart={handleDragStart}
+                            onDragEnd={handleDragEnd}
+                            onDragOverAgenda={handleDragOverAgenda} />
+              </div>
+            ))}
+            {showArchived && agendasView
+              .filter((agenda) => agenda.agenda_type === 'archived')
+              .map((agenda: PlannerAgenda) => (
+                <div key={agenda.id}>
+                  <AgendaLine agenda={agenda}
+                              onUpdateAgenda={handleUpdateAgenda}
+                              onDeleteAgenda={confirmAndDelete}
+                              onDragStart={handleDragStart}
+                              onDragEnd={handleDragEnd}
+                              onDragOverAgenda={handleDragOverAgenda} />
+                </div>
+              ))
+            }
 
           <AgendaLine agenda={emptyAgendaLine} onUpdateAgenda={handleEmptyAgendaLineEdit} />
         </div>

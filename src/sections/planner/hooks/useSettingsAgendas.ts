@@ -20,7 +20,7 @@ export const useSettingsAgendas = () => {
 
   const fetchSettingsAgendas = useCallback(async () => {
     try {
-      const response = await getPlannerAgendas(['custom']);
+      const response = await getPlannerAgendas(['custom', 'archived']);
       const agendas = response.data;
       setSettingsAgendas(agendas);
     } catch (error) {
@@ -47,8 +47,8 @@ export const useSettingsAgendas = () => {
   };
 
   const handleUpdateAgenda = async (agendaId: number, changes: PlannerAgendaUpdate) => {
-    // prevent multiple execution for the same item and empty name
-    if (updatingItemsRef.current.has(agendaId) || !changes.name?.trim()) {
+    // prevent multiple execution for the same item and empty name (when provided)
+    if (updatingItemsRef.current.has(agendaId) || (changes.name !== undefined && !changes.name.trim())) {
       return;
     }
     updatingItemsRef.current.add(agendaId);
@@ -110,7 +110,7 @@ export const useSettingsAgendas = () => {
     const prev = [...settingsAgendas];
     setSettingsAgendas(agendas);
     try {
-      await reorderPlannerAgendas(agendas.map(a => a.id));
+      await reorderPlannerAgendas(agendas.map(agenda => agenda.id));
     } catch (error) {
       console.error('Error reordering agendas:', error);
       showError('Failed to save new order, restoring…');
