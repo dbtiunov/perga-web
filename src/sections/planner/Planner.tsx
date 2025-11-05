@@ -192,6 +192,8 @@ const Planner = () => {
                         onDeleteAgendaItem={handleDeleteAgendaItem}
                         onCopyAgendaItem={handleCopyAgendaItem}
                         onMoveAgendaItem={handleMoveAgendaItem}
+                        onCopyAgendaItemToToday={(text) => handleAddDayItem(selectedDate, text)}
+                        onCopyAgendaItemToTomorrow={(text) => handleAddDayItem(getNextDay(selectedDate), text)}
                         copyAgendasMap={copyAgendasMap} />
       </div>
     </div>

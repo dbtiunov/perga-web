@@ -14,6 +14,8 @@ interface AgendaItemProps {
   onDeleteItem?: (itemId: number) => void;
   onCopyItem?: (itemId: number, toAgendaId: number) => void;
   onMoveItem?: (itemId: number, fromAgendaId: number, toAgendaId: number) => void;
+  onCopyToToday?: (text: string) => void;
+  onCopyToTomorrow?: (text: string) => void;
   copyAgendasMap?: {
     currentMonth: PlannerAgenda;
     nextMonth: PlannerAgenda;
@@ -29,6 +31,9 @@ const AgendaItem = ({
   onDeleteItem,
   onCopyItem,
   onMoveItem,
+  // New props
+  onCopyToToday,
+  onCopyToTomorrow,
   copyAgendasMap,
 }: AgendaItemProps) => {
   const isEmptyItem: boolean = item.id === -1;
@@ -226,6 +231,23 @@ const AgendaItem = ({
                 <div className="p-4 pb-2 text-xs uppercase text-gray-500">Copy to</div>
                 <div className="py-1">
                   <button className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 flex items-center"
+                          onClick={() => {
+                            onCopyToToday?.(item.text);
+                            setIsCopyDropdownOpen(false);
+                          }}>
+                    Today
+                  </button>
+                  <button className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 flex items-center"
+                          onClick={() => {
+                            onCopyToTomorrow?.(item.text);
+                            setIsCopyDropdownOpen(false);
+                          }}>
+                    Tomorrow
+                  </button>
+                </div>
+                <div className="my-1 border-t border-gray-200" />
+                <div className="py-1">
+                  <button className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 flex items-center"
                           onClick={() => handleCopyToAgenda(copyAgendasMap?.currentMonth.id)}>
                     Current month ({copyAgendasMap?.currentMonth.name})
                   </button>
@@ -237,7 +259,6 @@ const AgendaItem = ({
                 {(copyAgendasMap && copyAgendasMap?.customAgendas.length > 0) && (
                   <div>
                     <div className="my-1 border-t border-gray-200" />
-                    <div className="p-4 pb-2 text-xs uppercase text-gray-500">Custom agendas</div>
                     <div className="max-h-64 overflow-auto py-1">
                       {copyAgendasMap.customAgendas.map((customAgenda) => (
                         <button key={customAgenda.id}
@@ -276,7 +297,6 @@ const AgendaItem = ({
                 {(copyAgendasMap && copyAgendasMap?.customAgendas.length > 0) && (
                   <div>
                     <div className="my-1 border-t border-gray-200" />
-                    <div className="px-3 py-2 text-xs uppercase text-gray-500">Custom agendas</div>
                     <div className="max-h-64 overflow-auto py-1">
                       {copyAgendasMap.customAgendas.map((customAgenda) => (
                         <button key={customAgenda.id}
