@@ -16,10 +16,12 @@ interface PlannerAgendasProps {
   onUpdateAgendaItem: (itemId: number, agendaId: number, changes: { text?: string }) => void;
   onDeleteAgendaItem: (itemId: number, agendaId: number) => void;
   onCopyAgendaItem: (itemId: number, toAgendaId: number) => void;
-  onSnoozeAgendaItem: (itemId: number, fromAgendaId: number, toAgendaId: number) => void;
-  currentMonthAgenda?: PlannerAgenda;
-  nextMonthAgenda?: PlannerAgenda;
-  customAgendas: PlannerAgenda[];
+  onMoveAgendaItem: (itemId: number, fromAgendaId: number, toAgendaId: number) => void;
+  copyAgendasMap: {
+    currentMonth: PlannerAgenda;
+    nextMonth: PlannerAgenda;
+    customAgendas: PlannerAgenda[];
+  }
 }
 
 const PlannerAgendas: React.FC<PlannerAgendasProps> = ({
@@ -33,10 +35,8 @@ const PlannerAgendas: React.FC<PlannerAgendasProps> = ({
   onUpdateAgendaItem,
   onDeleteAgendaItem,
   onCopyAgendaItem,
-  onSnoozeAgendaItem,
-  currentMonthAgenda,
-  nextMonthAgenda,
-  customAgendas,
+  onMoveAgendaItem,
+  copyAgendasMap,
 }) => {
   const { collapsedAgendas, setCollapsedAgendas } = useCollapsedAgendas();
 
@@ -94,10 +94,8 @@ const PlannerAgendas: React.FC<PlannerAgendasProps> = ({
                                   onReorderAgendaItems(agenda.id, plannerAgendaItems[agenda.id]);
                                 }}
                                 onCopyItem={(itemId, toAgendaId) => onCopyAgendaItem(itemId, toAgendaId)}
-                                onSnoozeItem={(itemId, fromAgendaId, toAgendaId) => onSnoozeAgendaItem(itemId, fromAgendaId, toAgendaId)}
-                                currentMonthAgenda={currentMonthAgenda}
-                                nextMonthAgenda={nextMonthAgenda}
-                                customAgendas={customAgendas} />
+                                onMoveItem={(itemId, fromAgendaId, toAgendaId) => onMoveAgendaItem(itemId, fromAgendaId, toAgendaId)}
+                                copyAgendasMap={copyAgendasMap} />
                   </div>
                 ))}
 

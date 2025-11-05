@@ -10,7 +10,7 @@ import {
   deletePlannerAgendaItem,
   reorderPlannerAgendaItems,
   copyPlannerAgendaItem,
-  snoozePlannerAgendaItem,
+  movePlannerAgendaItem,
 } from '@api/planner_agendas';
 import { REFRESH_EVENT } from '@common/events';
 import { useToast } from '@contexts/hooks/useToast';
@@ -207,23 +207,21 @@ export const usePlannerAgendas = (selectedDate: Date) => {
     }
   };
 
-  const handleSnoozeAgendaItem = async (itemId: number, fromAgendaId: number, toAgendaId: number) => {
+  const handleMoveAgendaItem = async (itemId: number, fromAgendaId: number, toAgendaId: number) => {
     try {
-      const response = await snoozePlannerAgendaItem(itemId, toAgendaId);
+      const response = await movePlannerAgendaItem(itemId, toAgendaId);
       const newItem = response.data;
 
       setPlannerAgendaItems((prev) => ({
         ...prev,
 
-        // mark original as snoozed in its agenda list
-        [fromAgendaId]: (prev[fromAgendaId] || []).map(
-          (item) => item.id === itemId ? { ...item, state: 'snoozed' } : item
-        ),
+        // remove original agenda item
+        [fromAgendaId]: (prev[fromAgendaId] || []).filter((item) => item.id !== itemId),
 
         [newItem.agenda_id]: [...(prev[newItem.agenda_id] || []), newItem],
       }));
     } catch (error) {
-      console.error('Error snoozing agenda item:', error);
+      console.error('Error moving agenda item:', error);
     }
   };
 
@@ -237,6 +235,13 @@ export const usePlannerAgendas = (selectedDate: Date) => {
   const nextMonthAgenda = monthlyAgendas.find(a => a.name.toLowerCase().includes(nextMonthName.toLowerCase())) || monthlyAgendas[1] || monthlyAgendas[0];
 
   const customAgendas = plannerAgendas.filter(agenda => agenda.agenda_type === 'custom');
+  const copyAgendasMap = {
+    today: currentMonthAgenda,
+    tomorrow: nextMonthAgenda,
+    currentMonth: currentMonthAgenda,
+    nextMonth: nextMonthAgenda,
+    customAgendas: customAgendas,
+  }
 
   return {
     plannerAgendas,
@@ -249,9 +254,7 @@ export const usePlannerAgendas = (selectedDate: Date) => {
     handleUpdateAgendaItem,
     handleDeleteAgendaItem,
     handleCopyAgendaItem,
-    handleSnoozeAgendaItem,
-    currentMonthAgenda,
-    nextMonthAgenda,
-    customAgendas,
+    handleMoveAgendaItem,
+    copyAgendasMap,
   };
 };

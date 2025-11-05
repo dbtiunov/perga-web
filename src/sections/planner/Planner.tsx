@@ -27,10 +27,8 @@ const Planner = () => {
     handleUpdateAgendaItem,
     handleDeleteAgendaItem,
     handleCopyAgendaItem,
-    handleSnoozeAgendaItem,
-    currentMonthAgenda,
-    nextMonthAgenda,
-    customAgendas,
+    handleMoveAgendaItem,
+    copyAgendasMap,
   } = usePlannerAgendas(selectedDate);
 
   const {
@@ -193,10 +191,8 @@ const Planner = () => {
                         onUpdateAgendaItem={handleUpdateAgendaItem}
                         onDeleteAgendaItem={handleDeleteAgendaItem}
                         onCopyAgendaItem={handleCopyAgendaItem}
-                        onSnoozeAgendaItem={handleSnoozeAgendaItem}
-                        currentMonthAgenda={currentMonthAgenda}
-                        nextMonthAgenda={nextMonthAgenda}
-                        customAgendas={customAgendas} />
+                        onMoveAgendaItem={handleMoveAgendaItem}
+                        copyAgendasMap={copyAgendasMap} />
       </div>
     </div>
   );

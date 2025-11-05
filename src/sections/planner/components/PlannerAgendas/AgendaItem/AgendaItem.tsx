@@ -13,10 +13,12 @@ interface AgendaItemProps {
   onUpdateItem: (itemId: number, changes: { text?: string; day?: string; state?: PlannerItemState }) => void;
   onDeleteItem?: (itemId: number) => void;
   onCopyItem?: (itemId: number, toAgendaId: number) => void;
-  onSnoozeItem?: (itemId: number, fromAgendaId: number, toAgendaId: number) => void;
-  currentMonthAgenda?: PlannerAgenda;
-  nextMonthAgenda?: PlannerAgenda;
-  customAgendas?: PlannerAgenda[];
+  onMoveItem?: (itemId: number, fromAgendaId: number, toAgendaId: number) => void;
+  copyAgendasMap?: {
+    currentMonth: PlannerAgenda;
+    nextMonth: PlannerAgenda;
+    customAgendas: PlannerAgenda[];
+  }
 }
 
 const AgendaItem = ({
@@ -26,10 +28,8 @@ const AgendaItem = ({
   onUpdateItem,
   onDeleteItem,
   onCopyItem,
-  onSnoozeItem,
-  currentMonthAgenda,
-  nextMonthAgenda,
-  customAgendas,
+  onMoveItem,
+  copyAgendasMap,
 }: AgendaItemProps) => {
   const isEmptyItem: boolean = item.id === -1;
 
@@ -38,11 +38,11 @@ const AgendaItem = ({
   const [value, setValue] = useState(item.text);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isCopyDropdownOpen, setIsCopyDropdownOpen] = useState(false);
-  const [isSnoozeDropdownOpen, setIsSnoozeDropdownOpen] = useState(false);
+  const [isMoveDropdownOpen, setIsMoveDropdownOpen] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const copyDropdownRef = useRef<HTMLDivElement>(null);
-  const snoozeDropdownRef = useRef<HTMLDivElement>(null);
+  const moveDropdownRef = useRef<HTMLDivElement>(null);
 
   const onToggleCheckbox = () => {
     let newState: PlannerItemState;
@@ -68,12 +68,12 @@ const AgendaItem = ({
 
   const onCopyActionClick = () => {
     setIsCopyDropdownOpen(!isCopyDropdownOpen);
-    setIsSnoozeDropdownOpen(false);
+    setIsMoveDropdownOpen(false);
     setIsDropdownOpen(false);
   };
 
-  const onSnoozeActionClick = () => {
-    setIsSnoozeDropdownOpen(!isSnoozeDropdownOpen);
+  const onMoveActionClick = () => {
+    setIsMoveDropdownOpen(!isMoveDropdownOpen);
     setIsCopyDropdownOpen(false);
     setIsDropdownOpen(false);
   };
@@ -84,10 +84,10 @@ const AgendaItem = ({
     setIsCopyDropdownOpen(false);
   };
 
-  const handleSnoozeToAgenda = (toAgendaId: number | undefined) => {
+  const handleMoveToAgenda = (toAgendaId: number | undefined) => {
     if (!toAgendaId) return;
-    onSnoozeItem?.(item.id, item.agenda_id, toAgendaId);
-    setIsSnoozeDropdownOpen(false);
+    onMoveItem?.(item.id, item.agenda_id, toAgendaId);
+    setIsMoveDropdownOpen(false);
   };
 
   // Close dropdown when clicking outside
@@ -99,8 +99,8 @@ const AgendaItem = ({
       if (copyDropdownRef.current && !copyDropdownRef.current.contains(event.target as Node)) {
         setIsCopyDropdownOpen(false);
       }
-      if (snoozeDropdownRef.current && !snoozeDropdownRef.current.contains(event.target as Node)) {
-        setIsSnoozeDropdownOpen(false);
+      if (moveDropdownRef.current && !moveDropdownRef.current.contains(event.target as Node)) {
+        setIsMoveDropdownOpen(false);
       }
     };
 
@@ -183,9 +183,6 @@ const AgendaItem = ({
           {item.state === 'completed' && (
             <Icon name="checkboxCompleted" size={48} className="h-3 w-3 text-white" />
           )}
-          {item.state === 'snoozed' && (
-            <Icon name="checkboxSnoozed" size={48} className="h-3 w-3 text-white" />
-          )}
           {item.state === 'dropped' && (
             <Icon name="checkboxDropped" size={48} className="h-3 w-3 text-white" />
           )}
@@ -229,20 +226,20 @@ const AgendaItem = ({
                 <div className="p-4 pb-2 text-xs uppercase text-gray-500">Copy to</div>
                 <div className="py-1">
                   <button className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 flex items-center"
-                          onClick={() => handleCopyToAgenda(currentMonthAgenda?.id)}>
-                    Current month ({currentMonthAgenda?.name})
+                          onClick={() => handleCopyToAgenda(copyAgendasMap?.currentMonth.id)}>
+                    Current month ({copyAgendasMap?.currentMonth.name})
                   </button>
                   <button className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 flex items-center"
-                          onClick={() => handleCopyToAgenda(nextMonthAgenda?.id)}>
-                    Next month ({nextMonthAgenda?.name})
+                          onClick={() => handleCopyToAgenda(copyAgendasMap?.nextMonth.id)}>
+                    Next month ({copyAgendasMap?.nextMonth.name})
                   </button>
                 </div>
-                {(customAgendas && customAgendas.length > 0) && (
+                {(copyAgendasMap && copyAgendasMap?.customAgendas.length > 0) && (
                   <div>
                     <div className="my-1 border-t border-gray-200" />
                     <div className="p-4 pb-2 text-xs uppercase text-gray-500">Custom agendas</div>
                     <div className="max-h-64 overflow-auto py-1">
-                      {customAgendas.map((customAgenda) => (
+                      {copyAgendasMap.customAgendas.map((customAgenda) => (
                         <button key={customAgenda.id}
                                 className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
                                 onClick={() => handleCopyToAgenda(customAgenda.id)}>
@@ -256,35 +253,35 @@ const AgendaItem = ({
             )}
           </div>
 
-          <div className="inline-flex relative ml-2" ref={snoozeDropdownRef}>
-            <button onClick={onSnoozeActionClick}
+          <div className="inline-flex relative ml-2" ref={moveDropdownRef}>
+            <button onClick={onMoveActionClick}
                     className="inline-flex"
-                    aria-label="Snooze item" title="Snooze item">
-              <Icon name="snooze" size={48} className="h-6 w-6" />
+                    aria-label="Move item" title="Move item">
+              <Icon name="move" size={48} className="h-6 w-6" />
             </button>
 
-            {isSnoozeDropdownOpen && (
+            {isMoveDropdownOpen && (
               <div className="absolute right-0 mt-8 w-70 bg-white rounded-md shadow-lg z-10">
-                <div className="px-3 py-2 text-xs uppercase text-gray-500">Snooze to</div>
+                <div className="px-3 py-2 text-xs uppercase text-gray-500">Move to</div>
                 <div className="py-1">
                   <button className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 flex items-center"
-                          onClick={() => handleSnoozeToAgenda(currentMonthAgenda?.id)}>
-                    Current month ({currentMonthAgenda?.name})
+                          onClick={() => handleMoveToAgenda(copyAgendasMap?.currentMonth.id)}>
+                    Current month ({copyAgendasMap?.currentMonth.name})
                   </button>
                   <button className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 flex items-center"
-                          onClick={() => handleSnoozeToAgenda(nextMonthAgenda?.id)}>
-                    Next month ({nextMonthAgenda?.name})
+                          onClick={() => handleMoveToAgenda(copyAgendasMap?.nextMonth.id)}>
+                    Next month ({copyAgendasMap?.nextMonth.name})
                   </button>
                 </div>
-                {(customAgendas && customAgendas.length > 0) && (
+                {(copyAgendasMap && copyAgendasMap?.customAgendas.length > 0) && (
                   <div>
                     <div className="my-1 border-t border-gray-200" />
                     <div className="px-3 py-2 text-xs uppercase text-gray-500">Custom agendas</div>
                     <div className="max-h-64 overflow-auto py-1">
-                      {customAgendas.map((customAgenda) => (
+                      {copyAgendasMap.customAgendas.map((customAgenda) => (
                         <button key={customAgenda.id}
                                 className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
-                                onClick={() => handleSnoozeToAgenda(customAgenda.id)}>
+                                onClick={() => handleMoveToAgenda(customAgenda.id)}>
                           {customAgenda.name}
                         </button>
                       ))}
