@@ -31,7 +31,6 @@ const AgendaItem = ({
   onDeleteItem,
   onCopyItem,
   onMoveItem,
-  // New props
   onCopyToToday,
   onCopyToTomorrow,
   copyAgendasMap,
@@ -160,6 +159,10 @@ const AgendaItem = ({
   const showCheckbox: boolean = !isEmptyItem;
   const showExtraActions: boolean = !isEmptyItem;
 
+  const copyCustomAgendas = copyAgendasMap?.customAgendas.filter(
+    (agenda) => agenda.id !== item.agenda_id
+  );
+
   return (
     <div className={`group flex items-center gap-2 min-h-[2.5rem] p-2
                      ${!isEmptyItem ? 'hover:bg-gray-100 rounded' : ''}
@@ -247,20 +250,24 @@ const AgendaItem = ({
                 </div>
                 <div className="my-1 border-t border-gray-200" />
                 <div className="py-1">
-                  <button className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 flex items-center"
-                          onClick={() => handleCopyToAgenda(copyAgendasMap?.currentMonth.id)}>
-                    Current month ({copyAgendasMap?.currentMonth.name})
-                  </button>
-                  <button className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 flex items-center"
-                          onClick={() => handleCopyToAgenda(copyAgendasMap?.nextMonth.id)}>
-                    Next month ({copyAgendasMap?.nextMonth.name})
-                  </button>
+                  {copyAgendasMap?.currentMonth.id !== item.agenda_id &&
+                    <button className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 flex items-center"
+                            onClick={() => handleCopyToAgenda(copyAgendasMap?.currentMonth.id)}>
+                      Current month ({copyAgendasMap?.currentMonth.name})
+                    </button>
+                  }
+                  {copyAgendasMap?.nextMonth.id !== item.agenda_id &&
+                    <button className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 flex items-center"
+                            onClick={() => handleCopyToAgenda(copyAgendasMap?.nextMonth.id)}>
+                      Next month ({copyAgendasMap?.nextMonth.name})
+                    </button>
+                  }
                 </div>
-                {(copyAgendasMap && copyAgendasMap?.customAgendas.length > 0) && (
+                {(copyCustomAgendas && copyCustomAgendas.length > 0) && (
                   <div>
                     <div className="my-1 border-t border-gray-200" />
                     <div className="max-h-64 overflow-auto py-1">
-                      {copyAgendasMap.customAgendas.map((customAgenda) => (
+                      {copyCustomAgendas.map((customAgenda) => (
                         <button key={customAgenda.id}
                                 className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
                                 onClick={() => handleCopyToAgenda(customAgenda.id)}>
@@ -285,20 +292,24 @@ const AgendaItem = ({
               <div className="absolute right-0 mt-8 w-70 bg-white rounded-md shadow-lg z-10">
                 <div className="px-3 py-2 text-xs uppercase text-gray-500">Move to</div>
                 <div className="py-1">
-                  <button className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 flex items-center"
-                          onClick={() => handleMoveToAgenda(copyAgendasMap?.currentMonth.id)}>
-                    Current month ({copyAgendasMap?.currentMonth.name})
-                  </button>
-                  <button className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 flex items-center"
-                          onClick={() => handleMoveToAgenda(copyAgendasMap?.nextMonth.id)}>
-                    Next month ({copyAgendasMap?.nextMonth.name})
-                  </button>
+                  {copyAgendasMap?.currentMonth.id !== item.agenda_id &&
+                    <button className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 flex items-center"
+                            onClick={() => handleMoveToAgenda(copyAgendasMap?.currentMonth.id)}>
+                      Current month ({copyAgendasMap?.currentMonth.name})
+                    </button>
+                  }
+                  {copyAgendasMap?.nextMonth.id !== item.agenda_id &&
+                    <button className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 flex items-center"
+                            onClick={() => handleMoveToAgenda(copyAgendasMap?.nextMonth.id)}>
+                      Next month ({copyAgendasMap?.nextMonth.name})
+                    </button>
+                  }
                 </div>
-                {(copyAgendasMap && copyAgendasMap?.customAgendas.length > 0) && (
+                {(copyCustomAgendas && copyCustomAgendas?.length > 0) && (
                   <div>
                     <div className="my-1 border-t border-gray-200" />
                     <div className="max-h-64 overflow-auto py-1">
-                      {copyAgendasMap.customAgendas.map((customAgenda) => (
+                      {copyCustomAgendas.map((customAgenda) => (
                         <button key={customAgenda.id}
                                 className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
                                 onClick={() => handleMoveToAgenda(customAgenda.id)}>

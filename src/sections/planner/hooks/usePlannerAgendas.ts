@@ -15,6 +15,7 @@ import {
 import { REFRESH_EVENT } from '@common/events';
 import { useToast } from '@contexts/hooks/useToast';
 import { formatDate, formatDateMonthName } from "@planner/utils/dateUtils.ts";
+import { PlannerItemState } from "@/api";
 
 export const usePlannerAgendas = (selectedDate: Date) => {
   const [plannerAgendas, setPlannerAgendas] = useState<PlannerAgenda[]>([]);
@@ -67,7 +68,7 @@ export const usePlannerAgendas = (selectedDate: Date) => {
   };
 
   const handleUpdateAgendaItem = async (
-    itemId: number, agendaId: number, changes: { text?: string }
+    itemId: number, agendaId: number, changes: { text?: string; state?: PlannerItemState }
   ) => {
     // prevent multiple execution for the same item and empty text
     if (updatingItemsRef.current.has(itemId) || changes.text?.trim() === '') {

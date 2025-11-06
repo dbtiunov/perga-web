@@ -35,11 +35,14 @@ const PLANNER_API_BASE_URL = `${import.meta.env.VITE_API_BASE_URL}/planner`;
 const AGENDAS_API_URL = `${PLANNER_API_BASE_URL}/agendas/`;
 
 // Planner agenda endpoints
-export const getPlannerAgendas = (agendaTypes: string[], day: string | null = null) =>
+export const getPlannerAgendas = (
+  agendaTypes: string[], day: string | null = null, withCounts: boolean = false
+) =>
   axios.get<PlannerAgenda[]>(AGENDAS_API_URL, {
     params: {
       agenda_types: agendaTypes,
-      day
+      day,
+      with_counts: withCounts
     },
     paramsSerializer: {
       indexes: null // Prevents using square brackets in array params

@@ -15,9 +15,8 @@ const RESIZE_HANDLE_WIDTH_PX = 6;
 const Planner = () => {
   const { selectedDate, setSelectedDate } = useSelectedDate();
 
-  const { plannerAgendas } = usePlannerAgendas(selectedDate);
-
   const {
+    plannerAgendas,
     plannerAgendaItems,
     dragAgendaItem,
     handleDragStartAgendaItem,

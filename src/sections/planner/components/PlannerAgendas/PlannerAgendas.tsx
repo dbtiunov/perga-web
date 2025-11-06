@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { PlannerAgenda, PlannerAgendaItem } from '@api/planner_agendas';
+import { PlannerItemState } from "@/api/planner_base.ts";
 import { Icon } from '@common/Icon.tsx';
 import AgendaItem from '@planner/components/PlannerAgendas/AgendaItem/AgendaItem.tsx';
 import { useCollapsedAgendas } from '@planner/hooks/useCollapsedAgendas.ts';
@@ -13,7 +14,7 @@ interface PlannerAgendasProps {
   onDragEndAgendaItem: () => void;
   onReorderAgendaItems: (agendaId: number, items: PlannerAgendaItem[]) => void;
   onAddAgendaItem: (agendaId: number, text: string) => void;
-  onUpdateAgendaItem: (itemId: number, agendaId: number, changes: { text?: string }) => void;
+  onUpdateAgendaItem: (itemId: number, agendaId: number, changes: { text?: string; state?: PlannerItemState }) => void;
   onDeleteAgendaItem: (itemId: number, agendaId: number) => void;
   onCopyAgendaItem: (itemId: number, toAgendaId: number) => void;
   onMoveAgendaItem: (itemId: number, fromAgendaId: number, toAgendaId: number) => void;

@@ -20,7 +20,9 @@ export const useSettingsAgendas = () => {
 
   const fetchSettingsAgendas = useCallback(async () => {
     try {
-      const response = await getPlannerAgendas(['custom', 'archived']);
+      const response = await getPlannerAgendas(
+        ['custom', 'archived'], null, true
+      );
       const agendas = response.data;
       setSettingsAgendas(agendas);
     } catch (error) {
