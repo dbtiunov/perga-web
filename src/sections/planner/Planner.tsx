@@ -140,9 +140,9 @@ const Planner = () => {
   );
 
   return (
-    <div ref={plannerContainerRef} className="min-h-screen flex flex-col md:flex-row w-full bg-white">
+    <div ref={plannerContainerRef} className="h-screen flex flex-col md:flex-row w-full bg-white overflow-hidden">
       {/* Left pane (days) */}
-      <div className="w-full md:flex-none md:overflow-auto flex flex-col" style={leftPaneStyle}>
+      <div className="w-full md:flex-none md:overflow-auto md:min-h-0 flex flex-col" style={leftPaneStyle}>
         <PlannerDay date={selectedDate}
                     dayItems={daysItems}
                     dragDayItem={dragDayItem}
@@ -180,7 +180,7 @@ const Planner = () => {
       </div>
 
       {/* Right pane (agendas) */}
-      <div className="w-full md:flex-1 px-8 py-10">
+      <div className="w-full md:flex-1 md:overflow-auto md:min-h-0 px-8 py-10">
         <PlannerAgendas plannerAgendas={plannerAgendas}
                         plannerAgendaItems={plannerAgendaItems}
                         dragAgendaItem={dragAgendaItem}
