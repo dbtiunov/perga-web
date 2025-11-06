@@ -12,7 +12,8 @@ import {
   copyPlannerDayItem,
   snoozePlannerDayItem
 } from '@api/planner_days';
-import { formatDate, getNextDay } from '../utils/dateUtils';
+import { REFRESH_EVENT } from '@common/events';
+import { formatDate, getNextDay } from '@planner/utils/dateUtils';
 
 export const usePlannerDays = (selectedDate: Date) => {
   const [daysItems, setDaysItems] = useState<PlannerDayItem[]>([]);
@@ -73,24 +74,28 @@ export const usePlannerDays = (selectedDate: Date) => {
   };
 
   const handleUpdateDayItem = async (itemId: number, changes: { text?: string; day?: string, state?: PlannerItemState }) => {
-    // prevent multiple execution for the same item
-    if (updatingItemsRef.current.has(itemId)) {
+    // prevent multiple execution for the same item and empty text
+    if (updatingItemsRef.current.has(itemId) || changes.text?.trim() === '') {
       return;
     }
     updatingItemsRef.current.add(itemId);
 
     // use optimistic update for better ui interactivity
-    const previousItems = daysItems;
-    const prevItem = previousItems.find((item) => item.id === itemId);
+    const prev = [...daysItems];
+    const prevItem = prev.find((item) => item.id === itemId);
     const optimisticItem = { ...prevItem, ...changes } as PlannerDayItem;
-    setDaysItems(daysItems.map(item => item.id === itemId ? optimisticItem : item));
+    setDaysItems(
+      daysItems.map((item) => item.id === itemId ? optimisticItem : item)
+    );
 
     try {
       const response = await updatePlannerDayItem(itemId, changes);
-      setDaysItems(daysItems.map(item => item.id === itemId ? response.data : item));
+      setDaysItems(
+        daysItems.map((item) => item.id === itemId ? response.data : item)
+      );
     } catch (error) {
       console.error('Error updating day item:', error);
-      setDaysItems(previousItems);  // restoring previous state
+      setDaysItems(prev);  // restoring previous state
       showError('Failed to update item, please try again');
     } finally {
       updatingItemsRef.current.delete(itemId);
@@ -187,8 +192,19 @@ export const usePlannerDays = (selectedDate: Date) => {
 
   // Fetch items when selected date changes
   useEffect(() => {
-    fetchDaysItems();
+    void fetchDaysItems();
   }, [selectedDate, fetchDaysItems]);
+
+  // Refresh listener
+  useEffect(() => {
+    const handler = () => {
+      void fetchDaysItems();
+    };
+    window.addEventListener(REFRESH_EVENT, handler);
+    return () => {
+      window.removeEventListener(REFRESH_EVENT, handler);
+    };
+  }, [fetchDaysItems]);
 
   return {
     daysItems,

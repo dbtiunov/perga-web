@@ -1,5 +1,5 @@
 import { createContext } from 'react';
-import { User, UserSignin, UserSignup, UserUpdate } from '@api/auth';
+import { User, UserSignin, UserSignup, UserUpdate, UpdatePasswordRequest } from '@api/auth';
 
 export interface AuthContextType {
   isAuthenticated: boolean;
@@ -9,6 +9,7 @@ export interface AuthContextType {
   logout: () => void;
   fetchUser: () => void;
   updateUser: (userData: UserUpdate) => Promise<void>;
+  updatePassword: (data: UpdatePasswordRequest) => Promise<void>;
   isLoading: boolean;
 }
 

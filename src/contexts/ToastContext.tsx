@@ -10,16 +10,16 @@ const ToastItem: React.FC<{ message: ToastMessage; onClose: (id: number) => void
     return () => clearTimeout(t);
   }, [id, duration, onClose]);
 
-  const color = type === 'error'
-    ? 'bg-red-600'
+  const bgColor = type === 'error'
+    ? 'bg-red-700'
     : type === 'success'
-      ? 'bg-green-600'
+      ? 'bg-green-700'
       : type === 'warning'
-        ? 'bg-yellow-600'
-        : 'bg-gray-800';
+        ? 'bg-yellow-700'
+        : 'bg-gray-700';
 
   return (
-    <div className={`text-white px-4 py-3 rounded shadow mb-2 ${color}`} role="status" aria-live="polite">
+    <div className={`text-gray-100 px-4 py-3 rounded shadow mb-2 ${bgColor}`} role="status" aria-live="polite">
       {text}
     </div>
   );
@@ -29,13 +29,13 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const [messages, setMessages] = useState<ToastMessage[]>([]);
 
   const remove = useCallback((id: number) => {
-    setMessages(prev => prev.filter(m => m.id !== id));
+    setMessages((prev) => prev.filter((message) => message.id !== id));
   }, []);
 
   const showToast: ToastContextValue['showToast'] = useCallback((text, type = 'info', durationMs = 4000) => {
     // Generate a reasonably unique id
     const id = Date.now() + Math.random();
-    setMessages(prev => [...prev, { id, type, text, duration: durationMs }]);
+    setMessages((prev) => [...prev, { id, type, text, duration: durationMs }]);
   }, []);
 
   const showError: ToastContextValue['showError'] = useCallback((text, durationMs = 4000) => {

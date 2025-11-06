@@ -159,10 +159,8 @@ const DayItem = ({
   const showExtraActions: boolean = !isEmptyItem;
 
   return (
-    <div className={`group flex items-center gap-2 min-h-[2.5rem]
-                     ${item.id > 0 ? 'hover:bg-gray-100 rounded' : ''}
-                     ${isDragging ? 'opacity-50' : 'opacity-100'}
-                     transition-opacity duration-200`}
+    <div className={`group flex items-center gap-2 min-h-[2.5rem] transition-opacity duration-200
+                     ${isDragging ? 'opacity-50' : 'opacity-100'}`}
          draggable={canDrag}
          onDragStart={canDrag ? handleDragStart : undefined}
          onDragEnd={canDrag ? handleDragEnd : undefined}>
@@ -223,7 +221,7 @@ const DayItem = ({
                 <div className="absolute right-0 mt-8 w-40 bg-white rounded-md shadow-lg z-10">
                   <Calendar selectedDate={new Date()}
                             onDateChange={handleCopyItem}
-                            title="Copy to:"
+                            title="Copy to"
                             predefinedDates={predefinedDates} />
                 </div>
             )}
@@ -240,7 +238,7 @@ const DayItem = ({
                 <div className="absolute right-0 mt-8 w-40 bg-white rounded-md shadow-lg z-10">
                   <Calendar selectedDate={new Date()}
                             onDateChange={handleSnoozeItem}
-                            title="Snooze to:"
+                            title="Snooze to"
                             predefinedDates={predefinedDates} />
                 </div>
             )}

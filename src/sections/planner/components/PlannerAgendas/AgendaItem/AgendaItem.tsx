@@ -1,40 +1,55 @@
 import { useState, useRef, KeyboardEvent, useEffect } from 'react';
 import * as React from 'react';
 
-import { PlannerAgendaItem, PlannerAgendaType } from '@api/planner_agendas';
+import { PlannerAgendaItem, PlannerAgenda } from '@api/planner_agendas';
 import { PlannerItemState } from '@api/planner_base';
 import { Icon } from "@common/Icon.tsx";
 import { ITEM_TEXT_MAX_LENGTH } from "@planner/const.ts";
 
 interface AgendaItemProps {
   item: PlannerAgendaItem;
-  agendaType?: PlannerAgendaType;
   onDragStartItem?: () => void;
   onDragEndItem?: () => void;
   onUpdateItem: (itemId: number, changes: { text?: string; day?: string; state?: PlannerItemState }) => void;
   onDeleteItem?: (itemId: number) => void;
+  onCopyItem?: (itemId: number, toAgendaId: number) => void;
+  onMoveItem?: (itemId: number, fromAgendaId: number, toAgendaId: number) => void;
+  onCopyToToday?: (text: string) => void;
+  onCopyToTomorrow?: (text: string) => void;
+  copyAgendasMap?: {
+    currentMonth: PlannerAgenda;
+    nextMonth: PlannerAgenda;
+    customAgendas: PlannerAgenda[];
+  }
 }
 
 const AgendaItem = ({
   item,
-  agendaType,
   onDragStartItem,
   onDragEndItem,
   onUpdateItem,
-  onDeleteItem
+  onDeleteItem,
+  onCopyItem,
+  onMoveItem,
+  onCopyToToday,
+  onCopyToTomorrow,
+  copyAgendasMap,
 }: AgendaItemProps) => {
-  const isBacklog = agendaType === 'backlog';
   const isEmptyItem: boolean = item.id === -1;
 
   const [isEditing, setIsEditing] = useState(isEmptyItem);
   const [isDragging, setIsDragging] = useState(false);
   const [value, setValue] = useState(item.text);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isCopyDropdownOpen, setIsCopyDropdownOpen] = useState(false);
+  const [isMoveDropdownOpen, setIsMoveDropdownOpen] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const copyDropdownRef = useRef<HTMLDivElement>(null);
+  const moveDropdownRef = useRef<HTMLDivElement>(null);
 
   const onToggleCheckbox = () => {
-    let newState: PlannerItemState
+    let newState: PlannerItemState;
 
     if (item.state === 'todo') {
       newState = 'completed';
@@ -55,11 +70,41 @@ const AgendaItem = ({
     setIsDropdownOpen(false);
   };
 
+  const onCopyActionClick = () => {
+    setIsCopyDropdownOpen(!isCopyDropdownOpen);
+    setIsMoveDropdownOpen(false);
+    setIsDropdownOpen(false);
+  };
+
+  const onMoveActionClick = () => {
+    setIsMoveDropdownOpen(!isMoveDropdownOpen);
+    setIsCopyDropdownOpen(false);
+    setIsDropdownOpen(false);
+  };
+
+  const handleCopyToAgenda = (toAgendaId: number | undefined) => {
+    if (!toAgendaId) return;
+    onCopyItem?.(item.id, toAgendaId);
+    setIsCopyDropdownOpen(false);
+  };
+
+  const handleMoveToAgenda = (toAgendaId: number | undefined) => {
+    if (!toAgendaId) return;
+    onMoveItem?.(item.id, item.agenda_id, toAgendaId);
+    setIsMoveDropdownOpen(false);
+  };
+
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setIsDropdownOpen(false);
+      }
+      if (copyDropdownRef.current && !copyDropdownRef.current.contains(event.target as Node)) {
+        setIsCopyDropdownOpen(false);
+      }
+      if (moveDropdownRef.current && !moveDropdownRef.current.contains(event.target as Node)) {
+        setIsMoveDropdownOpen(false);
       }
     };
 
@@ -114,6 +159,10 @@ const AgendaItem = ({
   const showCheckbox: boolean = !isEmptyItem;
   const showExtraActions: boolean = !isEmptyItem;
 
+  const copyCustomAgendas = copyAgendasMap?.customAgendas.filter(
+    (agenda) => agenda.id !== item.agenda_id
+  );
+
   return (
     <div className={`group flex items-center gap-2 min-h-[2.5rem] p-2
                      ${!isEmptyItem ? 'hover:bg-gray-100 rounded' : ''}
@@ -142,9 +191,6 @@ const AgendaItem = ({
           {item.state === 'completed' && (
             <Icon name="checkboxCompleted" size={48} className="h-3 w-3 text-white" />
           )}
-          {item.state === 'snoozed' && (
-            <Icon name="checkboxSnoozed" size={48} className="h-3 w-3 text-white" />
-          )}
           {item.state === 'dropped' && (
             <Icon name="checkboxDropped" size={48} className="h-3 w-3 text-white" />
           )}
@@ -164,7 +210,7 @@ const AgendaItem = ({
                onKeyDown={handleKeyDown}
                className={`min-w-0 flex-1 bg-transparent border-none focus:outline-none focus:ring-0 
                            ${isEmptyItem ? 'px-14' : 'px-1'}`}
-               placeholder={isEmptyItem ? (isBacklog ? "Keep it here for the future" : "Plan ahead for the month") : ""} />
+               placeholder={isEmptyItem ? "Plan ahead for the month" : ""} />
         ) : (
           <div onClick={() => !isEmptyItem && setIsEditing(true)}
                className={`flex-1 px-1 cursor-text break-all
@@ -174,29 +220,133 @@ const AgendaItem = ({
         )
       }
 
-      {showExtraActions && <div className="inline-flex ml-2 relative opacity-100 md:opacity-0
-                                           md:group-hover:opacity-100 transition-opacity" ref={dropdownRef}>
-        <button onClick={onExtraActionsClick}
-                aria-label="Extra actions" title="Extra actions">
-          <Icon name="dots" size={48} className="h-6 w-6" />
-        </button>
-
-        {isDropdownOpen && (
-          <div className="absolute right-0 mt-8 w-32 bg-white rounded-md shadow-lg z-10">
-            <button onClick={onDropActionClick}
-                    className="w-full text-left px-4 py-2 text-sm  hover:bg-gray-100 flex items-center"
-                    aria-label="Drop item" title="Drop item">
-              <Icon name="drop" size={48} className="h-4 w-4 mr-2" /> Drop
+      {showExtraActions && (
+        <div className="flex-none relative opacity-100 md:opacity-0 md:group-hover:opacity-100 text-gray-600 hover:text-gray-800 p-1 bg-transparent transition-opacity">
+          <div className="inline-flex relative" ref={copyDropdownRef}>
+            <button onClick={onCopyActionClick}
+                    className="inline-flex"
+                    aria-label="Copy item" title="Copy item">
+              <Icon name="copy" size={48} className="h-6 w-6" />
             </button>
 
-            <button onClick={onDeleteActionClick}
-                    className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 flex items-center"
-                    aria-label="Delete item" title="Delete item">
-              <Icon name="delete" size={48} className="h-4 w-4 mr-2" /> Delete
-            </button>
+            {isCopyDropdownOpen && (
+              <div className="absolute right-0 mt-8 w-70 bg-white rounded-md shadow-lg z-10">
+                <div className="p-4 pb-2 text-xs uppercase text-gray-500">Copy to</div>
+                <div className="py-1">
+                  <button className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 flex items-center"
+                          onClick={() => {
+                            onCopyToToday?.(item.text);
+                            setIsCopyDropdownOpen(false);
+                          }}>
+                    Today
+                  </button>
+                  <button className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 flex items-center"
+                          onClick={() => {
+                            onCopyToTomorrow?.(item.text);
+                            setIsCopyDropdownOpen(false);
+                          }}>
+                    Tomorrow
+                  </button>
+                </div>
+                <div className="my-1 border-t border-gray-200" />
+                <div className="py-1">
+                  {copyAgendasMap?.currentMonth.id !== item.agenda_id &&
+                    <button className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 flex items-center"
+                            onClick={() => handleCopyToAgenda(copyAgendasMap?.currentMonth.id)}>
+                      Current month ({copyAgendasMap?.currentMonth.name})
+                    </button>
+                  }
+                  {copyAgendasMap?.nextMonth.id !== item.agenda_id &&
+                    <button className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 flex items-center"
+                            onClick={() => handleCopyToAgenda(copyAgendasMap?.nextMonth.id)}>
+                      Next month ({copyAgendasMap?.nextMonth.name})
+                    </button>
+                  }
+                </div>
+                {(copyCustomAgendas && copyCustomAgendas.length > 0) && (
+                  <div>
+                    <div className="my-1 border-t border-gray-200" />
+                    <div className="max-h-64 overflow-auto py-1">
+                      {copyCustomAgendas.map((customAgenda) => (
+                        <button key={customAgenda.id}
+                                className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
+                                onClick={() => handleCopyToAgenda(customAgenda.id)}>
+                          {customAgenda.name}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
-        )}
-      </div>}
+
+          <div className="inline-flex relative ml-2" ref={moveDropdownRef}>
+            <button onClick={onMoveActionClick}
+                    className="inline-flex"
+                    aria-label="Move item" title="Move item">
+              <Icon name="move" size={48} className="h-6 w-6" />
+            </button>
+
+            {isMoveDropdownOpen && (
+              <div className="absolute right-0 mt-8 w-70 bg-white rounded-md shadow-lg z-10">
+                <div className="px-3 py-2 text-xs uppercase text-gray-500">Move to</div>
+                <div className="py-1">
+                  {copyAgendasMap?.currentMonth.id !== item.agenda_id &&
+                    <button className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 flex items-center"
+                            onClick={() => handleMoveToAgenda(copyAgendasMap?.currentMonth.id)}>
+                      Current month ({copyAgendasMap?.currentMonth.name})
+                    </button>
+                  }
+                  {copyAgendasMap?.nextMonth.id !== item.agenda_id &&
+                    <button className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 flex items-center"
+                            onClick={() => handleMoveToAgenda(copyAgendasMap?.nextMonth.id)}>
+                      Next month ({copyAgendasMap?.nextMonth.name})
+                    </button>
+                  }
+                </div>
+                {(copyCustomAgendas && copyCustomAgendas?.length > 0) && (
+                  <div>
+                    <div className="my-1 border-t border-gray-200" />
+                    <div className="max-h-64 overflow-auto py-1">
+                      {copyCustomAgendas.map((customAgenda) => (
+                        <button key={customAgenda.id}
+                                className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
+                                onClick={() => handleMoveToAgenda(customAgenda.id)}>
+                          {customAgenda.name}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+
+          <div className="inline-flex relative ml-2" ref={dropdownRef}>
+            <button onClick={onExtraActionsClick}
+                    aria-label="Extra actions" title="Extra actions">
+              <Icon name="dots" size={48} className="h-6 w-6" />
+            </button>
+
+            {isDropdownOpen && (
+              <div className="absolute right-0 mt-8 w-36 bg-white rounded-md shadow-lg z-10">
+                <button onClick={onDropActionClick}
+                        className="w-full text-left px-4 py-2 text-sm  hover:bg-gray-100 flex items-center"
+                        aria-label="Drop item" title="Drop item">
+                  <Icon name="drop" size={48} className="h-4 w-4 mr-2" /> Drop item
+                </button>
+
+                <button onClick={onDeleteActionClick}
+                        className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 flex items-center"
+                        aria-label="Delete item" title="Delete item">
+                  <Icon name="delete" size={48} className="h-4 w-4 mr-2" /> Delete item
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 };

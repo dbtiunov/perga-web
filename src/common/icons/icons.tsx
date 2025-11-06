@@ -31,7 +31,15 @@ export const icons = {
             d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
     </svg>
   ),
-
+  refresh: (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 118.04 122.88" stroke="currentColor">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} fill="currentColor"
+            d="M16.08,59.26A8,8,0,0,1,0,59.26a59,59,0,0,1,97.13-45V8a8,8,0,1,1,16.08,0V33.35a8,8,0,0,1-8,8L80.82,
+               43.62a8,8,0,1,1-1.44-15.95l8-.73A43,43,0,0,0,16.08,59.26Zm22.77,19.6a8,8,0,0,1,1.44,16l-10.08.91A42.95,
+               42.95,0,0,0,102,63.86a8,8,0,0,1,16.08,0A59,59,0,0,1,22.3,110v4.18a8,8,0,0,1-16.08,0V89.14h0a8,8,0,0,1,
+               7.29-8l25.31-2.3Z" />
+    </svg>
+  ),
 
   rightChevron: (
     <svg xmlns="http://www.w3.org/2000/svg" stroke="currentColor"
@@ -82,6 +90,14 @@ export const icons = {
               d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
       </svg>
   ),
+  move: (
+      <svg xmlns="http://www.w3.org/2000/svg" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
+              d="M7 6h6a2 2 0 012 2v8a2 2 0 01-2 2H7a2 2 0 01-2-2V8a2 2 0 012-2z"/>
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
+              d="M14 12h7m0 0l-3-3m3 3l-3 3"/>
+      </svg>
+  ),
 
   checkboxCompleted: (
     <svg xmlns="http://www.w3.org/2000/svg" stroke="currentColor" viewBox="0 0 24 24">
@@ -99,6 +115,21 @@ export const icons = {
     <svg xmlns="http://www.w3.org/2000/svg" stroke="currentColor" viewBox="0 0 24 24">
       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="4"
             d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+    </svg>
+  ),
+  question: (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" >
+      <path fill="currentColor"
+            d="M11 12H9v-.148c0-.876.306-1.499 1-1.852.385-.195 1-.568 1-1a1.001 1.001 0 00-2 0H7c0-1.654 1.346-3
+               3-3s3 1 3 3-2 2.165-2 3zm-2 3h2v-2H9v2z" />
+      <path fill="currentColor"
+            d="M10 4a6 6 0 100 12 6 6 0 000-12zm-8 6a8 8 0 1116 0 8 8 0 01-16 0z" />
+    </svg>
+  ),
+  filter: (
+    <svg xmlns="http://www.w3.org/2000/svg" stroke="currentColor" viewBox="0 0 24 24" fill="none">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
+            d="M3 4h18L13 12v6l-2-1v-5L3 4z" />
     </svg>
   ),
 };

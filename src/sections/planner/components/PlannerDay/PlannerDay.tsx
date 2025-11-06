@@ -4,6 +4,7 @@ import { PlannerDayItem } from '@api/planner_days';
 import DayItem from '@planner/components/PlannerDay/DayItem/DayItem.tsx';
 import DateSelector from '@planner/components/DateSelector/DateSelector.tsx';
 import { formatDateForDisplay } from '@planner/utils/dateUtils.ts';
+import {PlannerItemState} from "@/api";
 
 interface PlannerDayProps {
   date: Date;
@@ -14,7 +15,7 @@ interface PlannerDayProps {
   getItemsForDate: (date: Date) => PlannerDayItem[];
   onReorderDayItems: (items: PlannerDayItem[]) => void;
   onAddDayItem: (date: Date, itemText: string) => void;
-  onUpdateDayItem: (itemId: number, changes: { text?: string; day?: string }) => void;
+  onUpdateDayItem: (itemId: number, changes: { text?: string; day?: string; state?: PlannerItemState }) => void;
   onDeleteDayItem: (itemId: number) => void;
   onCopyDayItem: (itemId: number, date: Date) => void;
   onSnoozeDayItem: (itemId: number, date: Date) => void;
@@ -45,7 +46,7 @@ const PlannerDay: React.FC<PlannerDayProps> = ({
   };
 
   const handleEmptyItemEdit = (_itemId: number, changes: { text?: string }) => {
-    if (changes.text && changes.text.trim()) {
+    if (changes.text?.trim()) {
       onAddDayItem(date, changes.text);
     }
   };

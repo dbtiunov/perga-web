@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { PlannerAgenda, PlannerAgendaItem } from '@api/planner_agendas';
+import { PlannerItemState } from "@/api/planner_base.ts";
 import { Icon } from '@common/Icon.tsx';
 import AgendaItem from '@planner/components/PlannerAgendas/AgendaItem/AgendaItem.tsx';
 import { useCollapsedAgendas } from '@planner/hooks/useCollapsedAgendas.ts';
@@ -13,8 +14,17 @@ interface PlannerAgendasProps {
   onDragEndAgendaItem: () => void;
   onReorderAgendaItems: (agendaId: number, items: PlannerAgendaItem[]) => void;
   onAddAgendaItem: (agendaId: number, text: string) => void;
-  onUpdateAgendaItem: (itemId: number, agendaId: number, changes: { text?: string }) => void;
+  onUpdateAgendaItem: (itemId: number, agendaId: number, changes: { text?: string; state?: PlannerItemState }) => void;
   onDeleteAgendaItem: (itemId: number, agendaId: number) => void;
+  onCopyAgendaItem: (itemId: number, toAgendaId: number) => void;
+  onMoveAgendaItem: (itemId: number, fromAgendaId: number, toAgendaId: number) => void;
+  onCopyAgendaItemToToday?: (text: string) => void;
+  onCopyAgendaItemToTomorrow?: (text: string) => void;
+  copyAgendasMap: {
+    currentMonth: PlannerAgenda;
+    nextMonth: PlannerAgenda;
+    customAgendas: PlannerAgenda[];
+  }
 }
 
 const PlannerAgendas: React.FC<PlannerAgendasProps> = ({
@@ -27,6 +37,11 @@ const PlannerAgendas: React.FC<PlannerAgendasProps> = ({
   onAddAgendaItem,
   onUpdateAgendaItem,
   onDeleteAgendaItem,
+  onCopyAgendaItem,
+  onMoveAgendaItem,
+  onCopyAgendaItemToToday,
+  onCopyAgendaItemToTomorrow,
+  copyAgendasMap,
 }) => {
   const { collapsedAgendas, setCollapsedAgendas } = useCollapsedAgendas();
 
@@ -48,7 +63,7 @@ const PlannerAgendas: React.FC<PlannerAgendasProps> = ({
                 <Icon name="rightChevron" size="24" className="h-4 w-4 text-gray-600" />
               </div>
               <h3 className='font-medium'>
-                {agenda.agenda_type === 'backlog' ? 'Backlog' : `${agenda.name} Agenda`}
+                {agenda.name} ({agenda.completed_items_cnt}/{agenda.completed_items_cnt + agenda.todo_items_cnt})
               </h3>
             </div>
           </div>
@@ -74,7 +89,6 @@ const PlannerAgendas: React.FC<PlannerAgendasProps> = ({
                          onReorderAgendaItems(agenda.id, newItems);
                       }}>
                     <AgendaItem item={item}
-                                agendaType={agenda.agenda_type}
                                 onUpdateItem={(itemId, changes) => {
                                   onUpdateAgendaItem(itemId, agenda.id, changes)
                                 }}
@@ -83,7 +97,12 @@ const PlannerAgendas: React.FC<PlannerAgendasProps> = ({
                                 onDragEndItem={() => {
                                   onDragEndAgendaItem();
                                   onReorderAgendaItems(agenda.id, plannerAgendaItems[agenda.id]);
-                                }} />
+                                }}
+                                onCopyItem={(itemId, toAgendaId) => onCopyAgendaItem(itemId, toAgendaId)}
+                                onMoveItem={(itemId, fromAgendaId, toAgendaId) => onMoveAgendaItem(itemId, fromAgendaId, toAgendaId)}
+                                onCopyToToday={onCopyAgendaItemToToday}
+                                onCopyToTomorrow={onCopyAgendaItemToTomorrow}
+                                copyAgendasMap={copyAgendasMap} />
                   </div>
                 ))}
 
@@ -95,15 +114,11 @@ const PlannerAgendas: React.FC<PlannerAgendasProps> = ({
                                 state: 'todo',
                                 index: -1
                               }}
-                              agendaType={agenda.agenda_type}
                               onUpdateItem={(_, changes) => {
-                                if (changes.text && changes.text.trim()) {
+                                if (changes.text?.trim()) {
                                   onAddAgendaItem(agenda.id, changes.text);
                                 }
-                              }}
-                              onDeleteItem={() => {}}
-                              onDragStartItem={() => {}}
-                              onDragEndItem={() => {}} />
+                              }} />
                 </div>
               </div>
             </div>
