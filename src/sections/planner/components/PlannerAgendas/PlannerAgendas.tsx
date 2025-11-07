@@ -62,9 +62,7 @@ const PlannerAgendas: React.FC<PlannerAgendasProps> = ({
               <div className={`mr-2 transform transition-transform ${collapsedAgendas[agenda.id] ? '' : 'rotate-90'}`}>
                 <Icon name="rightChevron" size="24" className="h-4 w-4 text-gray-600" />
               </div>
-              <h3 className='font-medium'>
-                {agenda.name} ({agenda.completed_items_cnt}/{agenda.completed_items_cnt + agenda.todo_items_cnt})
-              </h3>
+              <h3 className='font-medium text-gray-500'>{agenda.name}</h3>
             </div>
           </div>
 
