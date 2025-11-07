@@ -103,8 +103,7 @@ const SettingsPlanner: React.FC = () => {
           month.
         </p>
 
-        <div className="flex items-center justify-between mb-3">
-          <div>Custom Agendas</div>
+        <div className="flex items-center justify-end mb-3">
           <button type="button"
                   onClick={() => setShowArchived((prev) => !prev)}
                   className="text-sm text-gray-500 hover:underline focus:outline-none focus-visible:ring-2
