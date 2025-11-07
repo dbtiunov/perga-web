@@ -1,7 +1,18 @@
 import React, { useState, useEffect, ReactNode, useCallback } from 'react';
 import {
-  signin, signup, storeToken, removeToken, isAuthenticated, UserSignin, UserSignup,
-  UserUpdate, updateUser, getUser, User, updatePassword, UpdatePasswordRequest
+  signin,
+  signup,
+  storeToken,
+  removeToken,
+  isAuthenticated,
+  UserSignin,
+  UserSignup,
+  UserUpdate,
+  updateUser,
+  getUser,
+  User,
+  updatePassword,
+  UpdatePasswordRequest,
 } from '@/api';
 import { AuthContext } from './AuthContext.types';
 
@@ -63,7 +74,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       // automatically signin new user
       await handleSignin({
         username: userData.username,
-        password: userData.password
+        password: userData.password,
       });
     } finally {
       setIsLoading(false);
@@ -95,7 +106,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     fetchUser: handleFetchUser,
     updateUser: handleUpdateUser,
     updatePassword: handleUpdatePassword,
-    isLoading
+    isLoading,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

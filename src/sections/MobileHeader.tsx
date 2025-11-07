@@ -20,9 +20,12 @@ const MobileHeader = ({ toggleSidebar }: MobileHeaderProps) => {
 
   return (
     <header className="md:hidden bg-gray-700 text-white p-4 flex items-center justify-between fixed top-0 left-0 right-0 z-40">
-      <button onClick={toggleSidebar}
-              className="p-1"
-              aria-label="Toggle sidebar" title="Toggle sidebar">
+      <button
+        onClick={toggleSidebar}
+        className="p-1"
+        aria-label="Toggle sidebar"
+        title="Toggle sidebar"
+      >
         <Icon name="hamburger" size={24} className="h-6 w-6" />
       </button>
       <h1 className="text-lg font-semibold">{getSectionName()}</h1>

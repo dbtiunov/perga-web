@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import PlannerAgendas from '@planner/components/PlannerAgendas/PlannerAgendas.tsx';
 import PlannerDay from '@planner/components/PlannerDay/PlannerDay.tsx';
-import { PlannerLocalStorage } from "@planner/const.ts";
+import { PlannerLocalStorage } from '@planner/const.ts';
 import { usePlannerAgendas } from '@planner/hooks/usePlannerAgendas.ts';
 import { usePlannerDays } from '@planner/hooks/usePlannerDays.ts';
 import { useSelectedDate } from '@planner/hooks/useSelectedDate.ts';
@@ -57,7 +57,10 @@ const Planner = () => {
       return DEFAULT_LEFT_PANE_WIDTH_PERCENT;
     }
 
-    return Math.min(MAX_LEFT_PANE_WIDTH_PERCENT, Math.max(MIN_LEFT_PANE_WIDTH_PERCENT, savedWidthParsed));
+    return Math.min(
+      MAX_LEFT_PANE_WIDTH_PERCENT,
+      Math.max(MIN_LEFT_PANE_WIDTH_PERCENT, savedWidthParsed),
+    );
   });
   const [isDragging, setIsDragging] = useState(false);
 
@@ -71,7 +74,10 @@ const Planner = () => {
     const available = rect.width - RESIZE_HANDLE_WIDTH_PX;
     const xWithin = Math.min(Math.max(clientX - rect.left, 0), available);
     const percent = (xWithin / available) * 100;
-    const clamped = Math.min(MAX_LEFT_PANE_WIDTH_PERCENT, Math.max(MIN_LEFT_PANE_WIDTH_PERCENT, percent));
+    const clamped = Math.min(
+      MAX_LEFT_PANE_WIDTH_PERCENT,
+      Math.max(MIN_LEFT_PANE_WIDTH_PERCENT, percent),
+    );
     setLeftPaneWidthPercent(clamped);
   };
 
@@ -85,7 +91,10 @@ const Planner = () => {
       setIsDragging(false);
 
       try {
-        window.localStorage.setItem(PlannerLocalStorage.LeftPaneWidthKey, String(leftPaneWidthPercent));
+        window.localStorage.setItem(
+          PlannerLocalStorage.LeftPaneWidthKey,
+          String(leftPaneWidthPercent),
+        );
       } catch {
         /* ignore if localStorage is unavailable */
       }
@@ -117,7 +126,10 @@ const Planner = () => {
       setIsDragging(false);
 
       try {
-        window.localStorage.setItem(PlannerLocalStorage.LeftPaneWidthKey, String(leftPaneWidthPercent));
+        window.localStorage.setItem(
+          PlannerLocalStorage.LeftPaneWidthKey,
+          String(leftPaneWidthPercent),
+        );
       } catch {
         /* ignore if localStorage is unavailable */
       }
@@ -135,65 +147,82 @@ const Planner = () => {
   }, [isDragging, leftPaneWidthPercent]);
 
   const leftPaneStyle = useMemo(
-    () => ({width: `${leftPaneWidthPercent}%` }),[leftPaneWidthPercent]
+    () => ({ width: `${leftPaneWidthPercent}%` }),
+    [leftPaneWidthPercent],
   );
 
   return (
-    <div ref={plannerContainerRef} className="h-screen flex flex-col md:flex-row w-full bg-white overflow-hidden">
+    <div
+      ref={plannerContainerRef}
+      className="h-screen flex flex-col md:flex-row w-full bg-white overflow-hidden"
+    >
       {/* Left pane (days) */}
-      <div className="w-full md:flex-none md:overflow-auto md:min-h-0 flex flex-col" style={leftPaneStyle}>
-        <PlannerDay date={selectedDate}
-                    dayItems={daysItems}
-                    dragDayItem={dragDayItem}
-                    onDragStartDayItem={handleDayItemDragStart}
-                    onDragEndDayItem={handleDayItemDragEnd}
-                    getItemsForDate={getItemsForDate}
-                    onReorderDayItems={handleReorderDayItems}
-                    onAddDayItem={handleAddDayItem}
-                    onUpdateDayItem={handleUpdateDayItem}
-                    onDeleteDayItem={handleDeleteDayItem}
-                    onCopyDayItem={handleCopyDayItem}
-                    onSnoozeDayItem={handleSnoozeDayItem}
-                    onDateChange={setSelectedDate} />
-        <PlannerDay date={getNextDay(selectedDate)}
-                    dayItems={daysItems}
-                    dragDayItem={dragDayItem}
-                    onDragStartDayItem={handleDayItemDragStart}
-                    onDragEndDayItem={handleDayItemDragEnd}
-                    getItemsForDate={getItemsForDate}
-                    onReorderDayItems={handleReorderDayItems}
-                    onAddDayItem={handleAddDayItem}
-                    onUpdateDayItem={handleUpdateDayItem}
-                    onDeleteDayItem={handleDeleteDayItem}
-                    onCopyDayItem={handleCopyDayItem}
-                    onSnoozeDayItem={handleSnoozeDayItem} />
+      <div
+        className="w-full md:flex-none md:overflow-auto md:min-h-0 flex flex-col"
+        style={leftPaneStyle}
+      >
+        <PlannerDay
+          date={selectedDate}
+          dayItems={daysItems}
+          dragDayItem={dragDayItem}
+          onDragStartDayItem={handleDayItemDragStart}
+          onDragEndDayItem={handleDayItemDragEnd}
+          getItemsForDate={getItemsForDate}
+          onReorderDayItems={handleReorderDayItems}
+          onAddDayItem={handleAddDayItem}
+          onUpdateDayItem={handleUpdateDayItem}
+          onDeleteDayItem={handleDeleteDayItem}
+          onCopyDayItem={handleCopyDayItem}
+          onSnoozeDayItem={handleSnoozeDayItem}
+          onDateChange={setSelectedDate}
+        />
+        <PlannerDay
+          date={getNextDay(selectedDate)}
+          dayItems={daysItems}
+          dragDayItem={dragDayItem}
+          onDragStartDayItem={handleDayItemDragStart}
+          onDragEndDayItem={handleDayItemDragEnd}
+          getItemsForDate={getItemsForDate}
+          onReorderDayItems={handleReorderDayItems}
+          onAddDayItem={handleAddDayItem}
+          onUpdateDayItem={handleUpdateDayItem}
+          onDeleteDayItem={handleDeleteDayItem}
+          onCopyDayItem={handleCopyDayItem}
+          onSnoozeDayItem={handleSnoozeDayItem}
+        />
       </div>
 
       {/* Separator with resize handle */}
-      <div role="separator" aria-orientation="vertical" aria-label="Resize planner panes"
-           className="hidden md:block md:shrink-0 md:cursor-col-resize md:bg-transparent"
-           style={{ width: RESIZE_HANDLE_WIDTH_PX, touchAction: 'none' }}
-           onMouseDown={() => setIsDragging(true)}
-           onTouchStart={() => setIsDragging(true)}>
+      <div
+        role="separator"
+        aria-orientation="vertical"
+        aria-label="Resize planner panes"
+        className="hidden md:block md:shrink-0 md:cursor-col-resize md:bg-transparent"
+        style={{ width: RESIZE_HANDLE_WIDTH_PX, touchAction: 'none' }}
+        onMouseDown={() => setIsDragging(true)}
+        onTouchStart={() => setIsDragging(true)}
+      >
         <div className="h-full w-px mx-auto bg-gray-600" />
       </div>
 
       {/* Right pane (agendas) */}
       <div className="w-full md:flex-1 md:overflow-auto md:min-h-0 px-8 py-10">
-        <PlannerAgendas plannerAgendas={plannerAgendas}
-                        plannerAgendaItems={plannerAgendaItems}
-                        dragAgendaItem={dragAgendaItem}
-                        onDragStartAgendaItem={handleDragStartAgendaItem}
-                        onDragEndAgendaItem={handleDragEndAgendaItem}
-                        onReorderAgendaItems={handleReorderAgendaItems}
-                        onAddAgendaItem={handleAddAgendaItem}
-                        onUpdateAgendaItem={handleUpdateAgendaItem}
-                        onDeleteAgendaItem={handleDeleteAgendaItem}
-                        onCopyAgendaItem={handleCopyAgendaItem}
-                        onMoveAgendaItem={handleMoveAgendaItem}
-                        onCopyAgendaItemToToday={(text) => handleAddDayItem(selectedDate, text)}
-                        onCopyAgendaItemToTomorrow={(text) => handleAddDayItem(getNextDay(selectedDate), text)}
-                        copyAgendasMap={copyAgendasMap} />
+        <PlannerAgendas
+          plannerAgendas={plannerAgendas}
+          plannerAgendaItems={plannerAgendaItems}
+          dragAgendaItem={dragAgendaItem}
+          onDragStartAgendaItem={handleDragStartAgendaItem}
+          onDragEndAgendaItem={handleDragEndAgendaItem}
+          onReorderAgendaItems={handleReorderAgendaItems}
+          onAddAgendaItem={handleAddAgendaItem}
+          onUpdateAgendaItem={handleUpdateAgendaItem}
+          onDeleteAgendaItem={handleDeleteAgendaItem}
+          onCopyAgendaItem={handleCopyAgendaItem}
+          onMoveAgendaItem={handleMoveAgendaItem}
+          onCopyAgendaItemToToday={(text) => handleAddDayItem(selectedDate, text)}
+          onCopyAgendaItemToTomorrow={(text) => handleAddDayItem(getNextDay(selectedDate), text)}
+          copyAgendasMap={copyAgendasMap}
+        />
       </div>
     </div>
   );

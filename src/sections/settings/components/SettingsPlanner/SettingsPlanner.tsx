@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 
 import { type PlannerAgenda } from '@api/planner_agendas.ts';
 import { Icon } from '@common/Icon.tsx';
-import { useSettingsAgendas } from "@planner/hooks/useSettingsAgendas.ts";
+import { useSettingsAgendas } from '@planner/hooks/useSettingsAgendas.ts';
 import AgendaLine from '@settings/components/SettingsPlanner/AgendaLine/AgendaLine.tsx';
 
 const SettingsPlanner: React.FC = () => {
@@ -23,7 +23,7 @@ const SettingsPlanner: React.FC = () => {
     index: -1,
     todo_items_cnt: 0,
     completed_items_cnt: 0,
-  }
+  };
 
   const handleEmptyAgendaLineEdit = (_agendaId: number, changes: { name?: string }) => {
     if (changes.name?.trim()) {
@@ -46,13 +46,13 @@ const SettingsPlanner: React.FC = () => {
   useEffect(() => {
     if (!draggingAgendaRef.current) {
       setAgendasView(settingsAgendas);
-      initialOrderRef.current = settingsAgendas.map(agenda => agenda.id);
+      initialOrderRef.current = settingsAgendas.map((agenda) => agenda.id);
     }
   }, [settingsAgendas]);
 
   const handleDragStart = (agenda: PlannerAgenda) => {
     draggingAgendaRef.current = agenda;
-    initialOrderRef.current = agendasView.map(agenda => agenda.id);
+    initialOrderRef.current = agendasView.map((agenda) => agenda.id);
   };
 
   const handleDragOverAgenda = (target: PlannerAgenda) => {
@@ -77,7 +77,7 @@ const SettingsPlanner: React.FC = () => {
   };
 
   const handleDragEnd = () => {
-    const updatedOrder = agendasView.map(agenda => agenda.id);
+    const updatedOrder = agendasView.map((agenda) => agenda.id);
     const initialOrder = initialOrderRef.current;
     draggingAgendaRef.current = null;
 
@@ -99,24 +99,30 @@ const SettingsPlanner: React.FC = () => {
         <legend className="px-2 text-gray-600">Agendas</legend>
 
         <p className="text-sm text-gray-500 mb-10">
-          Create and manage custom agendas to organize your tasks. A Monthly agenda is created automatically for each
-          month.
+          Create and manage custom agendas to organize your tasks. A Monthly agenda is created
+          automatically for each month.
         </p>
 
         <div className="flex items-center justify-end mb-3">
-          <button type="button"
-                  onClick={() => setShowArchived((prev) => !prev)}
-                  className="text-sm text-gray-500 hover:underline focus:outline-none focus-visible:ring-2
-                           focus-visible:ring-gray-400">
+          <button
+            type="button"
+            onClick={() => setShowArchived((prev) => !prev)}
+            className="text-sm text-gray-500 hover:underline focus:outline-none focus-visible:ring-2
+                           focus-visible:ring-gray-400"
+          >
             <span className="inline-flex items-center gap-1">
               <Icon name="filter" size={16} className="h-4 w-4" />
               <span className="grid">
-                <span className={`col-start-1 row-start-1 ${showArchived ? 'opacity-0' : 'opacity-100'}`}
-                      aria-hidden={showArchived}>
+                <span
+                  className={`col-start-1 row-start-1 ${showArchived ? 'opacity-0' : 'opacity-100'}`}
+                  aria-hidden={showArchived}
+                >
                   Show archived
                 </span>
-                <span className={`col-start-1 row-start-1 ${showArchived ? 'opacity-100' : 'opacity-0'}`}
-                      aria-hidden={!showArchived}>
+                <span
+                  className={`col-start-1 row-start-1 ${showArchived ? 'opacity-100' : 'opacity-0'}`}
+                  aria-hidden={!showArchived}
+                >
                   Hide archived
                 </span>
               </span>
@@ -129,27 +135,31 @@ const SettingsPlanner: React.FC = () => {
             .filter((agenda) => agenda.agenda_type === 'custom')
             .map((agenda: PlannerAgenda) => (
               <div key={agenda.id}>
-                <AgendaLine agenda={agenda}
-                            onUpdateAgenda={handleUpdateAgenda}
-                            onDeleteAgenda={confirmAndDelete}
-                            onDragStart={handleDragStart}
-                            onDragEnd={handleDragEnd}
-                            onDragOverAgenda={handleDragOverAgenda} />
+                <AgendaLine
+                  agenda={agenda}
+                  onUpdateAgenda={handleUpdateAgenda}
+                  onDeleteAgenda={confirmAndDelete}
+                  onDragStart={handleDragStart}
+                  onDragEnd={handleDragEnd}
+                  onDragOverAgenda={handleDragOverAgenda}
+                />
               </div>
             ))}
-            {showArchived && agendasView
+          {showArchived &&
+            agendasView
               .filter((agenda) => agenda.agenda_type === 'archived')
               .map((agenda: PlannerAgenda) => (
                 <div key={agenda.id}>
-                  <AgendaLine agenda={agenda}
-                              onUpdateAgenda={handleUpdateAgenda}
-                              onDeleteAgenda={confirmAndDelete}
-                              onDragStart={handleDragStart}
-                              onDragEnd={handleDragEnd}
-                              onDragOverAgenda={handleDragOverAgenda} />
+                  <AgendaLine
+                    agenda={agenda}
+                    onUpdateAgenda={handleUpdateAgenda}
+                    onDeleteAgenda={confirmAndDelete}
+                    onDragStart={handleDragStart}
+                    onDragEnd={handleDragEnd}
+                    onDragOverAgenda={handleDragOverAgenda}
+                  />
                 </div>
-              ))
-            }
+              ))}
 
           <AgendaLine agenda={emptyAgendaLine} onUpdateAgenda={handleEmptyAgendaLineEdit} />
         </div>

@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from 'axios';
 
 const AUTH_API_URL = `${import.meta.env.VITE_API_BASE_URL}/auth`;
 
@@ -82,8 +82,7 @@ export const signin = (userData: UserSignin) =>
 export const refreshToken = (refreshTokenData: RefreshTokenRequest) =>
   axios.post<Token>(`${AUTH_API_URL}/refresh_token/`, refreshTokenData);
 
-export const getUser = () =>
-  axios.get<User>(`${AUTH_API_URL}/user/`);
+export const getUser = () => axios.get<User>(`${AUTH_API_URL}/user/`);
 
 export const updateUser = (userData: UserUpdate) =>
   axios.put<User>(`${AUTH_API_URL}/user/`, userData);
@@ -103,7 +102,7 @@ export const setupAxiosInterceptors = () => {
     },
     (error) => {
       return Promise.reject(error);
-    }
+    },
   );
 
   // Add response interceptor to handle 401 errors
@@ -117,9 +116,9 @@ export const setupAxiosInterceptors = () => {
       // If the error is a 401 Unauthorized and we haven't tried to refresh the token yet
       // Also, avoid attempting refresh for the refresh endpoint itself to prevent infinite loop
       if (
-        error.response?.status === 401
-        && !originalRequest?._retry
-        && !originalRequest?.url?.includes('/auth/refresh_token/')
+        error.response?.status === 401 &&
+        !originalRequest?._retry &&
+        !originalRequest?.url?.includes('/auth/refresh_token/')
       ) {
         originalRequest._retry = true;
 
@@ -132,7 +131,7 @@ export const setupAxiosInterceptors = () => {
             // Update the Authorization header and retry the original request
             originalRequest.headers = {
               ...originalRequest.headers,
-              Authorization: `Bearer ${response.data.access_token}`
+              Authorization: `Bearer ${response.data.access_token}`,
             };
             return axios(originalRequest);
           } catch (refreshError) {
@@ -156,6 +155,6 @@ export const setupAxiosInterceptors = () => {
         }
       }
       return Promise.reject(error);
-    }
+    },
   );
 };

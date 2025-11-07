@@ -14,12 +14,14 @@ import {
 } from '@api/planner_agendas';
 import { REFRESH_EVENT } from '@common/events';
 import { useToast } from '@contexts/hooks/useToast';
-import { formatDate, formatDateMonthName } from "@planner/utils/dateUtils.ts";
-import { PlannerItemState } from "@/api";
+import { formatDate, formatDateMonthName } from '@planner/utils/dateUtils.ts';
+import { PlannerItemState } from '@/api';
 
 export const usePlannerAgendas = (selectedDate: Date) => {
   const [plannerAgendas, setPlannerAgendas] = useState<PlannerAgenda[]>([]);
-  const [plannerAgendaItems, setPlannerAgendaItems] = useState<Record<number, PlannerAgendaItem[]>>({});
+  const [plannerAgendaItems, setPlannerAgendaItems] = useState<Record<number, PlannerAgendaItem[]>>(
+    {},
+  );
 
   const [dragAgendaItem, setDragAgendaItem] = useState<PlannerAgendaItem | null>(null);
 
@@ -39,7 +41,7 @@ export const usePlannerAgendas = (selectedDate: Date) => {
       setPlannerAgendas(agendas);
 
       if (agendas.length > 0) {
-        const agendaIds = agendas.map(agenda => agenda.id);
+        const agendaIds = agendas.map((agenda) => agenda.id);
         const itemsResponse = await getItemsByAgendas(agendaIds);
         setPlannerAgendaItems(itemsResponse.data);
       }
@@ -56,11 +58,11 @@ export const usePlannerAgendas = (selectedDate: Date) => {
     try {
       const response = await createPlannerAgendaItem({
         agenda_id: agendaId,
-        text
+        text,
       });
       setPlannerAgendaItems({
         ...plannerAgendaItems,
-        [agendaId]: [...(plannerAgendaItems[agendaId] || []), response.data]
+        [agendaId]: [...(plannerAgendaItems[agendaId] || []), response.data],
       });
     } catch (error) {
       console.error('Error adding planner agenda item:', error);
@@ -68,7 +70,9 @@ export const usePlannerAgendas = (selectedDate: Date) => {
   };
 
   const handleUpdateAgendaItem = async (
-    itemId: number, agendaId: number, changes: { text?: string; state?: PlannerItemState }
+    itemId: number,
+    agendaId: number,
+    changes: { text?: string; state?: PlannerItemState },
   ) => {
     // prevent multiple execution for the same item and empty text
     if (updatingItemsRef.current.has(itemId) || changes.text?.trim() === '') {
@@ -83,22 +87,20 @@ export const usePlannerAgendas = (selectedDate: Date) => {
     const optimisticItem = { ...prevItem, ...changes } as PlannerAgendaItem;
     setPlannerAgendaItems({
       ...plannerAgendaItems,
-      [agendaId]: prevItems.map((item) => (item.id === itemId ? optimisticItem : item))
+      [agendaId]: prevItems.map((item) => (item.id === itemId ? optimisticItem : item)),
     });
 
     try {
-      const response = await updatePlannerAgendaItem(
-        itemId, { agenda_id: agendaId, ...changes }
-      );
+      const response = await updatePlannerAgendaItem(itemId, { agenda_id: agendaId, ...changes });
       setPlannerAgendaItems({
         ...plannerAgendaItems,
-        [agendaId]: plannerAgendaItems[agendaId].map(
-          (item) => item.id === itemId ? response.data : item
-        )
+        [agendaId]: plannerAgendaItems[agendaId].map((item) =>
+          item.id === itemId ? response.data : item,
+        ),
       });
     } catch (error) {
       console.error('Error updating planner agenda item:', error);
-      setPlannerAgendaItems(prev);  // restoring previous state
+      setPlannerAgendaItems(prev); // restoring previous state
       showError('Failed to update item, please try again');
     } finally {
       updatingItemsRef.current.delete(itemId);
@@ -110,7 +112,7 @@ export const usePlannerAgendas = (selectedDate: Date) => {
       await deletePlannerAgendaItem(itemId);
       setPlannerAgendaItems({
         ...plannerAgendaItems,
-        [agendaId]: plannerAgendaItems[agendaId].filter(item => item.id !== itemId)
+        [agendaId]: plannerAgendaItems[agendaId].filter((item) => item.id !== itemId),
       });
     } catch (error) {
       console.error('Error deleting planner agenda item:', error);
@@ -133,28 +135,34 @@ export const usePlannerAgendas = (selectedDate: Date) => {
   // Optimistic reorder that is called frequently during item drag
   // Update state without API request and save it to ref
   const handleReorderAgendaItems = (agendaId: number, items: PlannerAgendaItem[]) => {
-    currentItemsOrder.current.set(agendaId, (plannerAgendaItems[agendaId] || []).map(item => item.id));
+    currentItemsOrder.current.set(
+      agendaId,
+      (plannerAgendaItems[agendaId] || []).map((item) => item.id),
+    );
     setPlannerAgendaItems({
       ...plannerAgendaItems,
       [agendaId]: items,
     });
-    updatedItemsOrder.current.set(agendaId, items.map(item => item.id));
+    updatedItemsOrder.current.set(
+      agendaId,
+      items.map((item) => item.id),
+    );
   };
 
   const applyUpdatedItemsOrder = async (agendaId: number) => {
     const updatedOrder = updatedItemsOrder.current.get(agendaId);
     if (!updatedOrder) {
-        return;
+      return;
     }
 
     // Skip if items order hasn't changed
     const currentOrder = currentItemsOrder.current.get(agendaId);
     if (
-        currentOrder
-        && currentOrder.length === updatedOrder.length
-        && currentOrder.every((id, index) => id === updatedOrder[index])
-    ){
-        return;
+      currentOrder &&
+      currentOrder.length === updatedOrder.length &&
+      currentOrder.every((id, index) => id === updatedOrder[index])
+    ) {
+      return;
     }
 
     try {
@@ -230,19 +238,23 @@ export const usePlannerAgendas = (selectedDate: Date) => {
   const nextMonthDate = new Date(selectedDate.getFullYear(), selectedDate.getMonth() + 1, 1);
   const nextMonthName = formatDateMonthName(nextMonthDate);
 
+  const monthlyAgendas = plannerAgendas.filter((agenda) => agenda.agenda_type === 'monthly');
+  const currentMonthAgenda =
+    monthlyAgendas.find((a) => a.name.toLowerCase().includes(currentMonthName.toLowerCase())) ||
+    monthlyAgendas[0];
+  const nextMonthAgenda =
+    monthlyAgendas.find((a) => a.name.toLowerCase().includes(nextMonthName.toLowerCase())) ||
+    monthlyAgendas[1] ||
+    monthlyAgendas[0];
 
-  const monthlyAgendas = plannerAgendas.filter(agenda => agenda.agenda_type === 'monthly');
-  const currentMonthAgenda = monthlyAgendas.find(a => a.name.toLowerCase().includes(currentMonthName.toLowerCase())) || monthlyAgendas[0];
-  const nextMonthAgenda = monthlyAgendas.find(a => a.name.toLowerCase().includes(nextMonthName.toLowerCase())) || monthlyAgendas[1] || monthlyAgendas[0];
-
-  const customAgendas = plannerAgendas.filter(agenda => agenda.agenda_type === 'custom');
+  const customAgendas = plannerAgendas.filter((agenda) => agenda.agenda_type === 'custom');
   const copyAgendasMap = {
     today: currentMonthAgenda,
     tomorrow: nextMonthAgenda,
     currentMonth: currentMonthAgenda,
     nextMonth: nextMonthAgenda,
     customAgendas: customAgendas,
-  }
+  };
 
   return {
     plannerAgendas,

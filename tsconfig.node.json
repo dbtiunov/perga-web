@@ -5,8 +5,8 @@
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
     "target": "ES2022",
     "lib": ["ES2023"],
-    "module": "Node16",                 // Must match moduleResolution setting
-    "moduleResolution": "Node16",      // Needed for resolving modern ESM packages
+    "module": "Node16", // Must match moduleResolution setting
+    "moduleResolution": "Node16", // Needed for resolving modern ESM packages
     "skipLibCheck": true,
     "types": ["node"],
 

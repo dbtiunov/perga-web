@@ -19,8 +19,10 @@ const Layout = () => {
           <Sidebar />
         </div>
         <MobileHeader toggleSidebar={toggleSidebar} />
-        <main className={`bg-white transition-all duration-300 ${isSidebarVisible ? 'ml-14' : 'ml-0'} md:ml-20 
-                         text-gray-600 overflow-x-hidden pt-16 md:pt-0 relative z-20 min-h-screen`}>
+        <main
+          className={`bg-white transition-all duration-300 ${isSidebarVisible ? 'ml-14' : 'ml-0'} md:ml-20 
+                         text-gray-600 overflow-x-hidden pt-16 md:pt-0 relative z-20 min-h-screen`}
+        >
           <Outlet />
         </main>
       </div>
@@ -28,4 +30,4 @@ const Layout = () => {
   );
 };
 
-export default Layout; 
+export default Layout;

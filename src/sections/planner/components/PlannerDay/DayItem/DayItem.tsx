@@ -4,28 +4,31 @@ import Calendar from '@planner/components/Calendar/Calendar';
 
 import { PlannerItemState } from '@api/planner_base';
 import { PlannerDayItem } from '@api/planner_days';
-import { Icon } from "@common/Icon.tsx";
-import { ITEM_TEXT_MAX_LENGTH } from "@planner/const.ts";
-import { getNextDay, getNextMonth, getNextWeek } from "@planner/utils/dateUtils.ts";
+import { Icon } from '@common/Icon.tsx';
+import { ITEM_TEXT_MAX_LENGTH } from '@planner/const.ts';
+import { getNextDay, getNextMonth, getNextWeek } from '@planner/utils/dateUtils.ts';
 
 interface DayItemProps {
   item: PlannerDayItem;
   onDragStartItem?: () => void;
   onDragEndItem?: () => void;
-  onUpdateItem: (itemId: number, changes: { text?: string; day?: string; state?: PlannerItemState }) => void;
+  onUpdateItem: (
+    itemId: number,
+    changes: { text?: string; day?: string; state?: PlannerItemState },
+  ) => void;
   onDeleteItem?: (itemId: number) => void;
   onCopyItem?: (itemId: number, date: Date) => void;
   onSnoozeItem?: (itemId: number, date: Date) => void;
 }
 
 const DayItem = ({
-  item, 
+  item,
   onDragStartItem,
   onDragEndItem,
   onUpdateItem,
   onDeleteItem,
   onCopyItem,
-  onSnoozeItem
+  onSnoozeItem,
 }: DayItemProps) => {
   const itemDate = new Date(item.day);
   const isEmptyItem: boolean = item.id === -1;
@@ -42,7 +45,7 @@ const DayItem = ({
   const snoozeDropdownRef = useRef<HTMLDivElement>(null);
 
   const onToggleCheckbox = () => {
-    let newState: PlannerItemState
+    let newState: PlannerItemState;
 
     if (item.state === 'todo') {
       newState = 'completed';
@@ -65,7 +68,7 @@ const DayItem = ({
     setIsDropdownOpen(false);
   };
 
-  const predefinedDates: Array<{label: string; date: Date}> = [
+  const predefinedDates: Array<{ label: string; date: Date }> = [
     { label: 'Next day', date: getNextDay(itemDate) },
     { label: 'Next week', date: getNextWeek(itemDate) },
     { label: 'Next month', date: getNextMonth(itemDate) },
@@ -159,51 +162,74 @@ const DayItem = ({
   const showExtraActions: boolean = !isEmptyItem;
 
   return (
-    <div className={`group flex items-center gap-2 min-h-[2.5rem] transition-opacity duration-200
+    <div
+      className={`group flex items-center gap-2 min-h-[2.5rem] transition-opacity duration-200
                      ${isDragging ? 'opacity-50' : 'opacity-100'}`}
-         draggable={canDrag}
-         onDragStart={canDrag ? handleDragStart : undefined}
-         onDragEnd={canDrag ? handleDragEnd : undefined}>
+      draggable={canDrag}
+      onDragStart={canDrag ? handleDragStart : undefined}
+      onDragEnd={canDrag ? handleDragEnd : undefined}
+    >
       {canDrag && (
-        <div className="flex-none cursor-grab opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity"
-             aria-label="Drag to reorder" title="Drag to reorder">
+        <div
+          className="flex-none cursor-grab opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity"
+          aria-label="Drag to reorder"
+          title="Drag to reorder"
+        >
           <Icon name="drag" size={24} className="h-4 w-4 text-gray-600" />
         </div>
       )}
 
       {showCheckbox && (
-        <div onClick={onToggleCheckbox}
-             className={`flex-none w-5 h-5 rounded flex items-center justify-center cursor-pointer
-                         ${item.state === 'todo' 
-                           ? 'border border-gray-300 bg-white' 
-                           : item.state === 'completed'
-                             ? 'bg-green-500 border border-green-500' 
-                             : 'bg-blue-500 border border-blue-500'}`}
-             role="checkbox" aria-checked={item.state === 'completed'}>
-          {item.state === 'completed' && <Icon name="checkboxCompleted" size={48} className="h-3 w-3 text-white" />}
-          {item.state === 'snoozed' && <Icon name="checkboxSnoozed" size={48} className="h-3 w-3 text-white" />}
-          {item.state === 'dropped' && <Icon name="checkboxDropped" size={48} className="h-3 w-3 text-white" />}
+        <div
+          onClick={onToggleCheckbox}
+          className={`flex-none w-5 h-5 rounded flex items-center justify-center cursor-pointer
+                         ${
+                           item.state === 'todo'
+                             ? 'border border-gray-300 bg-white'
+                             : item.state === 'completed'
+                               ? 'bg-green-500 border border-green-500'
+                               : 'bg-blue-500 border border-blue-500'
+                         }`}
+          role="checkbox"
+          aria-checked={item.state === 'completed'}
+        >
+          {item.state === 'completed' && (
+            <Icon name="checkboxCompleted" size={48} className="h-3 w-3 text-white" />
+          )}
+          {item.state === 'snoozed' && (
+            <Icon name="checkboxSnoozed" size={48} className="h-3 w-3 text-white" />
+          )}
+          {item.state === 'dropped' && (
+            <Icon name="checkboxDropped" size={48} className="h-3 w-3 text-white" />
+          )}
         </div>
       )}
 
       {isEditing ? (
-        <input ref={inputRef} type="text" value={value} autoFocus
-               maxLength={ITEM_TEXT_MAX_LENGTH}
-               onKeyDown={handleKeyDown}
-               onChange={(e) => setValue(e.target.value)}
-               onBlur={() => {
-                 if (isEmptyItem) {
-                   return;
-                 }
-                 setIsEditing(false);
-                 onUpdateItem(item.id, { text: value });
-               }}
-               className={`min-w-0 flex-1 bg-transparent border-none focus:outline-none focus:ring-0 ${isEmptyItem ? 'px-15' : 'px-2'}`}
-               placeholder={isEmptyItem ? "Jot something..." : ""} />
+        <input
+          ref={inputRef}
+          type="text"
+          value={value}
+          autoFocus
+          maxLength={ITEM_TEXT_MAX_LENGTH}
+          onKeyDown={handleKeyDown}
+          onChange={(e) => setValue(e.target.value)}
+          onBlur={() => {
+            if (isEmptyItem) {
+              return;
+            }
+            setIsEditing(false);
+            onUpdateItem(item.id, { text: value });
+          }}
+          className={`min-w-0 flex-1 bg-transparent border-none focus:outline-none focus:ring-0 ${isEmptyItem ? 'px-15' : 'px-2'}`}
+          placeholder={isEmptyItem ? 'Jot something...' : ''}
+        />
       ) : (
-        <div onClick={() => !isEmptyItem && setIsEditing(true)}
-             className={`flex-1 px-2 cursor-text 
-                         ${item.state === 'todo' ? 'text-gray-600' : 'line-through text-gray-400'}`}>
+        <div
+          onClick={() => !isEmptyItem && setIsEditing(true)}
+          className={`flex-1 px-2 cursor-text 
+                         ${item.state === 'todo' ? 'text-gray-600' : 'line-through text-gray-400'}`}
+        >
           {item.text}
         </div>
       )}
@@ -211,58 +237,79 @@ const DayItem = ({
       {showActions && (
         <div className="flex-none relative opacity-100 md:opacity-0 md:group-hover:opacity-100 text-gray-600 hover:text-gray-800 p-2 bg-transparent transition-opacity">
           <div className="inline-flex relative" ref={copyDropdownRef}>
-            <button onClick={onCopyActionClick}
-                    className="inline-flex"
-                    aria-label="Copy item" title="Copy item">
+            <button
+              onClick={onCopyActionClick}
+              className="inline-flex"
+              aria-label="Copy item"
+              title="Copy item"
+            >
               <Icon name="copy" size={48} className="h-6 w-6" />
             </button>
 
             {isCopyDropdownOpen && (
-                <div className="absolute right-0 mt-8 w-40 bg-white rounded-md shadow-lg z-10">
-                  <Calendar selectedDate={new Date()}
-                            onDateChange={handleCopyItem}
-                            title="Copy to"
-                            predefinedDates={predefinedDates} />
-                </div>
+              <div className="absolute right-0 mt-8 w-40 bg-white rounded-md shadow-lg z-10">
+                <Calendar
+                  selectedDate={new Date()}
+                  onDateChange={handleCopyItem}
+                  title="Copy to"
+                  predefinedDates={predefinedDates}
+                />
+              </div>
             )}
           </div>
 
           <div className="inline-flex relative ml-2" ref={snoozeDropdownRef}>
-            <button onClick={onSnoozeActionClick}
-                    className="inline-flex"
-                    aria-label="Snooze item" title="Snooze item">
+            <button
+              onClick={onSnoozeActionClick}
+              className="inline-flex"
+              aria-label="Snooze item"
+              title="Snooze item"
+            >
               <Icon name="snooze" size={48} className="h-6 w-6" />
             </button>
 
             {isSnoozeDropdownOpen && (
-                <div className="absolute right-0 mt-8 w-40 bg-white rounded-md shadow-lg z-10">
-                  <Calendar selectedDate={new Date()}
-                            onDateChange={handleSnoozeItem}
-                            title="Snooze to"
-                            predefinedDates={predefinedDates} />
-                </div>
+              <div className="absolute right-0 mt-8 w-40 bg-white rounded-md shadow-lg z-10">
+                <Calendar
+                  selectedDate={new Date()}
+                  onDateChange={handleSnoozeItem}
+                  title="Snooze to"
+                  predefinedDates={predefinedDates}
+                />
+              </div>
             )}
           </div>
 
           {showExtraActions && (
             <div className="inline-flex relative ml-2" ref={dropdownRef}>
-              <button onClick={onExtraActionsClick}
-                      aria-label="Extra actions" title="Extra actions">
+              <button
+                onClick={onExtraActionsClick}
+                aria-label="Extra actions"
+                title="Extra actions"
+              >
                 <Icon name="dots" size={48} className="h-6 w-6" />
               </button>
 
               {isDropdownOpen && (
                 <div className="absolute right-0 mt-8 w-36 bg-white rounded-md shadow-lg z-10">
-                  <button onClick={onDropActionClick}
-                          className="w-full text-left px-4 py-2 text-sm  hover:bg-gray-100 flex items-center"
-                          aria-label="Drop item" title="Drop item">
-                    <Icon name="drop" size={48} className="h-4 w-4 mr-2" />Drop item
+                  <button
+                    onClick={onDropActionClick}
+                    className="w-full text-left px-4 py-2 text-sm  hover:bg-gray-100 flex items-center"
+                    aria-label="Drop item"
+                    title="Drop item"
+                  >
+                    <Icon name="drop" size={48} className="h-4 w-4 mr-2" />
+                    Drop item
                   </button>
 
-                  <button onClick={onDeleteActionClick}
-                          className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 flex items-center"
-                          aria-label="Delete item" title="Delete item">
-                    <Icon name="delete" size={48} className="h-4 w-4 mr-2" />Delete item
+                  <button
+                    onClick={onDeleteActionClick}
+                    className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 flex items-center"
+                    aria-label="Delete item"
+                    title="Delete item"
+                  >
+                    <Icon name="delete" size={48} className="h-4 w-4 mr-2" />
+                    Delete item
                   </button>
                 </div>
               )}

@@ -25,7 +25,9 @@ function App() {
           {/* Auth routes */}
           <Route path="/signin/" element={<Signin />} />
           {!isSignupDisabled && <Route path="/signup/" element={<Signup />} />}
-          {isSignupDisabled && <Route path="/signup/" element={<Navigate to="/signin/" replace />} />}
+          {isSignupDisabled && (
+            <Route path="/signup/" element={<Navigate to="/signin/" replace />} />
+          )}
 
           {/* Protected routes */}
           <Route path="/" element={<ProtectedRoute />}>

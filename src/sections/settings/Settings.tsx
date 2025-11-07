@@ -15,14 +15,17 @@ const Settings = () => {
             <h3 className="text-2xl font-light mb-6">Settings</h3>
 
             {sections.map((section) => (
-              <NavLink key={section.to} to={section.to}
-                       className={({ isActive }: { isActive: boolean }) =>
-                         `block w-full text-left mb-2 px-3 py-2 rounded transition-colors text-sm ${
-                           isActive
-                             ? 'text-gray-100 bg-gray-600 font-semibold'
-                             : 'text-gray-600 hover:bg-gray-200'
-                         }`
-                       }>
+              <NavLink
+                key={section.to}
+                to={section.to}
+                className={({ isActive }: { isActive: boolean }) =>
+                  `block w-full text-left mb-2 px-3 py-2 rounded transition-colors text-sm ${
+                    isActive
+                      ? 'text-gray-100 bg-gray-600 font-semibold'
+                      : 'text-gray-600 hover:bg-gray-200'
+                  }`
+                }
+              >
                 {section.label}
               </NavLink>
             ))}

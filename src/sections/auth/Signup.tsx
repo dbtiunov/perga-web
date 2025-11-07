@@ -52,7 +52,9 @@ const Signup: React.FC = () => {
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-600">Create a new account</h2>
+          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-600">
+            Create a new account
+          </h2>
           <p className="mt-2 text-center text-sm text-gray-400">
             Or{' '}
             <Link to="/signin/" className="font-medium text-indigo-600 hover:text-indigo-500">
@@ -62,7 +64,10 @@ const Signup: React.FC = () => {
         </div>
 
         {error && (
-          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+          <div
+            className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
+            role="alert"
+          >
             <span className="block sm:inline">{error}</span>
           </div>
         )}
@@ -70,7 +75,9 @@ const Signup: React.FC = () => {
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div className="rounded-md shadow-sm -space-y-px">
             <div>
-              <label htmlFor="username" className="sr-only">Username</label>
+              <label htmlFor="username" className="sr-only">
+                Username
+              </label>
               <input
                 id="username"
                 name="username"
@@ -83,7 +90,9 @@ const Signup: React.FC = () => {
               />
             </div>
             <div>
-              <label htmlFor="email" className="sr-only">Email</label>
+              <label htmlFor="email" className="sr-only">
+                Email
+              </label>
               <input
                 id="email"
                 name="email"
@@ -96,7 +105,9 @@ const Signup: React.FC = () => {
               />
             </div>
             <div>
-              <label htmlFor="password" className="sr-only">Password</label>
+              <label htmlFor="password" className="sr-only">
+                Password
+              </label>
               <input
                 id="password"
                 name="password"
@@ -109,7 +120,9 @@ const Signup: React.FC = () => {
               />
             </div>
             <div>
-              <label htmlFor="confirmPassword" className="sr-only">Confirm Password</label>
+              <label htmlFor="confirmPassword" className="sr-only">
+                Confirm Password
+              </label>
               <input
                 id="confirmPassword"
                 name="confirmPassword"

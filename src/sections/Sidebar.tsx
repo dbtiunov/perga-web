@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 import { useAuth } from '@contexts/hooks/useAuth.ts';
-import { Icon } from "@common/Icon";
+import { Icon } from '@common/Icon';
 import { triggerRefresh } from '@common/events';
 
 const Sidebar = () => {
@@ -37,10 +37,10 @@ const Sidebar = () => {
   }, []);
 
   const navItems = [
-    { 
+    {
       path: '/planner/',
-      label: 'Planner', 
-      icon: <Icon name="planner" size="20" fill="white" className="h-8 w-8" />
+      label: 'Planner',
+      icon: <Icon name="planner" size="20" fill="white" className="h-8 w-8" />,
     },
   ];
 
@@ -50,55 +50,71 @@ const Sidebar = () => {
   };
 
   return (
-    <div className='h-screen bg-gray-700 flex flex-col transition-all duration-300 fixed w-14 md:w-20 pt-16 md:pt-0'>
+    <div className="h-screen bg-gray-700 flex flex-col transition-all duration-300 fixed w-14 md:w-20 pt-16 md:pt-0">
       <nav className="flex-grow">
         {navItems.map((item) => (
-          <Link key={item.path}
-                to={item.path}
-                arial-label={item.label} title={item.label}
-                className={`flex flex-col items-center py-4 hover:bg-gray-800 focus:bg-gray-800 text-gray-300 
+          <Link
+            key={item.path}
+            to={item.path}
+            arial-label={item.label}
+            title={item.label}
+            className={`flex flex-col items-center py-4 hover:bg-gray-800 focus:bg-gray-800 text-gray-300 
                           hover:text-white focus:text-white transition-colors 
-                            ${location.pathname === item.path ? 'bg-gray-800 text-white' : ''}`}>
+                            ${location.pathname === item.path ? 'bg-gray-800 text-white' : ''}`}
+          >
             <div>{item.icon}</div>
-            <div className='text-sm hidden md:block'>{item.label}</div>
+            <div className="text-sm hidden md:block">{item.label}</div>
           </Link>
         ))}
       </nav>
 
       <div className="mt-auto">
-        <button onClick={handleRefreshClick}
-                aria-label="Refresh data" title="Refresh data"
-                className="flex flex-col items-center py-4 w-full hover:bg-gray-800 focus:bg-gray-800
-                         text-gray-300 hover:text-white focus:text-white transition-colors">
+        <button
+          onClick={handleRefreshClick}
+          aria-label="Refresh data"
+          title="Refresh data"
+          className="flex flex-col items-center py-4 w-full hover:bg-gray-800 focus:bg-gray-800
+                         text-gray-300 hover:text-white focus:text-white transition-colors"
+        >
           <div>
-            <Icon name="refresh" size="20" className={`w-6 h-6 ${isSpinning ? 'motion-safe:animate-spin' : ''}`} />
+            <Icon
+              name="refresh"
+              size="20"
+              className={`w-6 h-6 ${isSpinning ? 'motion-safe:animate-spin' : ''}`}
+            />
           </div>
-          <div className='text-sm hidden md:block'>Refresh</div>
+          <div className="text-sm hidden md:block">Refresh</div>
         </button>
 
-        <Link to="/settings/profile/"
-              aria-label="Settings" title="Settings"
-              className={`flex flex-col items-center py-4 hover:bg-gray-800 focus:bg-gray-800 text-gray-300 
+        <Link
+          to="/settings/profile/"
+          aria-label="Settings"
+          title="Settings"
+          className={`flex flex-col items-center py-4 hover:bg-gray-800 focus:bg-gray-800 text-gray-300 
                         hover:text-white focus:text-white transition-colors 
-                          ${location.pathname.startsWith('/settings') ? 'bg-gray-800 text-white' : ''}`}>
+                          ${location.pathname.startsWith('/settings') ? 'bg-gray-800 text-white' : ''}`}
+        >
           <div>
             <Icon name="settings" size="20" className="w-8 h-8" />
           </div>
-          <div className='text-sm hidden md:block'>Settings</div>
+          <div className="text-sm hidden md:block">Settings</div>
         </Link>
 
-        <button onClick={handleLogout}
-                aria-label="Logout" title="Logout"
-                className="flex flex-col items-center py-4 w-full hover:bg-gray-800 focus:bg-gray-800
-                         text-gray-300 hover:text-white focus:text-white transition-colors">
+        <button
+          onClick={handleLogout}
+          aria-label="Logout"
+          title="Logout"
+          className="flex flex-col items-center py-4 w-full hover:bg-gray-800 focus:bg-gray-800
+                         text-gray-300 hover:text-white focus:text-white transition-colors"
+        >
           <div>
             <Icon name="logout" size="20" className="w-8 h-8" />
           </div>
-          <div className='text-sm hidden md:block'>Logout</div>
+          <div className="text-sm hidden md:block">Logout</div>
         </button>
       </div>
     </div>
   );
 };
 
-export default Sidebar; 
+export default Sidebar;

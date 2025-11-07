@@ -20,9 +20,7 @@ export const useSettingsAgendas = () => {
 
   const fetchSettingsAgendas = useCallback(async () => {
     try {
-      const response = await getPlannerAgendas(
-        ['custom', 'archived'], null, true
-      );
+      const response = await getPlannerAgendas(['custom', 'archived'], null, true);
       const agendas = response.data;
       setSettingsAgendas(agendas);
     } catch (error) {
@@ -38,7 +36,7 @@ export const useSettingsAgendas = () => {
     try {
       const response = await createPlannerAgenda({
         name,
-        agenda_type: 'custom'
+        agenda_type: 'custom',
       });
       const newAgenda = response.data;
       setSettingsAgendas((prev) => [...prev, newAgenda]);
@@ -50,25 +48,28 @@ export const useSettingsAgendas = () => {
 
   const handleUpdateAgenda = async (agendaId: number, changes: PlannerAgendaUpdate) => {
     // prevent multiple execution for the same item and empty name (when provided)
-    if (updatingItemsRef.current.has(agendaId) || (changes.name !== undefined && !changes.name.trim())) {
+    if (
+      updatingItemsRef.current.has(agendaId) ||
+      (changes.name !== undefined && !changes.name.trim())
+    ) {
       return;
     }
     updatingItemsRef.current.add(agendaId);
 
-   // use optimistic update for better ui interactivity
+    // use optimistic update for better ui interactivity
     const prev = settingsAgendas;
     const prevAgenda = prev.find((agenda) => agenda.id === agendaId);
     const optimisticAgenda = { ...prevAgenda, ...changes } as PlannerAgenda;
     setSettingsAgendas(
-      settingsAgendas.map((agenda) => agenda.id === agendaId ? optimisticAgenda : agenda)
+      settingsAgendas.map((agenda) => (agenda.id === agendaId ? optimisticAgenda : agenda)),
     );
 
     try {
       const response = await updatePlannerAgenda(agendaId, changes);
       const updated = response.data;
 
-      setSettingsAgendas((prev) => prev.map(
-        agenda => (agenda.id === agendaId ? updated : agenda))
+      setSettingsAgendas((prev) =>
+        prev.map((agenda) => (agenda.id === agendaId ? updated : agenda)),
       );
       return updated;
     } catch (error) {
@@ -112,7 +113,7 @@ export const useSettingsAgendas = () => {
     const prev = [...settingsAgendas];
     setSettingsAgendas(agendas);
     try {
-      await reorderPlannerAgendas(agendas.map(agenda => agenda.id));
+      await reorderPlannerAgendas(agendas.map((agenda) => agenda.id));
     } catch (error) {
       console.error('Error reordering agendas:', error);
       showError('Failed to save new order, restoring…');

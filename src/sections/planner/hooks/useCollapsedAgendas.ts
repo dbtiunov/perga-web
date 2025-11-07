@@ -25,6 +25,6 @@ export const useCollapsedAgendas = () => {
 
   return {
     collapsedAgendas,
-    setCollapsedAgendas
+    setCollapsedAgendas,
   };
 };

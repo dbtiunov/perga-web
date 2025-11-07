@@ -8,11 +8,7 @@ interface DateSelectorProps {
   onDateChange: (date: Date) => void;
 }
 
-const DateSelector: React.FC<DateSelectorProps> = ({
-  selectedDate, 
-  onDateChange
-
-}) => {
+const DateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onDateChange }) => {
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const calendarRef = useRef<HTMLDivElement>(null);
 
@@ -53,28 +49,37 @@ const DateSelector: React.FC<DateSelectorProps> = ({
 
   return (
     <div className="flex items-center space-x-2 text-gray-600">
-      <button onClick={handlePreviousDay} className="p-1"
-              aria-label="Previous day" title="Previous day">
+      <button
+        onClick={handlePreviousDay}
+        className="p-1"
+        aria-label="Previous day"
+        title="Previous day"
+      >
         <div className="transform rotate-180">
           <Icon name="rightChevron" size={20} />
         </div>
       </button>
 
       <div className="relative" ref={calendarRef}>
-        <button onClick={handleCalendarButtonClick}
-                className="p-1"
-                aria-label="Open calendar" title="Open calendar">
+        <button
+          onClick={handleCalendarButtonClick}
+          className="p-1"
+          aria-label="Open calendar"
+          title="Open calendar"
+        >
           <Icon name="planner" size={20} fill="currentColor" />
         </button>
 
-        {isCalendarOpen &&
-          <Calendar selectedDate={selectedDate}
-                    onDateChange={handleCalendarDateChange}
-                    predefinedDates={[{label: 'Today', date: new Date()}]} />}
+        {isCalendarOpen && (
+          <Calendar
+            selectedDate={selectedDate}
+            onDateChange={handleCalendarDateChange}
+            predefinedDates={[{ label: 'Today', date: new Date() }]}
+          />
+        )}
       </div>
 
-      <button onClick={handleNextDay} className="p-1"
-              aria-label="Next day" title="Next day">
+      <button onClick={handleNextDay} className="p-1" aria-label="Next day" title="Next day">
         <Icon name="rightChevron" size={20} />
       </button>
     </div>

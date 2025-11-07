@@ -14,7 +14,11 @@ export const formatDate = (date: Date): string => {
  * Format date for display with day of the week and optional Today/Tomorrow label
  */
 export const formatDateForDisplay = (date: Date): string => {
-  const formattedDate = date.toLocaleDateString('en-US', { weekday: 'short', month: 'long', day: 'numeric' });
+  const formattedDate = date.toLocaleDateString('en-US', {
+    weekday: 'short',
+    month: 'long',
+    day: 'numeric',
+  });
 
   // Add "Today", "Yesterday", "Tomorrow" to the title when applicable
   const today = new Date();
