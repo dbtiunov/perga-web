@@ -10,7 +10,7 @@ import {
   deletePlannerDayItem,
   reorderPlannerDayItems,
   copyPlannerDayItem,
-  snoozePlannerDayItem
+  snoozePlannerDayItem,
 } from '@api/planner_days';
 import { REFRESH_EVENT } from '@common/events';
 import { formatDate, getNextDay } from '@planner/utils/dateUtils';
@@ -38,7 +38,7 @@ export const usePlannerDays = (selectedDate: Date) => {
 
       const combinedItems = [
         ...(response.data[selectedDateStr] || []),
-        ...(response.data[nextDayStr] || [])
+        ...(response.data[nextDayStr] || []),
       ];
 
       setDaysItems(combinedItems);
@@ -46,7 +46,6 @@ export const usePlannerDays = (selectedDate: Date) => {
       console.error('Error fetching all days:', error);
     }
   }, [selectedDate]);
-
 
   const handleAddDayItem = async (date: Date, itemText: string) => {
     if (!itemText.trim()) {
@@ -56,7 +55,7 @@ export const usePlannerDays = (selectedDate: Date) => {
     try {
       const response = await createPlannerDayItem({
         text: itemText,
-        day: formatDate(date)
+        day: formatDate(date),
       });
       setDaysItems([...daysItems, response.data]);
     } catch (error) {
@@ -67,13 +66,16 @@ export const usePlannerDays = (selectedDate: Date) => {
   const handleDeleteDayItem = async (id: number) => {
     try {
       await deletePlannerDayItem(id);
-      setDaysItems(daysItems.filter(item => item.id !== id));
+      setDaysItems(daysItems.filter((item) => item.id !== id));
     } catch (error) {
       console.error('Error deleting day item:', error);
     }
   };
 
-  const handleUpdateDayItem = async (itemId: number, changes: { text?: string; day?: string, state?: PlannerItemState }) => {
+  const handleUpdateDayItem = async (
+    itemId: number,
+    changes: { text?: string; day?: string; state?: PlannerItemState },
+  ) => {
     // prevent multiple execution for the same item and empty text
     if (updatingItemsRef.current.has(itemId) || changes.text?.trim() === '') {
       return;
@@ -84,18 +86,14 @@ export const usePlannerDays = (selectedDate: Date) => {
     const prev = [...daysItems];
     const prevItem = prev.find((item) => item.id === itemId);
     const optimisticItem = { ...prevItem, ...changes } as PlannerDayItem;
-    setDaysItems(
-      daysItems.map((item) => item.id === itemId ? optimisticItem : item)
-    );
+    setDaysItems(daysItems.map((item) => (item.id === itemId ? optimisticItem : item)));
 
     try {
       const response = await updatePlannerDayItem(itemId, changes);
-      setDaysItems(
-        daysItems.map((item) => item.id === itemId ? response.data : item)
-      );
+      setDaysItems(daysItems.map((item) => (item.id === itemId ? response.data : item)));
     } catch (error) {
       console.error('Error updating day item:', error);
-      setDaysItems(prev);  // restoring previous state
+      setDaysItems(prev); // restoring previous state
       showError('Failed to update item, please try again');
     } finally {
       updatingItemsRef.current.delete(itemId);
@@ -120,8 +118,8 @@ export const usePlannerDays = (selectedDate: Date) => {
       const response = await snoozePlannerDayItem(itemId, formatDate(day));
 
       // Update the original item's state to 'snoozed'
-      const updatedItems = daysItems.map(item =>
-        item.id === itemId ? { ...item, state: 'snoozed' as PlannerItemState } : item
+      const updatedItems = daysItems.map((item) =>
+        item.id === itemId ? { ...item, state: 'snoozed' as PlannerItemState } : item,
       );
 
       // Add the new item to the current state if its date is currently shown
@@ -154,9 +152,9 @@ export const usePlannerDays = (selectedDate: Date) => {
   // Optimistic reorder that is called frequently during item drag
   // Update state without API request and save it to ref
   const handleReorderDayItems = (items: PlannerDayItem[]) => {
-    currentItemsOrder.current = daysItems.map(item => item.id);
+    currentItemsOrder.current = daysItems.map((item) => item.id);
     setDaysItems(items);
-    updatedItemsOrder.current = items.map(item => item.id);
+    updatedItemsOrder.current = items.map((item) => item.id);
   };
 
   const applyUpdatedItemsOrder = async () => {
@@ -168,9 +166,9 @@ export const usePlannerDays = (selectedDate: Date) => {
     // Skip if items order hasn't changed
     const currentOrder = currentItemsOrder.current;
     if (
-        currentOrder
-        && currentOrder.length === updatedOrder.length
-        && currentOrder.every((id, index) => id === updatedOrder[index])
+      currentOrder &&
+      currentOrder.length === updatedOrder.length &&
+      currentOrder.every((id, index) => id === updatedOrder[index])
     ) {
       return;
     }
@@ -187,7 +185,7 @@ export const usePlannerDays = (selectedDate: Date) => {
 
   const getItemsForDate = (date: Date) => {
     const dateStr = formatDate(date);
-    return daysItems.filter(item => item.day === dateStr);
+    return daysItems.filter((item) => item.day === dateStr);
   };
 
   // Fetch items when selected date changes

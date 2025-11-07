@@ -23,5 +23,3 @@ export const Icon: React.FC<IconProps> = ({ name, size = 24, fill = 'none', clas
     className,
   });
 };
-
-

@@ -1,6 +1,6 @@
-import axios from "axios";
+import axios from 'axios';
 
-import { PlannerItemState, BasePlannerItem } from "./planner_base.ts";
+import { PlannerItemState, BasePlannerItem } from './planner_base.ts';
 
 export type PlannerAgendaType = 'monthly' | 'custom' | 'archived';
 
@@ -29,32 +29,33 @@ export interface PlannerAgendaItemUpdate {
   state?: PlannerItemState;
 }
 
-
 // API base URLs
 const PLANNER_API_BASE_URL = `${import.meta.env.VITE_API_BASE_URL}/planner`;
 const AGENDAS_API_URL = `${PLANNER_API_BASE_URL}/agendas/`;
 
 // Planner agenda endpoints
 export const getPlannerAgendas = (
-  agendaTypes: string[], day: string | null = null, withCounts: boolean = false
+  agendaTypes: string[],
+  day: string | null = null,
+  withCounts: boolean = false,
 ) =>
   axios.get<PlannerAgenda[]>(AGENDAS_API_URL, {
     params: {
       agenda_types: agendaTypes,
       day,
-      with_counts: withCounts
+      with_counts: withCounts,
     },
     paramsSerializer: {
-      indexes: null // Prevents using square brackets in array params
-    }
+      indexes: null, // Prevents using square brackets in array params
+    },
   });
 
 export const getItemsByAgendas = (agendaIds: number[]) =>
   axios.get<Record<number, PlannerAgendaItem[]>>(`${AGENDAS_API_URL}items/`, {
     params: { agenda_ids: agendaIds },
     paramsSerializer: {
-      indexes: null // Prevents using square brackets in array params
-    }
+      indexes: null, // Prevents using square brackets in array params
+    },
   });
 
 export const createPlannerAgendaItem = (item: PlannerAgendaItemCreate) =>
@@ -67,7 +68,10 @@ export const deletePlannerAgendaItem = (itemId: number) =>
   axios.delete(`${AGENDAS_API_URL}items/${itemId}/`);
 
 export const reorderPlannerAgendaItems = (agendaId: number, orderedItemIds: number[]) =>
-  axios.post(`${AGENDAS_API_URL}items/reorder/`, { agenda_id: agendaId, ordered_item_ids: orderedItemIds });
+  axios.post(`${AGENDAS_API_URL}items/reorder/`, {
+    agenda_id: agendaId,
+    ordered_item_ids: orderedItemIds,
+  });
 
 export interface PlannerAgendaCreate {
   name: string;

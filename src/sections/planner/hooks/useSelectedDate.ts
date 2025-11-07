@@ -16,6 +16,6 @@ export const useSelectedDate = () => {
 
   return {
     selectedDate,
-    setSelectedDate
+    setSelectedDate,
   };
 };

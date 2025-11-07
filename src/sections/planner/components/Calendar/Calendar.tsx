@@ -15,11 +15,11 @@ interface CalendarProps {
   }>;
 }
 
-const Calendar: React.FC<CalendarProps> = ({ 
-  selectedDate, 
+const Calendar: React.FC<CalendarProps> = ({
+  selectedDate,
   onDateChange,
   title,
-  predefinedDates
+  predefinedDates,
 }) => {
   const [currentMonth, setCurrentMonth] = useState<Date>(() => new Date(selectedDate));
   const { user } = useAuth();
@@ -75,72 +75,84 @@ const Calendar: React.FC<CalendarProps> = ({
     return dayOfWeek;
   };
 
-  return <div className="bg-white absolute right-0 mt-1 shadow-lg z-10 w-64 origin-top-right border-gray-200 border-1">
-    {(title || predefinedDates?.length) && <div className="border-gray-200 border-b-1">
-      {title && <div className="p-4 pb-2 text-xs uppercase text-gray-500">{title}</div>}
+  return (
+    <div className="bg-white absolute right-0 mt-1 shadow-lg z-10 w-64 origin-top-right border-gray-200 border-1">
+      {(title || predefinedDates?.length) && (
+        <div className="border-gray-200 border-b-1">
+          {title && <div className="p-4 pb-2 text-xs uppercase text-gray-500">{title}</div>}
 
-      {predefinedDates?.length && <div className="p-2 grid grid-cols-1 gap-2">
-        {predefinedDates.map((predefinedDate: {label: string; date: Date}) => (
-          <button key={predefinedDate.label}
+          {predefinedDates?.length && (
+            <div className="p-2 grid grid-cols-1 gap-2">
+              {predefinedDates.map((predefinedDate: { label: string; date: Date }) => (
+                <button
+                  key={predefinedDate.label}
                   onClick={() => onDateChange(predefinedDate.date)}
-                  className="text-sm p-2 hover:bg-gray-100 rounded text-left">
-            {predefinedDate.label} ({formatDateForDisplayShort(predefinedDate.date)})
+                  className="text-sm p-2 hover:bg-gray-100 rounded text-left"
+                >
+                  {predefinedDate.label} ({formatDateForDisplayShort(predefinedDate.date)})
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      <div className="p-4 w-64 origin-top-right">
+        <div className="flex justify-between items-center mb-2 text-gray-600">
+          <button onClick={handlePreviousMonth} className="p-1">
+            <div className="transform rotate-180">
+              <Icon name="rightChevron" size={16} />
+            </div>
           </button>
-        ))}
-      </div>}
-    </div>}
 
-    <div className="p-4 w-64 origin-top-right">
-      <div className="flex justify-between items-center mb-2 text-gray-600">
-        <button onClick={handlePreviousMonth} className="p-1">
-          <div className="transform rotate-180">
+          <div>{formatDateMonthName(currentMonth)}</div>
+
+          <button onClick={handleNextMonth} className="p-1">
             <Icon name="rightChevron" size={16} />
-          </div>
-        </button>
+          </button>
+        </div>
 
-        <div>{formatDateMonthName(currentMonth)}</div>
-
-        <button onClick={handleNextMonth} className="p-1">
-          <Icon name="rightChevron" size={16} />
-        </button>
-      </div>
-
-      <div className="grid grid-cols-7 gap-1 text-center">
-        {orderedDayNames.map((day, index) => (
-          <div key={index} className="text-xs font-medium text-gray-600 py-1">
-            {day}
-          </div>
-        ))}
-
-        {/* Empty cells for days before the first day of month */}
-        {Array.from({ length: getFirstDayOfMonth(currentMonth) }).map((_, index) => (
-          <div key={`empty-${index}`} className="h-8"></div>
-        ))}
-
-        {Array.from({ length: getDaysInMonth(currentMonth) }).map((_, index) => {
-          const day = index + 1;
-          const date = new Date(currentMonth);
-          date.setDate(day);
-
-          const isSelected =
-            selectedDate.getDate() === day &&
-            selectedDate.getMonth() === currentMonth.getMonth() &&
-            selectedDate.getFullYear() === currentMonth.getFullYear();
-
-          return (
-            <button key={day}
-                    onClick={() => handleDateClick(day)}
-                    className={`h-8 w-8 flex items-center justify-center rounded-md text-sm
-                        ${isSelected 
-                            ? 'bg-blue-500 text-white' 
-                            : 'hover:bg-gray-200 text-gray-600 transition-colors'}`}>
+        <div className="grid grid-cols-7 gap-1 text-center">
+          {orderedDayNames.map((day, index) => (
+            <div key={index} className="text-xs font-medium text-gray-600 py-1">
               {day}
-            </button>
-          );
-        })}
+            </div>
+          ))}
+
+          {/* Empty cells for days before the first day of month */}
+          {Array.from({ length: getFirstDayOfMonth(currentMonth) }).map((_, index) => (
+            <div key={`empty-${index}`} className="h-8"></div>
+          ))}
+
+          {Array.from({ length: getDaysInMonth(currentMonth) }).map((_, index) => {
+            const day = index + 1;
+            const date = new Date(currentMonth);
+            date.setDate(day);
+
+            const isSelected =
+              selectedDate.getDate() === day &&
+              selectedDate.getMonth() === currentMonth.getMonth() &&
+              selectedDate.getFullYear() === currentMonth.getFullYear();
+
+            return (
+              <button
+                key={day}
+                onClick={() => handleDateClick(day)}
+                className={`h-8 w-8 flex items-center justify-center rounded-md text-sm
+                        ${
+                          isSelected
+                            ? 'bg-blue-500 text-white'
+                            : 'hover:bg-gray-200 text-gray-600 transition-colors'
+                        }`}
+              >
+                {day}
+              </button>
+            );
+          })}
+        </div>
       </div>
     </div>
-  </div>;
+  );
 };
 
 export default Calendar;

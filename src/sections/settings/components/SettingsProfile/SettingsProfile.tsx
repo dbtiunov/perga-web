@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { updateUser, type UserUpdate, updatePassword, type UpdatePasswordRequest, type WeekStartDay } from '@api/auth.ts';
+import {
+  updateUser,
+  type UserUpdate,
+  updatePassword,
+  type UpdatePasswordRequest,
+  type WeekStartDay,
+} from '@api/auth.ts';
 import { REFRESH_EVENT } from '@common/events.ts';
 import { useAuth } from '@contexts/hooks/useAuth.ts';
 import { useToast } from '@contexts/hooks/useToast.ts';
@@ -33,9 +39,7 @@ const SettingsProfile: React.FC = () => {
   useEffect(() => {
     if (user) {
       const hasFieldChanges =
-        username !== user.username ||
-        email !== user.email ||
-        weekStartDay !== user.week_start_day;
+        username !== user.username || email !== user.email || weekStartDay !== user.week_start_day;
 
       setHasChanges(hasFieldChanges);
     }
@@ -98,7 +102,7 @@ const SettingsProfile: React.FC = () => {
 
       const payload: UpdatePasswordRequest = {
         current_password: currentPassword,
-        new_password: newPassword
+        new_password: newPassword,
       };
 
       await updatePassword(payload);
@@ -122,19 +126,33 @@ const SettingsProfile: React.FC = () => {
 
           <div className="space-y-5">
             <div className="mb-6">
-              <label className="block text-gray-600 text-sm font-medium mb-1" htmlFor="username">Username</label>
-              <input id="username" type="text" value={username} required
-                     onChange={(e) => setUsername(e.target.value)}
-                     className="shadow appearance-none border border-gray-400 rounded w-full py-1.5 px-2 text-gray-600 leading-tight
-                                focus:outline-none focus:shadow-outline text-sm"/>
+              <label className="block text-gray-600 text-sm font-medium mb-1" htmlFor="username">
+                Username
+              </label>
+              <input
+                id="username"
+                type="text"
+                value={username}
+                required
+                onChange={(e) => setUsername(e.target.value)}
+                className="shadow appearance-none border border-gray-400 rounded w-full py-1.5 px-2 text-gray-600 leading-tight
+                                focus:outline-none focus:shadow-outline text-sm"
+              />
             </div>
 
             <div className="mb-6">
-              <label className="block text-gray-600 text-sm font-medium mb-1" htmlFor="email">Email</label>
-              <input id="email" type="email" value={email} required
-                     onChange={(e) => setEmail(e.target.value)}
-                     className="shadow appearance-none border rounded w-full py-1.5 px-2 text-gray-600 leading-tight
-                                focus:outline-none focus:shadow-outline text-sm"/>
+              <label className="block text-gray-600 text-sm font-medium mb-1" htmlFor="email">
+                Email
+              </label>
+              <input
+                id="email"
+                type="email"
+                value={email}
+                required
+                onChange={(e) => setEmail(e.target.value)}
+                className="shadow appearance-none border rounded w-full py-1.5 px-2 text-gray-600 leading-tight
+                                focus:outline-none focus:shadow-outline text-sm"
+              />
             </div>
 
             <div className="space-y-2">
@@ -142,29 +160,45 @@ const SettingsProfile: React.FC = () => {
 
               <div className="flex space-x-4">
                 <div className="flex items-center">
-                  <input id="sunday" type="radio" name="weekStartDay" value="sunday"
-                         checked={weekStartDay === 'sunday'}
-                         onChange={() => setWeekStartDay('sunday')}
-                         className="h-4 w-4 text-blue-600 focus:ring-blue-500" />
-                  <label htmlFor="sunday" className="ml-2 block text-sm text-gray-600">Sunday</label>
+                  <input
+                    id="sunday"
+                    type="radio"
+                    name="weekStartDay"
+                    value="sunday"
+                    checked={weekStartDay === 'sunday'}
+                    onChange={() => setWeekStartDay('sunday')}
+                    className="h-4 w-4 text-blue-600 focus:ring-blue-500"
+                  />
+                  <label htmlFor="sunday" className="ml-2 block text-sm text-gray-600">
+                    Sunday
+                  </label>
                 </div>
                 <div className="flex items-center">
-                  <input id="monday" type="radio" name="weekStartDay" value="monday"
-                         checked={weekStartDay === 'monday'}
-                         onChange={() => setWeekStartDay('monday')}
-                         className="h-4 w-4 text-blue-600 focus:ring-blue-500" />
-                  <label htmlFor="monday" className="ml-2 block text-sm text-gray-600">Monday</label>
+                  <input
+                    id="monday"
+                    type="radio"
+                    name="weekStartDay"
+                    value="monday"
+                    checked={weekStartDay === 'monday'}
+                    onChange={() => setWeekStartDay('monday')}
+                    className="h-4 w-4 text-blue-600 focus:ring-blue-500"
+                  />
+                  <label htmlFor="monday" className="ml-2 block text-sm text-gray-600">
+                    Monday
+                  </label>
                 </div>
               </div>
             </div>
           </div>
 
           <div className="mt-4 flex">
-            <button type="submit"
-                    disabled={isUpdatingSettings || !hasChanges}
-                    className={`${hasChanges ? 'bg-blue-500 hover:bg-blue-700' : 'bg-gray-400 cursor-not-allowed'}
+            <button
+              type="submit"
+              disabled={isUpdatingSettings || !hasChanges}
+              className={`${hasChanges ? 'bg-blue-500 hover:bg-blue-700' : 'bg-gray-400 cursor-not-allowed'}
                               text-white font-medium py-1.5 px-8 rounded focus:outline-none focus:shadow-outline 
-                                text-sm`} >
+                                text-sm`}
+            >
               {isUpdatingSettings ? 'Updating...' : 'Update'}
             </button>
           </div>
@@ -180,25 +214,37 @@ const SettingsProfile: React.FC = () => {
               <label className="text-gray-600 text-sm font-medium mb-1" htmlFor="currentPassword">
                 Current Password
               </label>
-              <input id="currentPassword" type="password" value={currentPassword}
-                     onChange={(e) => setCurrentPassword(e.target.value)}
-                     className="shadow appearance-none border rounded w-full py-1.5 px-2 text-gray-600 leading-tight
-                                focus:outline-none focus:shadow-outline text-sm"/>
+              <input
+                id="currentPassword"
+                type="password"
+                value={currentPassword}
+                onChange={(e) => setCurrentPassword(e.target.value)}
+                className="shadow appearance-none border rounded w-full py-1.5 px-2 text-gray-600 leading-tight
+                                focus:outline-none focus:shadow-outline text-sm"
+              />
             </div>
 
             <div className="mb-6">
-              <label className="text-gray-600 text-sm font-medium mb-1" htmlFor="newPassword">New Password</label>
-              <input id="newPassword" type="password" value={newPassword}
-                     onChange={(e) => setNewPassword(e.target.value)}
-                     className="shadow appearance-none border rounded w-full py-1.5 px-2 text-gray-600 leading-tight
-                                focus:outline-none focus:shadow-outline text-sm"/>
+              <label className="text-gray-600 text-sm font-medium mb-1" htmlFor="newPassword">
+                New Password
+              </label>
+              <input
+                id="newPassword"
+                type="password"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                className="shadow appearance-none border rounded w-full py-1.5 px-2 text-gray-600 leading-tight
+                                focus:outline-none focus:shadow-outline text-sm"
+              />
             </div>
 
-            <button type="submit"
-                    disabled={isUpdatingPassword || !hasPasswordChanges}
-                    className={`${hasPasswordChanges ? 'bg-blue-500 hover:bg-blue-700' : 'bg-gray-400 cursor-not-allowed'}
+            <button
+              type="submit"
+              disabled={isUpdatingPassword || !hasPasswordChanges}
+              className={`${hasPasswordChanges ? 'bg-blue-500 hover:bg-blue-700' : 'bg-gray-400 cursor-not-allowed'}
                               text-white font-medium py-1.5 px-8 rounded focus:outline-none focus:shadow-outline 
-                                text-sm`} >
+                                text-sm`}
+            >
               {isUpdatingPassword ? 'Updating...' : 'Update password'}
             </button>
           </div>
