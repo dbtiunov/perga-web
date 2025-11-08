@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { PlannerAgenda, PlannerAgendaItem } from '@api/planner_agendas';
 import { PlannerItemState } from '@/api/planner_base.ts';
@@ -48,6 +48,24 @@ const PlannerAgendas: React.FC<PlannerAgendasProps> = ({
   copyAgendasMap,
 }) => {
   const { collapsedAgendas, setCollapsedAgendas } = useCollapsedAgendas();
+
+  // Ensure that newly created custom agendas are collapsed by default
+  useEffect(() => {
+    if (!plannerAgendas?.length){
+      return;
+    }
+
+    const updates: Record<number, boolean> = {};
+    for (const agenda of plannerAgendas) {
+      if (agenda.agenda_type === 'custom' && collapsedAgendas[agenda.id] === undefined) {
+        updates[agenda.id] = true;
+      }
+    }
+
+    if (Object.keys(updates).length > 0) {
+      setCollapsedAgendas({ ...collapsedAgendas, ...updates });
+    }
+  }, [plannerAgendas, collapsedAgendas, setCollapsedAgendas]);
 
   const toggleAgendaCollapse = (agendaId: number) => {
     setCollapsedAgendas({
