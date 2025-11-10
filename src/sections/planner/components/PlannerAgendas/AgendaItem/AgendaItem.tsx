@@ -169,7 +169,6 @@ const AgendaItem = ({
   return (
     <div
       className={`group flex items-center gap-2 min-h-[2.5rem] p-2
-                     ${!isEmptyItem ? 'hover:bg-gray-100 rounded' : ''}
                      ${isDragging ? 'opacity-50' : 'opacity-100'}
                      transition-opacity duration-200`}
       draggable={canDrag}

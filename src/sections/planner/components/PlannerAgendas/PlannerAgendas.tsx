@@ -79,96 +79,98 @@ const PlannerAgendas: React.FC<PlannerAgendasProps> = ({
 
   return (
     <div className="space-y-4">
-      {plannerAgendas.map((agenda) => (
-        <div key={agenda.id}>
-          <div className="flex items-center justify-between mb-3 group">
-            <button
-              type="button"
-              className="flex items-center cursor-pointer focus:outline-none"
-              onClick={() => toggleAgendaCollapse(agenda.id)}
-              aria-expanded={!collapsedAgendas[agenda.id]}
-              aria-controls={`agenda-${agenda.id}`}
-            >
-              <div
-                className={`mr-2 transform transition-transform ${collapsedAgendas[agenda.id] ? '' : 'rotate-90'}`}
+      {plannerAgendas
+        .filter((agenda) => agenda.id !== copyAgendasMap.nextMonth.id)
+        .map((agenda) => (
+          <div key={agenda.id}>
+            <div className="flex items-center justify-between mb-3 group">
+              <button
+                type="button"
+                className="flex items-center cursor-pointer focus:outline-none"
+                onClick={() => toggleAgendaCollapse(agenda.id)}
+                aria-expanded={!collapsedAgendas[agenda.id]}
+                aria-controls={`agenda-${agenda.id}`}
               >
-                <Icon name="rightChevron" size="24" className="h-4 w-4 text-gray-600" />
+                <div
+                  className={`mr-2 transform transition-transform ${collapsedAgendas[agenda.id] ? '' : 'rotate-90'}`}
+                >
+                  <Icon name="rightChevron" size="24" className="h-4 w-4 text-gray-600" />
+                </div>
+                <h3 className="font-medium text-gray-500">{agenda.name}</h3>
+              </button>
+
+              <div className="pl-2 text-gray-600 hover:text-gray-800 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
+                <AgendaActionsDropdown agenda={agenda} fetchAgendaItems={fetchAgendaItems} />
               </div>
-              <h3 className="font-medium text-gray-500">{agenda.name}</h3>
-            </button>
-
-            <div className="pl-2 text-gray-600 hover:text-gray-800 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
-              <AgendaActionsDropdown agenda={agenda} fetchAgendaItems={fetchAgendaItems} />
             </div>
-          </div>
 
-          {!collapsedAgendas[agenda.id] && (
-            <div id={`agenda-${agenda.id}`}>
-              <div className="space-y-0">
-                {plannerAgendaItems[agenda.id]?.map((item, index) => (
-                  <div
-                    key={item.id}
-                    onDragOver={(e) => {
-                      e.preventDefault();
-                      if (!dragAgendaItem || dragAgendaItem.agenda_id !== agenda.id) return;
+            {!collapsedAgendas[agenda.id] && (
+              <div id={`agenda-${agenda.id}`}>
+                <div className="space-y-0">
+                  {plannerAgendaItems[agenda.id]?.map((item, index) => (
+                    <div
+                      key={item.id}
+                      onDragOver={(e) => {
+                        e.preventDefault();
+                        if (!dragAgendaItem || dragAgendaItem.agenda_id !== agenda.id) return;
 
-                      const draggingItemIndex = plannerAgendaItems[agenda.id].findIndex(
-                        (t) => t.id === dragAgendaItem.id,
-                      );
-                      if (draggingItemIndex === index) {
-                        return;
-                      }
+                        const draggingItemIndex = plannerAgendaItems[agenda.id].findIndex(
+                          (t) => t.id === dragAgendaItem.id,
+                        );
+                        if (draggingItemIndex === index) {
+                          return;
+                        }
 
-                      const newItems = [...plannerAgendaItems[agenda.id]];
-                      const [removed] = newItems.splice(draggingItemIndex, 1);
-                      newItems.splice(index, 0, removed);
+                        const newItems = [...plannerAgendaItems[agenda.id]];
+                        const [removed] = newItems.splice(draggingItemIndex, 1);
+                        newItems.splice(index, 0, removed);
 
-                      onReorderAgendaItems(agenda.id, newItems);
-                    }}
-                  >
+                        onReorderAgendaItems(agenda.id, newItems);
+                      }}
+                    >
+                      <AgendaItem
+                        item={item}
+                        onUpdateItem={(itemId, changes) => {
+                          onUpdateAgendaItem(itemId, agenda.id, changes);
+                        }}
+                        onDeleteItem={() => onDeleteAgendaItem(item.id, agenda.id)}
+                        onDragStartItem={() => onDragStartAgendaItem(item)}
+                        onDragEndItem={() => {
+                          onDragEndAgendaItem();
+                          onReorderAgendaItems(agenda.id, plannerAgendaItems[agenda.id]);
+                        }}
+                        onCopyItem={(itemId, toAgendaId) => onCopyAgendaItem(itemId, toAgendaId)}
+                        onMoveItem={(itemId, fromAgendaId, toAgendaId) =>
+                          onMoveAgendaItem(itemId, fromAgendaId, toAgendaId)
+                        }
+                        onCopyToToday={onCopyAgendaItemToToday}
+                        onCopyToTomorrow={onCopyAgendaItemToTomorrow}
+                        copyAgendasMap={copyAgendasMap}
+                      />
+                    </div>
+                  ))}
+
+                  <div>
                     <AgendaItem
-                      item={item}
-                      onUpdateItem={(itemId, changes) => {
-                        onUpdateAgendaItem(itemId, agenda.id, changes);
+                      item={{
+                        id: -1,
+                        agenda_id: agenda.id,
+                        text: '',
+                        state: 'todo',
+                        index: -1,
                       }}
-                      onDeleteItem={() => onDeleteAgendaItem(item.id, agenda.id)}
-                      onDragStartItem={() => onDragStartAgendaItem(item)}
-                      onDragEndItem={() => {
-                        onDragEndAgendaItem();
-                        onReorderAgendaItems(agenda.id, plannerAgendaItems[agenda.id]);
+                      onUpdateItem={(_, changes) => {
+                        if (changes.text?.trim()) {
+                          onAddAgendaItem(agenda.id, changes.text);
+                        }
                       }}
-                      onCopyItem={(itemId, toAgendaId) => onCopyAgendaItem(itemId, toAgendaId)}
-                      onMoveItem={(itemId, fromAgendaId, toAgendaId) =>
-                        onMoveAgendaItem(itemId, fromAgendaId, toAgendaId)
-                      }
-                      onCopyToToday={onCopyAgendaItemToToday}
-                      onCopyToTomorrow={onCopyAgendaItemToTomorrow}
-                      copyAgendasMap={copyAgendasMap}
                     />
                   </div>
-                ))}
-
-                <div>
-                  <AgendaItem
-                    item={{
-                      id: -1,
-                      agenda_id: agenda.id,
-                      text: '',
-                      state: 'todo',
-                      index: -1,
-                    }}
-                    onUpdateItem={(_, changes) => {
-                      if (changes.text?.trim()) {
-                        onAddAgendaItem(agenda.id, changes.text);
-                      }
-                    }}
-                  />
                 </div>
               </div>
-            </div>
-          )}
-        </div>
-      ))}
+            )}
+          </div>
+        ))}
     </div>
   );
 };
