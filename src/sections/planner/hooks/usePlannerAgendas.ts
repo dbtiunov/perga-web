@@ -42,11 +42,28 @@ export const usePlannerAgendas = (selectedDate: Date) => {
 
       if (agendas.length > 0) {
         const agendaIds = agendas.map((agenda) => agenda.id);
-        const itemsResponse = await getItemsByAgendas(agendaIds);
-        setPlannerAgendaItems(itemsResponse.data);
+        await fetchAgendaItems(agendaIds);
       }
     } catch (error) {
       console.error('Error fetching planner agendas:', error);
+    }
+  }, []);
+
+  // Fetch items only for specific agendas
+  const fetchAgendaItems = useCallback(async (agendaIds: number[]) => {
+    if (!agendaIds?.length) {
+      return;
+    }
+
+    try {
+      const itemsResponse = await getItemsByAgendas(agendaIds);
+      const itemsByAgenda = itemsResponse.data;
+      setPlannerAgendaItems((prev) => ({
+        ...prev,
+        ...itemsByAgenda,
+      }));
+    } catch (error) {
+      console.error('Error fetching agenda items:', error);
     }
   }, []);
 
@@ -269,5 +286,6 @@ export const usePlannerAgendas = (selectedDate: Date) => {
     handleCopyAgendaItem,
     handleMoveAgendaItem,
     copyAgendasMap,
+    fetchAgendaItems,
   };
 };

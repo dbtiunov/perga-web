@@ -28,6 +28,7 @@ const Planner = () => {
     handleCopyAgendaItem,
     handleMoveAgendaItem,
     copyAgendasMap,
+    fetchAgendaItems,
   } = usePlannerAgendas(selectedDate);
 
   const {
@@ -222,6 +223,7 @@ const Planner = () => {
           onCopyAgendaItemToToday={(text) => handleAddDayItem(selectedDate, text)}
           onCopyAgendaItemToTomorrow={(text) => handleAddDayItem(getNextDay(selectedDate), text)}
           copyAgendasMap={copyAgendasMap}
+          fetchAgendaItems={fetchAgendaItems}
         />
       </div>
     </div>

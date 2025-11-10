@@ -5,6 +5,7 @@ import { PlannerItemState } from '@/api/planner_base.ts';
 import { Icon } from '@common/Icon.tsx';
 import AgendaItem from '@planner/components/PlannerAgendas/AgendaItem/AgendaItem.tsx';
 import { useCollapsedAgendas } from '@planner/hooks/useCollapsedAgendas.ts';
+import AgendaActionsDropdown from '@planner/components/PlannerAgendas/AgendaActionsDropdown';
 
 interface PlannerAgendasProps {
   plannerAgendas: PlannerAgenda[];
@@ -29,6 +30,7 @@ interface PlannerAgendasProps {
     nextMonth: PlannerAgenda;
     customAgendas: PlannerAgenda[];
   };
+  fetchAgendaItems: (agendaIds: number[]) => Promise<void> | void;
 }
 
 const PlannerAgendas: React.FC<PlannerAgendasProps> = ({
@@ -46,12 +48,13 @@ const PlannerAgendas: React.FC<PlannerAgendasProps> = ({
   onCopyAgendaItemToToday,
   onCopyAgendaItemToTomorrow,
   copyAgendasMap,
+  fetchAgendaItems,
 }) => {
   const { collapsedAgendas, setCollapsedAgendas } = useCollapsedAgendas();
 
   // Ensure that newly created custom agendas are collapsed by default
   useEffect(() => {
-    if (!plannerAgendas?.length){
+    if (!plannerAgendas?.length) {
       return;
     }
 
@@ -78,22 +81,29 @@ const PlannerAgendas: React.FC<PlannerAgendasProps> = ({
     <div className="space-y-4">
       {plannerAgendas.map((agenda) => (
         <div key={agenda.id}>
-          <div
-            className="flex items-center mb-3 cursor-pointer"
-            onClick={() => toggleAgendaCollapse(agenda.id)}
-          >
-            <div className="flex items-center">
+          <div className="flex items-center justify-between mb-3 group">
+            <button
+              type="button"
+              className="flex items-center cursor-pointer focus:outline-none"
+              onClick={() => toggleAgendaCollapse(agenda.id)}
+              aria-expanded={!collapsedAgendas[agenda.id]}
+              aria-controls={`agenda-${agenda.id}`}
+            >
               <div
                 className={`mr-2 transform transition-transform ${collapsedAgendas[agenda.id] ? '' : 'rotate-90'}`}
               >
                 <Icon name="rightChevron" size="24" className="h-4 w-4 text-gray-600" />
               </div>
               <h3 className="font-medium text-gray-500">{agenda.name}</h3>
+            </button>
+
+            <div className="pl-2 text-gray-600 hover:text-gray-800 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
+              <AgendaActionsDropdown agenda={agenda} fetchAgendaItems={fetchAgendaItems} />
             </div>
           </div>
 
           {!collapsedAgendas[agenda.id] && (
-            <div>
+            <div id={`agenda-${agenda.id}`}>
               <div className="space-y-0">
                 {plannerAgendaItems[agenda.id]?.map((item, index) => (
                   <div
