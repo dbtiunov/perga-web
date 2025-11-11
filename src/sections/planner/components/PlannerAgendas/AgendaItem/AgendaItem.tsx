@@ -5,6 +5,7 @@ import { PlannerAgendaItem, PlannerAgenda } from '@api/planner_agendas';
 import { PlannerItemState } from '@api/planner_base';
 import { Icon } from '@common/Icon.tsx';
 import { ITEM_TEXT_MAX_LENGTH } from '@planner/const.ts';
+import { getNextDay, formatDateForDisplayShort } from '@planner/utils/dateUtils';
 
 interface AgendaItemProps {
   item: PlannerAgendaItem;
@@ -17,8 +18,8 @@ interface AgendaItemProps {
   onDeleteItem?: (itemId: number) => void;
   onCopyItem?: (itemId: number, toAgendaId: number) => void;
   onMoveItem?: (itemId: number, fromAgendaId: number, toAgendaId: number) => void;
-  onCopyToToday?: (text: string) => void;
-  onCopyToTomorrow?: (text: string) => void;
+  onCopyToDay?: (date: Date, text: string) => void;
+  selectedDate?: Date;
   copyAgendasMap?: {
     currentMonth: PlannerAgenda;
     nextMonth: PlannerAgenda;
@@ -34,8 +35,8 @@ const AgendaItem = ({
   onDeleteItem,
   onCopyItem,
   onMoveItem,
-  onCopyToToday,
-  onCopyToTomorrow,
+  onCopyToDay,
+  selectedDate,
   copyAgendasMap,
 }: AgendaItemProps) => {
   const isEmptyItem: boolean = item.id === -1;
@@ -162,6 +163,23 @@ const AgendaItem = ({
   const showCheckbox: boolean = !isEmptyItem;
   const showExtraActions: boolean = !isEmptyItem;
 
+  const copyDates: Array<{ date: Date; label: string; key: string }> = [];
+  if (selectedDate) {
+    const today = new Date();
+    const tomorrow = getNextDay(today);
+    copyDates.push({ date: today, label: `${formatDateForDisplayShort(today)} (Today)`, key: 'today' });
+    copyDates.push({ date: tomorrow, label: `${formatDateForDisplayShort(tomorrow)} (Tomorrow)`, key: 'tomorrow' });
+
+    if (![today.toDateString(), tomorrow.toDateString()].includes(selectedDate.toDateString())) {
+      copyDates.push({ date: selectedDate, label: formatDateForDisplayShort(selectedDate), key: 'selected_date' });
+    }
+
+    const nextDate = getNextDay(selectedDate);
+    if (![today.toDateString(), tomorrow.toDateString()].includes(nextDate.toDateString())) {
+      copyDates.push({ date: nextDate, label: formatDateForDisplayShort(nextDate), key: 'next_date' });
+    }
+  }
+
   const copyCustomAgendas = copyAgendasMap?.customAgendas.filter(
     (agenda) => agenda.id !== item.agenda_id,
   );
@@ -253,24 +271,17 @@ const AgendaItem = ({
               <div className="absolute right-0 mt-8 w-70 bg-white rounded-md shadow-lg z-10">
                 <div className="p-4 pb-2 text-xs uppercase text-gray-500">Copy to</div>
                 <div className="py-1">
-                  <button
-                    className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 flex items-center"
-                    onClick={() => {
-                      onCopyToToday?.(item.text);
-                      setIsCopyDropdownOpen(false);
-                    }}
-                  >
-                    Today
-                  </button>
-                  <button
-                    className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 flex items-center"
-                    onClick={() => {
-                      onCopyToTomorrow?.(item.text);
-                      setIsCopyDropdownOpen(false);
-                    }}
-                  >
-                    Tomorrow
-                  </button>
+                  {copyDates.map((copyDate) => (
+                    <button
+                      className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 flex items-center"
+                      onClick={() => {
+                        onCopyToDay?.(copyDate.date, item.text);
+                        setIsCopyDropdownOpen(false);
+                      }}
+                    >
+                      {copyDate.label}
+                    </button>
+                  ))}
                 </div>
                 <div className="my-1 border-t border-gray-200" />
                 <div className="py-1">

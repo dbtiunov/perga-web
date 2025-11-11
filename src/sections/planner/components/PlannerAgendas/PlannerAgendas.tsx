@@ -23,8 +23,8 @@ interface PlannerAgendasProps {
   onDeleteAgendaItem: (itemId: number, agendaId: number) => void;
   onCopyAgendaItem: (itemId: number, toAgendaId: number) => void;
   onMoveAgendaItem: (itemId: number, fromAgendaId: number, toAgendaId: number) => void;
-  onCopyAgendaItemToToday?: (text: string) => void;
-  onCopyAgendaItemToTomorrow?: (text: string) => void;
+  onCopyAgendaItemToDay?: (date: Date, text: string) => void;
+  selectedDate?: Date;
   copyAgendasMap: {
     currentMonth: PlannerAgenda;
     nextMonth: PlannerAgenda;
@@ -45,8 +45,8 @@ const PlannerAgendas: React.FC<PlannerAgendasProps> = ({
   onDeleteAgendaItem,
   onCopyAgendaItem,
   onMoveAgendaItem,
-  onCopyAgendaItemToToday,
-  onCopyAgendaItemToTomorrow,
+  onCopyAgendaItemToDay,
+  selectedDate,
   copyAgendasMap,
   fetchAgendaItems,
 }) => {
@@ -143,8 +143,8 @@ const PlannerAgendas: React.FC<PlannerAgendasProps> = ({
                         onMoveItem={(itemId, fromAgendaId, toAgendaId) =>
                           onMoveAgendaItem(itemId, fromAgendaId, toAgendaId)
                         }
-                        onCopyToToday={onCopyAgendaItemToToday}
-                        onCopyToTomorrow={onCopyAgendaItemToTomorrow}
+                        onCopyToDay={onCopyAgendaItemToDay}
+                        selectedDate={selectedDate}
                         copyAgendasMap={copyAgendasMap}
                       />
                     </div>
