@@ -102,3 +102,10 @@ export const copyPlannerAgendaItem = (itemId: number, agendaId: number) =>
 
 export const movePlannerAgendaItem = (itemId: number, agendaId: number) =>
   axios.post<PlannerAgendaItem>(`${AGENDAS_API_URL}items/${itemId}/move/`, { agenda_id: agendaId });
+
+export type PlannerAgendaAction = 'delete_finished_items' | 'sort_items_by_state';
+
+export const actionPlannerAgenda = (agendaId: number, action: PlannerAgendaAction) =>
+  axios.post(`${AGENDAS_API_URL}${agendaId}/action/`, {
+    action,
+  });
