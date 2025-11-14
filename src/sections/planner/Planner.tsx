@@ -12,8 +12,31 @@ const MIN_LEFT_PANE_WIDTH_PERCENT = 30;
 const MAX_LEFT_PANE_WIDTH_PERCENT = 70;
 const RESIZE_HANDLE_WIDTH_PX = 6;
 
+const mdQuery = '(min-width: 768px)';
+
 const Planner = () => {
   const { selectedDate, setSelectedDate } = useSelectedDate();
+
+  // Track if viewport is at least md to apply resizable width only on md+
+  const [isMd, setIsMd] = useState<boolean>(() => {
+    if (typeof window === 'undefined'){
+      // assume md on SSR to avoid layout shift
+      return true;
+    }
+    return window.matchMedia(mdQuery).matches;
+  });
+  useEffect(() => {
+    if (typeof window === 'undefined'){
+      return;
+    }
+
+    const mql = window.matchMedia(mdQuery);
+    const onChange = () => setIsMd(mql.matches);
+    onChange();
+    mql.addEventListener?.('change', onChange);
+
+    return () => mql.removeEventListener?.('change', onChange);
+  }, []);
 
   const {
     plannerAgendas,
@@ -155,12 +178,12 @@ const Planner = () => {
   return (
     <div
       ref={plannerContainerRef}
-      className="h-screen flex flex-col md:flex-row w-full bg-white overflow-hidden"
+      className="md:h-screen flex flex-col md:flex-row w-full bg-white overflow-auto md:overflow-hidden"
     >
       {/* Left pane (days) */}
       <div
         className="w-full md:flex-none md:overflow-auto md:min-h-0 flex flex-col"
-        style={leftPaneStyle}
+        style={isMd ? leftPaneStyle : undefined}
       >
         <PlannerDay
           date={selectedDate}
@@ -207,7 +230,7 @@ const Planner = () => {
       </div>
 
       {/* Right pane (agendas) */}
-      <div className="w-full md:flex-1 md:overflow-auto md:min-h-0 px-8 py-10">
+      <div className="w-full md:flex-1 overflow-auto min-h-0 px-8 py-10">
         <PlannerAgendas
           plannerAgendas={plannerAgendas}
           plannerAgendaItems={plannerAgendaItems}

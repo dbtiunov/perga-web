@@ -273,6 +273,7 @@ const AgendaItem = ({
                 <div className="py-1">
                   {copyDates.map((copyDate) => (
                     <button
+                      key={copyDate.key}
                       className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 flex items-center"
                       onClick={() => {
                         onCopyToDay?.(copyDate.date, item.text);
