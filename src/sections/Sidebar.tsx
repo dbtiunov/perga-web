@@ -7,6 +7,7 @@ import { Icon } from '@common/Icon';
 import { triggerRefresh } from '@common/events';
 import Storage from '@common/utils/storage';
 import { StorageKeys } from '@common/utils/storageKeys';
+import { applyThemeClass } from '@common/utils/theme';
 
 const Sidebar = () => {
   const location = useLocation();
@@ -61,12 +62,13 @@ const Sidebar = () => {
     setIsDarkThemeEnabled((prev) => {
       const next = !prev;
       Storage.setBoolean(StorageKeys.IsDarkThemeEnabled, next);
+      applyThemeClass(next);
       return next;
     });
   };
 
   return (
-    <div className="h-screen bg-gray-700 flex flex-col transition-all duration-300 fixed w-14 md:w-20 pt-16 md:pt-0">
+    <div className="h-screen bg-gray-700 dark:bg-gray-900 flex flex-col transition-all duration-300 fixed w-14 md:w-20 pt-16 md:pt-0">
       <nav className="flex-grow">
         {navItems.map((item) => (
           <Link
