@@ -119,9 +119,9 @@ const SettingsProfile: React.FC = () => {
   };
 
   return (
-    <div className="px-0 md:px-6 mb-4 w-full md:max-w-2/5">
+    <div className="w-full md:max-w-2/5">
       <form onSubmit={handleProfileUpdate}>
-        <fieldset className="border border-gray-400 rounded-md p-8 mb-6">
+        <fieldset className="border border-gray-400 rounded-md p-8">
           <legend className="px-2 text-gray-600">Edit Profile</legend>
 
           <div className="space-y-5">

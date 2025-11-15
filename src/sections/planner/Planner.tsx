@@ -19,14 +19,14 @@ const Planner = () => {
 
   // Track if viewport is at least md to apply resizable width only on md+
   const [isMd, setIsMd] = useState<boolean>(() => {
-    if (typeof window === 'undefined'){
+    if (typeof window === 'undefined') {
       // assume md on SSR to avoid layout shift
       return true;
     }
     return window.matchMedia(mdQuery).matches;
   });
   useEffect(() => {
-    if (typeof window === 'undefined'){
+    if (typeof window === 'undefined') {
       return;
     }
 

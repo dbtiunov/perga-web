@@ -163,7 +163,7 @@ const DayItem = ({
 
   return (
     <div
-      className={`group flex items-center gap-2 min-h-[2.5rem] transition-opacity duration-200
+      className={`group flex items-center gap-2 min-h-[2.5rem] transition-opacity transition-colors duration-200 hover:bg-gray-100 rounded-md
                      ${isDragging ? 'opacity-50' : 'opacity-100'}`}
       draggable={canDrag}
       onDragStart={canDrag ? handleDragStart : undefined}
@@ -294,7 +294,7 @@ const DayItem = ({
                 <div className="absolute right-0 mt-8 w-36 bg-white rounded-md shadow-lg z-10">
                   <button
                     onClick={onDropActionClick}
-                    className="w-full text-left px-4 py-2 text-sm  hover:bg-gray-100 flex items-center"
+                    className="w-full text-left px-4 py-3 text-sm  hover:bg-gray-100 flex items-center"
                     aria-label="Drop item"
                     title="Drop item"
                   >
@@ -304,7 +304,7 @@ const DayItem = ({
 
                   <button
                     onClick={onDeleteActionClick}
-                    className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 flex items-center"
+                    className="w-full text-left px-4 py-3 text-sm hover:bg-gray-100 flex items-center"
                     aria-label="Delete item"
                     title="Delete item"
                   >

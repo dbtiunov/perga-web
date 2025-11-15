@@ -87,13 +87,17 @@ const AgendaItem = ({
   };
 
   const handleCopyToAgenda = (toAgendaId: number | undefined) => {
-    if (!toAgendaId) return;
+    if (!toAgendaId) {
+      return;
+    }
     onCopyItem?.(item.id, toAgendaId);
     setIsCopyDropdownOpen(false);
   };
 
   const handleMoveToAgenda = (toAgendaId: number | undefined) => {
-    if (!toAgendaId) return;
+    if (!toAgendaId) {
+      return;
+    }
     onMoveItem?.(item.id, item.agenda_id, toAgendaId);
     setIsMoveDropdownOpen(false);
   };
@@ -167,16 +171,32 @@ const AgendaItem = ({
   if (selectedDate) {
     const today = new Date();
     const tomorrow = getNextDay(today);
-    copyDates.push({ date: today, label: `${formatDateForDisplayShort(today)} (Today)`, key: 'today' });
-    copyDates.push({ date: tomorrow, label: `${formatDateForDisplayShort(tomorrow)} (Tomorrow)`, key: 'tomorrow' });
+    copyDates.push({
+      date: today,
+      label: `${formatDateForDisplayShort(today)} (Today)`,
+      key: 'today',
+    });
+    copyDates.push({
+      date: tomorrow,
+      label: `${formatDateForDisplayShort(tomorrow)} (Tomorrow)`,
+      key: 'tomorrow',
+    });
 
     if (![today.toDateString(), tomorrow.toDateString()].includes(selectedDate.toDateString())) {
-      copyDates.push({ date: selectedDate, label: formatDateForDisplayShort(selectedDate), key: 'selected_date' });
+      copyDates.push({
+        date: selectedDate,
+        label: formatDateForDisplayShort(selectedDate),
+        key: 'selected_date',
+      });
     }
 
     const nextDate = getNextDay(selectedDate);
     if (![today.toDateString(), tomorrow.toDateString()].includes(nextDate.toDateString())) {
-      copyDates.push({ date: nextDate, label: formatDateForDisplayShort(nextDate), key: 'next_date' });
+      copyDates.push({
+        date: nextDate,
+        label: formatDateForDisplayShort(nextDate),
+        key: 'next_date',
+      });
     }
   }
 
@@ -188,7 +208,7 @@ const AgendaItem = ({
     <div
       className={`group flex items-center gap-2 min-h-[2.5rem] p-2
                      ${isDragging ? 'opacity-50' : 'opacity-100'}
-                     transition-opacity duration-200`}
+                     transition-opacity transition-colors duration-200 hover:bg-gray-100 rounded-md`}
       draggable={canDrag}
       onDragStart={canDrag ? handleDragStart : undefined}
       onDragEnd={canDrag ? handleDragEnd : undefined}
@@ -269,12 +289,12 @@ const AgendaItem = ({
 
             {isCopyDropdownOpen && (
               <div className="absolute right-0 mt-8 w-70 bg-white rounded-md shadow-lg z-10">
-                <div className="p-4 pb-2 text-xs uppercase text-gray-500">Copy to</div>
-                <div className="py-1">
+                <div className="p-4 text-xs uppercase text-gray-500">Copy to</div>
+                <div>
                   {copyDates.map((copyDate) => (
                     <button
                       key={copyDate.key}
-                      className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 flex items-center"
+                      className="w-full text-left px-4 py-3 text-sm hover:bg-gray-100 flex items-center"
                       onClick={() => {
                         onCopyToDay?.(copyDate.date, item.text);
                         setIsCopyDropdownOpen(false);
@@ -284,11 +304,11 @@ const AgendaItem = ({
                     </button>
                   ))}
                 </div>
-                <div className="my-1 border-t border-gray-200" />
-                <div className="py-1">
+                <div className="border-t border-gray-200" />
+                <div>
                   {copyAgendasMap?.currentMonth.id !== item.agenda_id && (
                     <button
-                      className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 flex items-center"
+                      className="w-full text-left px-4 py-3 text-sm hover:bg-gray-100 flex items-center"
                       onClick={() => handleCopyToAgenda(copyAgendasMap?.currentMonth.id)}
                     >
                       Current month ({copyAgendasMap?.currentMonth.name})
@@ -296,7 +316,7 @@ const AgendaItem = ({
                   )}
                   {copyAgendasMap?.nextMonth.id !== item.agenda_id && (
                     <button
-                      className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 flex items-center"
+                      className="w-full text-left px-4 py-3 text-sm hover:bg-gray-100 flex items-center"
                       onClick={() => handleCopyToAgenda(copyAgendasMap?.nextMonth.id)}
                     >
                       Next month ({copyAgendasMap?.nextMonth.name})
@@ -305,12 +325,12 @@ const AgendaItem = ({
                 </div>
                 {copyCustomAgendas && copyCustomAgendas.length > 0 && (
                   <div>
-                    <div className="my-1 border-t border-gray-200" />
-                    <div className="max-h-64 overflow-auto py-1">
+                    <div className="border-t border-gray-200" />
+                    <div className="max-h-64 overflow-auto">
                       {copyCustomAgendas.map((customAgenda) => (
                         <button
                           key={customAgenda.id}
-                          className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
+                          className="w-full text-left px-4 py-3 text-sm hover:bg-gray-100"
                           onClick={() => handleCopyToAgenda(customAgenda.id)}
                         >
                           {customAgenda.name}
@@ -335,11 +355,11 @@ const AgendaItem = ({
 
             {isMoveDropdownOpen && (
               <div className="absolute right-0 mt-8 w-70 bg-white rounded-md shadow-lg z-10">
-                <div className="px-3 py-2 text-xs uppercase text-gray-500">Move to</div>
-                <div className="py-1">
+                <div className="p-4 text-xs uppercase text-gray-500">Move to</div>
+                <div>
                   {copyAgendasMap?.currentMonth.id !== item.agenda_id && (
                     <button
-                      className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 flex items-center"
+                      className="w-full text-left px-4 py-3 text-sm hover:bg-gray-100 flex items-center"
                       onClick={() => handleMoveToAgenda(copyAgendasMap?.currentMonth.id)}
                     >
                       Current month ({copyAgendasMap?.currentMonth.name})
@@ -347,7 +367,7 @@ const AgendaItem = ({
                   )}
                   {copyAgendasMap?.nextMonth.id !== item.agenda_id && (
                     <button
-                      className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 flex items-center"
+                      className="w-full text-left px-4 py-3 text-sm hover:bg-gray-100 flex items-center"
                       onClick={() => handleMoveToAgenda(copyAgendasMap?.nextMonth.id)}
                     >
                       Next month ({copyAgendasMap?.nextMonth.name})
@@ -356,12 +376,12 @@ const AgendaItem = ({
                 </div>
                 {copyCustomAgendas && copyCustomAgendas?.length > 0 && (
                   <div>
-                    <div className="my-1 border-t border-gray-200" />
-                    <div className="max-h-64 overflow-auto py-1">
+                    <div className="border-t border-gray-200" />
+                    <div className="max-h-64 overflow-auto">
                       {copyCustomAgendas.map((customAgenda) => (
                         <button
                           key={customAgenda.id}
-                          className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
+                          className="w-full text-left px-4 py-3 text-sm hover:bg-gray-100"
                           onClick={() => handleMoveToAgenda(customAgenda.id)}
                         >
                           {customAgenda.name}
@@ -383,7 +403,7 @@ const AgendaItem = ({
               <div className="absolute right-0 mt-8 w-36 bg-white rounded-md shadow-lg z-10">
                 <button
                   onClick={onDropActionClick}
-                  className="w-full text-left px-4 py-2 text-sm  hover:bg-gray-100 flex items-center"
+                  className="w-full text-left px-4 py-3 text-sm  hover:bg-gray-100 flex items-center"
                   aria-label="Drop item"
                   title="Drop item"
                 >
@@ -392,7 +412,7 @@ const AgendaItem = ({
 
                 <button
                   onClick={onDeleteActionClick}
-                  className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 flex items-center"
+                  className="w-full text-left px-4 py-3 text-sm hover:bg-gray-100 flex items-center"
                   aria-label="Delete item"
                   title="Delete item"
                 >

@@ -82,12 +82,12 @@ const Calendar: React.FC<CalendarProps> = ({
           {title && <div className="p-4 pb-2 text-xs uppercase text-gray-500">{title}</div>}
 
           {predefinedDates?.length && (
-            <div className="p-2 grid grid-cols-1 gap-2">
+            <div className="grid grid-cols-1 gap-2">
               {predefinedDates.map((predefinedDate: { label: string; date: Date }) => (
                 <button
                   key={predefinedDate.label}
                   onClick={() => onDateChange(predefinedDate.date)}
-                  className="text-sm p-2 hover:bg-gray-100 rounded text-left"
+                  className="text-sm px-4 py-3 hover:bg-gray-100 text-left"
                 >
                   {predefinedDate.label} ({formatDateForDisplayShort(predefinedDate.date)})
                 </button>
@@ -142,7 +142,7 @@ const Calendar: React.FC<CalendarProps> = ({
                         ${
                           isSelected
                             ? 'bg-blue-500 text-white'
-                            : 'hover:bg-gray-200 text-gray-600 transition-colors'
+                            : 'hover:bg-gray-100 text-gray-600 transition-colors'
                         }`}
               >
                 {day}
