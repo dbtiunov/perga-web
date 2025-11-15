@@ -5,6 +5,8 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '@contexts/hooks/useAuth.ts';
 import { Icon } from '@common/Icon';
 import { triggerRefresh } from '@common/events';
+import Storage from '@common/utils/storage';
+import { StorageKeys } from '@common/utils/storageKeys';
 
 const Sidebar = () => {
   const location = useLocation();
@@ -13,6 +15,10 @@ const Sidebar = () => {
 
   const [isSpinning, setIsSpinning] = useState(false);
   const spinTimeoutRef = useRef<number | null>(null);
+
+  const [isDarkThemeEnabled, setIsDarkThemeEnabled] = useState<boolean>(() => {
+    return Storage.getBoolean(StorageKeys.IsDarkThemeEnabled, false);
+  });
 
   const handleRefreshClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     triggerRefresh();
@@ -47,6 +53,16 @@ const Sidebar = () => {
   const handleLogout = () => {
     logout();
     navigate('/signin/');
+  };
+
+  const handleToggleThemeClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.currentTarget.blur();
+
+    setIsDarkThemeEnabled((prev) => {
+      const next = !prev;
+      Storage.setBoolean(StorageKeys.IsDarkThemeEnabled, next);
+      return next;
+    });
   };
 
   return (
@@ -84,6 +100,19 @@ const Sidebar = () => {
             />
           </div>
           <div className="text-sm hidden md:block">Refresh</div>
+        </button>
+
+        <button
+          onClick={handleToggleThemeClick}
+          aria-label="Toggle dark mode"
+          title="Toggle dark mode"
+          className="flex flex-col items-center py-4 w-full hover:bg-gray-800 focus:bg-gray-800
+                         text-gray-300 hover:text-white focus:text-white transition-colors"
+        >
+          <div>
+            <Icon name={isDarkThemeEnabled ? 'sun' : 'moon'} size="20" className="w-8 h-8" />
+          </div>
+          <div className="text-sm hidden md:block">Theme</div>
         </button>
 
         <Link
