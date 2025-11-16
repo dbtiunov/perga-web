@@ -98,7 +98,7 @@ const AgendaLine: React.FC<AgendaLineProps> = ({
       ) : (
         <div
           onClick={() => !isEmptyLine && setIsEditing(true)}
-          className={`flex-1 px-2 cursor-text truncate hover:cursor-text ${isArchived ? 'text-gray-500' : 'text-gray-600'}`}
+          className={`flex-1 px-2 cursor-text truncate hover:cursor-text ${isArchived ? 'text-gray-400' : 'text-gray-600'}`}
         >
           {agenda.name} ({agenda.completed_items_cnt}/
           {agenda.completed_items_cnt + agenda.todo_items_cnt})

@@ -96,7 +96,7 @@ const PlannerAgendas: React.FC<PlannerAgendasProps> = ({
                 >
                   <Icon name="rightChevron" size="24" className="h-4 w-4 text-gray-600" />
                 </div>
-                <h3 className="font-medium text-gray-500">{agenda.name}</h3>
+                <h3 className="text-gray-600">{agenda.name}</h3>
               </button>
 
               <div className="pl-2 text-gray-600 hover:text-gray-800 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity">

@@ -2,7 +2,7 @@ import Storage from '@common/utils/storage';
 import { StorageKeys } from '@common/utils/storageKeys';
 
 export function applyThemeClass(isDark: boolean): void {
-  if (typeof document === 'undefined'){
+  if (typeof document === 'undefined') {
     return;
   }
 
@@ -11,7 +11,7 @@ export function applyThemeClass(isDark: boolean): void {
 }
 
 export function initTheme(): void {
-  if (typeof document === 'undefined'){
+  if (typeof document === 'undefined') {
     return;
   }
 

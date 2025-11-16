@@ -14,12 +14,12 @@ const ToastItem: React.FC<{ message: ToastMessage; onClose: (id: number) => void
 
   const bgColor =
     type === 'error'
-      ? 'bg-red-700'
+      ? 'bg-red-600'
       : type === 'success'
-        ? 'bg-green-700'
+        ? 'bg-green-600'
         : type === 'warning'
-          ? 'bg-yellow-700'
-          : 'bg-gray-700';
+          ? 'bg-yellow-600'
+          : 'bg-gray-600';
 
   return (
     <div

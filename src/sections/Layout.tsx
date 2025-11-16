@@ -14,7 +14,7 @@ const Layout = () => {
 
   return (
     <ToastProvider>
-      <div className="h-screen max-w-full overflow-x-hidden bg-gray-50 text-gray-700">
+      <div className="h-screen max-w-full overflow-x-hidden bg-gray-100 text-gray-600">
         <div className={`${isSidebarVisible ? 'block' : 'hidden'} md:block z-30 relative`}>
           <Sidebar />
         </div>

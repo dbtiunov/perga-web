@@ -3,7 +3,6 @@ import { useState, useEffect } from 'react';
 import Storage from '@common/utils/storage';
 import { StorageKeys } from '@common/utils/storageKeys';
 
-
 export const useCollapsedAgendas = () => {
   // Initialize collapsedAgendas from localStorage if available
   const [collapsedAgendas, setCollapsedAgendas] = useState<Record<number, boolean>>(() => {

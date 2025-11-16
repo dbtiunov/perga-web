@@ -289,7 +289,7 @@ const AgendaItem = ({
 
             {isCopyDropdownOpen && (
               <div className="absolute right-0 mt-8 w-70 bg-white rounded-md shadow-lg z-10">
-                <div className="p-4 text-xs uppercase text-gray-500">Copy to</div>
+                <div className="px-4 py-3 text-xs uppercase text-gray-600">Copy to</div>
                 <div>
                   {copyDates.map((copyDate) => (
                     <button
@@ -355,7 +355,7 @@ const AgendaItem = ({
 
             {isMoveDropdownOpen && (
               <div className="absolute right-0 mt-8 w-70 bg-white rounded-md shadow-lg z-10">
-                <div className="p-4 text-xs uppercase text-gray-500">Move to</div>
+                <div className="px-4 py-3 text-xs uppercase text-gray-600">Move to</div>
                 <div>
                   {copyAgendasMap?.currentMonth.id !== item.agenda_id && (
                     <button

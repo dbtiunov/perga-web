@@ -8,7 +8,7 @@ const hasWindow = typeof window !== 'undefined';
 
 function getStorage(): Storage | null {
   try {
-    if (!hasWindow){
+    if (!hasWindow) {
       return null;
     }
 
@@ -21,7 +21,7 @@ function getStorage(): Storage | null {
 /** Get raw string value from localStorage. */
 export function get(key: string, defaultValue: string | null = null): string | null {
   const storage = getStorage();
-  if (!storage){
+  if (!storage) {
     return defaultValue;
   }
 
@@ -36,7 +36,7 @@ export function get(key: string, defaultValue: string | null = null): string | n
 /** Set raw string value to localStorage. */
 export function set(key: string, value: string): void {
   const storage = getStorage();
-  if (!storage){
+  if (!storage) {
     return;
   }
 
@@ -50,7 +50,7 @@ export function set(key: string, value: string): void {
 /** Remove key from localStorage. */
 export function remove(key: string): void {
   const storage = getStorage();
-  if (!storage){
+  if (!storage) {
     return;
   }
 
@@ -64,7 +64,7 @@ export function remove(key: string): void {
 /** Get parsed JSON value from localStorage. */
 export function getJSON<T>(key: string, defaultValue: T): T {
   const raw = get(key, null);
-  if (raw === null){
+  if (raw === null) {
     return defaultValue;
   }
 
