@@ -1,5 +1,8 @@
 @import 'tailwindcss';
 
+/* For dark theme */
+@custom-variant dark (&:where(.dark, .dark *));
+
 html,
 body {
   margin: 0;

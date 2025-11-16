@@ -11,6 +11,10 @@ export function applyThemeClass(isDark: boolean): void {
 }
 
 export function initTheme(): void {
-  const isDark = Storage.getBoolean(StorageKeys.IsDarkThemeEnabled, false);
+  if (typeof document === 'undefined'){
+    return;
+  }
+
+  const isDark = Storage.getBoolean(StorageKeys.IsDarkThemeEnabled);
   applyThemeClass(isDark);
 }

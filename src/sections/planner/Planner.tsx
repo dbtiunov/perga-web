@@ -137,7 +137,7 @@ const Planner = () => {
   return (
     <div
       ref={plannerContainerRef}
-      className="md:h-screen flex flex-col md:flex-row w-full bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 overflow-auto md:overflow-hidden"
+      className="md:h-screen flex flex-col md:flex-row w-full bg-white text-gray-700 overflow-auto md:overflow-hidden"
     >
       {/* Left pane (days) */}
       <div
