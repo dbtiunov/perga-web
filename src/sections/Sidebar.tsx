@@ -68,7 +68,7 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="h-screen bg-gray-700 flex flex-col transition-all duration-300 fixed w-14 md:w-20 pt-16 md:pt-0">
+    <div className="h-screen bg-bg-sidebar flex flex-col transition-all duration-300 fixed w-14 md:w-20 pt-16 md:pt-0">
       <nav className="flex-grow">
         {navItems.map((item) => (
           <Link
@@ -76,9 +76,9 @@ const Sidebar = () => {
             to={item.path}
             arial-label={item.label}
             title={item.label}
-            className={`flex flex-col items-center py-4 hover:bg-gray-800 focus:bg-gray-800 text-gray-300 
-                          hover:text-white focus:text-white transition-colors 
-                            ${location.pathname === item.path ? 'bg-gray-800 text-white' : ''}`}
+            className={`flex flex-col items-center py-4 hover:bg-bg-sidebar-hover focus:bg-bg-sidebar-hover text-text-sidebar 
+                          hover:text-text-sidebar-hover focus:text-text-sidebar-hover transition-colors 
+                            ${location.pathname === item.path ? 'bg-bg-sidebar-hover text-text-sidebar-hover' : ''}`}
           >
             <div>{item.icon}</div>
             <div className="text-sm hidden md:block">{item.label}</div>
@@ -91,8 +91,8 @@ const Sidebar = () => {
           onClick={handleRefreshClick}
           aria-label="Refresh data"
           title="Refresh data"
-          className="flex flex-col items-center py-4 w-full hover:bg-gray-800 focus:bg-gray-800
-                         text-gray-300 hover:text-white focus:text-white transition-colors"
+          className="flex flex-col items-center py-4 w-full hover:bg-bg-sidebar-hover focus:bg-bg-sidebar-hover
+                         text-text-sidebar hover:text-text-sidebar-hover focus:text-text-sidebar-hover transition-colors"
         >
           <div>
             <Icon
@@ -108,8 +108,8 @@ const Sidebar = () => {
           onClick={handleToggleThemeClick}
           aria-label="Toggle dark mode"
           title="Toggle dark mode"
-          className="flex flex-col items-center py-4 w-full hover:bg-gray-800 focus:bg-gray-800
-                         text-gray-300 hover:text-white focus:text-white transition-colors"
+          className="flex flex-col items-center py-4 w-full hover:bg-bg-sidebar-hover focus:bg-bg-sidebar-hover
+                         text-text-sidebar hover:text-text-sidebar-hover focus:text-text-sidebar-hover transition-colors"
         >
           <div>
             <Icon name={isDarkThemeEnabled ? 'sun' : 'moon'} size="20" className="w-8 h-8" />
@@ -121,9 +121,9 @@ const Sidebar = () => {
           to="/settings/profile/"
           aria-label="Settings"
           title="Settings"
-          className={`flex flex-col items-center py-4 hover:bg-gray-800 focus:bg-gray-800 text-gray-300 
-                        hover:text-white focus:text-white transition-colors 
-                          ${location.pathname.startsWith('/settings') ? 'bg-gray-800 text-white' : ''}`}
+          className={`flex flex-col items-center py-4 hover:bg-bg-sidebar-hover focus:bg-bg-sidebar-hover text-text-sidebar 
+                        hover:text-text-sidebar-hover focus:text-text-sidebar-hover transition-colors 
+                          ${location.pathname.startsWith('/settings') ? 'bg-bg-sidebar-hover text-text-sidebar-hover' : ''}`}
         >
           <div>
             <Icon name="settings" size="20" className="w-8 h-8" />
@@ -135,8 +135,8 @@ const Sidebar = () => {
           onClick={handleLogout}
           aria-label="Logout"
           title="Logout"
-          className="flex flex-col items-center py-4 w-full hover:bg-gray-800 focus:bg-gray-800
-                         text-gray-300 hover:text-white focus:text-white transition-colors"
+          className="flex flex-col items-center py-4 w-full hover:bg-bg-sidebar-hover focus:bg-bg-sidebar-hover
+                         text-text-sidebar hover:text-text-sidebar-hover focus:text-text-sidebar-hover transition-colors"
         >
           <div>
             <Icon name="logout" size="20" className="w-8 h-8" />

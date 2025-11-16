@@ -235,7 +235,7 @@ const DayItem = ({
       )}
 
       {showActions && (
-        <div className="flex-none relative opacity-100 md:opacity-0 md:group-hover:opacity-100 text-text-main hover:text-gray-800 p-2 bg-transparent transition-opacity">
+        <div className="flex-none relative opacity-100 md:opacity-0 md:group-hover:opacity-100 text-text-main p-2 bg-transparent transition-opacity">
           <div className="inline-flex relative" ref={copyDropdownRef}>
             <button
               onClick={onCopyActionClick}

@@ -206,7 +206,7 @@ const SettingsProfile: React.FC = () => {
       </form>
 
       <form onSubmit={handlePasswordUpdate}>
-        <fieldset className="border border-gray-400 rounded-md p-8 mb-6">
+        <fieldset className="border border-gray-400 rounded-md p-8 mt-10">
           <legend className="px-2 text-text-main">Change Password</legend>
 
           <div className="space-y-5">

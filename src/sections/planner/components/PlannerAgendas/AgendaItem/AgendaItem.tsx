@@ -276,7 +276,7 @@ const AgendaItem = ({
       )}
 
       {showExtraActions && (
-        <div className="flex-none relative opacity-100 md:opacity-0 md:group-hover:opacity-100 text-text-main hover:text-gray-800 p-1 bg-transparent transition-opacity">
+        <div className="flex-none relative opacity-100 md:opacity-0 md:group-hover:opacity-100 text-text-main p-1 bg-transparent transition-opacity">
           <div className="inline-flex relative" ref={copyDropdownRef}>
             <button
               onClick={onCopyActionClick}
@@ -325,7 +325,7 @@ const AgendaItem = ({
                 </div>
                 {copyCustomAgendas && copyCustomAgendas.length > 0 && (
                   <div>
-                    <div className="border-t border-gray-200" />
+                    <div className="border-t border-border-main" />
                     <div className="max-h-64 overflow-auto">
                       {copyCustomAgendas.map((customAgenda) => (
                         <button

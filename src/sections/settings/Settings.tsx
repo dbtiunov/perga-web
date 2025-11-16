@@ -10,7 +10,7 @@ const Settings = () => {
     <div className="container">
       <div className="flex flex-col md:flex-row w-full">
         {/* Sidebar */}
-        <aside className="w-full md:w-56 md:min-h-screen bg-gray-100 px-4 py-6 border-b-1 md:border-b-0 md:border-r-1 border-gray-200">
+        <aside className="w-full md:w-56 md:min-h-screen bg-bg-settings-sidebar px-4 py-6 border-b-1 md:border-b-0 md:border-r-1 border-border-settings-sidebar">
           <nav className="space-y-1" aria-label="Settings sections">
             <h3 className="text-2xl font-light mb-6">Settings</h3>
 
