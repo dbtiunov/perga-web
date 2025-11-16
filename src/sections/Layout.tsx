@@ -14,14 +14,14 @@ const Layout = () => {
 
   return (
     <ToastProvider>
-      <div className="h-screen max-w-full overflow-x-hidden bg-gray-100 text-gray-600">
+      <div className="h-screen max-w-full overflow-x-hidden bg-gray-100 text-text-main bg-bg-main">
         <div className={`${isSidebarVisible ? 'block' : 'hidden'} md:block z-30 relative`}>
           <Sidebar />
         </div>
         <MobileHeader toggleSidebar={toggleSidebar} />
         <main
-          className={`bg-white transition-all duration-300 ${isSidebarVisible ? 'ml-14' : 'ml-0'} md:ml-20 
-                         text-gray-600  overflow-x-hidden pt-16 md:pt-0 relative z-20 min-h-screen`}
+          className={`bg-bg-main transition-all duration-300 ${isSidebarVisible ? 'ml-14' : 'ml-0'} md:ml-20 
+                         text-text-main  overflow-x-hidden pt-16 md:pt-0 relative z-20 min-h-screen`}
         >
           <Outlet />
         </main>

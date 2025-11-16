@@ -94,12 +94,12 @@ const PlannerAgendas: React.FC<PlannerAgendasProps> = ({
                 <div
                   className={`mr-2 transform transition-transform ${collapsedAgendas[agenda.id] ? '' : 'rotate-90'}`}
                 >
-                  <Icon name="rightChevron" size="24" className="h-4 w-4 text-gray-600" />
+                  <Icon name="rightChevron" size="24" className="h-4 w-4 text-text-main" />
                 </div>
-                <h3 className="text-gray-600">{agenda.name}</h3>
+                <h3 className="text-text-main">{agenda.name}</h3>
               </button>
 
-              <div className="pl-2 text-gray-600 hover:text-gray-800 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
+              <div className="pl-2 text-text-main hover:text-gray-800 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
                 <AgendaActionsDropdown agenda={agenda} fetchAgendaItems={fetchAgendaItems} />
               </div>
             </div>

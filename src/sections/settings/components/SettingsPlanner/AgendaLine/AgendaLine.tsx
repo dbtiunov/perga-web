@@ -51,7 +51,7 @@ const AgendaLine: React.FC<AgendaLineProps> = ({
 
   return (
     <div
-      className={`group flex items-center gap-2 min-h-[2.5rem] transition-colors duration-200 hover:bg-gray-100
+      className={`group flex items-center gap-2 min-h-[2.5rem] transition-colors duration-200 hover:bg-bg-hover
                   rounded-md ${isArchived ? 'bg-gray-100 italic opacity-80' : ''}`}
       draggable={!isEmptyLine && !isArchived}
       onDragStart={!isEmptyLine && !isArchived ? () => onDragStart?.(agenda) : undefined}
@@ -71,7 +71,7 @@ const AgendaLine: React.FC<AgendaLineProps> = ({
           aria-label="Drag to reorder"
           title="Drag to reorder"
         >
-          <Icon name="drag" size={24} className="h-4 w-4 text-gray-600" />
+          <Icon name="drag" size={24} className="h-4 w-4 text-text-main" />
         </div>
       )}
 
@@ -91,14 +91,14 @@ const AgendaLine: React.FC<AgendaLineProps> = ({
             setIsEditing(false);
             onUpdateAgenda(agenda.id, { name: value });
           }}
-          className="min-w-0 flex-1 bg-transparent rounded px-2 py-1 text-gray-600 focus:outline-none
+          className="min-w-0 flex-1 bg-transparent rounded px-2 py-1 text-text-main focus:outline-none
                           focus:ring-0"
           placeholder={isEmptyLine ? 'Add new agenda' : ''}
         />
       ) : (
         <div
           onClick={() => !isEmptyLine && setIsEditing(true)}
-          className={`flex-1 px-2 cursor-text truncate hover:cursor-text ${isArchived ? 'text-gray-400' : 'text-gray-600'}`}
+          className={`flex-1 px-2 cursor-text truncate hover:cursor-text ${isArchived ? 'text-text-muted' : 'text-text-main'}`}
         >
           {agenda.name} ({agenda.completed_items_cnt}/
           {agenda.completed_items_cnt + agenda.todo_items_cnt})
@@ -106,7 +106,7 @@ const AgendaLine: React.FC<AgendaLineProps> = ({
       )}
 
       {!isEmptyLine && (
-        <div className="flex-none opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity p-2 text-gray-600 flex items-center gap-2">
+        <div className="flex-none opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity p-2 text-text-main flex items-center gap-2">
           <button
             type="button"
             onClick={() =>

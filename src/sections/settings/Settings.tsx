@@ -22,7 +22,7 @@ const Settings = () => {
                   `block w-full text-left mb-2 px-3 py-2 rounded transition-colors text-sm ${
                     isActive
                       ? 'text-gray-100 bg-gray-600 font-semibold'
-                      : 'text-gray-600 hover:bg-gray-200'
+                      : 'text-text-main hover:bg-bg-hover'
                   }`
                 }
               >

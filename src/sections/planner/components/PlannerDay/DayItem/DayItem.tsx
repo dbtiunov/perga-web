@@ -163,7 +163,7 @@ const DayItem = ({
 
   return (
     <div
-      className={`group flex items-center gap-2 min-h-[2.5rem] transition-opacity transition-colors duration-200 hover:bg-gray-100 rounded-md
+      className={`group flex items-center gap-2 min-h-[2.5rem] transition-opacity duration-200 hover:bg-bg-hover rounded-md
                      ${isDragging ? 'opacity-50' : 'opacity-100'}`}
       draggable={canDrag}
       onDragStart={canDrag ? handleDragStart : undefined}
@@ -175,7 +175,7 @@ const DayItem = ({
           aria-label="Drag to reorder"
           title="Drag to reorder"
         >
-          <Icon name="drag" size={24} className="h-4 w-4 text-gray-600" />
+          <Icon name="drag" size={24} className="h-4 w-4 text-text-main" />
         </div>
       )}
 
@@ -185,10 +185,10 @@ const DayItem = ({
           className={`flex-none w-5 h-5 rounded flex items-center justify-center cursor-pointer
                          ${
                            item.state === 'todo'
-                             ? 'border border-gray-300 bg-white'
+                             ? 'bg-bg-main border border-border-main'
                              : item.state === 'completed'
-                               ? 'bg-green-500 border border-green-500'
-                               : 'bg-blue-500 border border-blue-500'
+                               ? 'bg-bg-green border border-border-green'
+                               : 'bg-bg-blue border border-border-blue'
                          }`}
           role="checkbox"
           aria-checked={item.state === 'completed'}
@@ -228,14 +228,14 @@ const DayItem = ({
         <div
           onClick={() => !isEmptyItem && setIsEditing(true)}
           className={`flex-1 px-2 cursor-text 
-                         ${item.state === 'todo' ? 'text-gray-600' : 'line-through text-gray-400'}`}
+                         ${item.state === 'todo' ? 'text-text-main' : 'line-through text-text-muted'}`}
         >
           {item.text}
         </div>
       )}
 
       {showActions && (
-        <div className="flex-none relative opacity-100 md:opacity-0 md:group-hover:opacity-100 text-gray-600 hover:text-gray-800 p-2 bg-transparent transition-opacity">
+        <div className="flex-none relative opacity-100 md:opacity-0 md:group-hover:opacity-100 text-text-main hover:text-gray-800 p-2 bg-transparent transition-opacity">
           <div className="inline-flex relative" ref={copyDropdownRef}>
             <button
               onClick={onCopyActionClick}
@@ -247,7 +247,7 @@ const DayItem = ({
             </button>
 
             {isCopyDropdownOpen && (
-              <div className="absolute right-0 mt-8 w-40 bg-white rounded-md shadow-lg z-10">
+              <div className="absolute right-0 mt-8 w-40 bg-bg-main rounded-md shadow-lg z-10">
                 <Calendar
                   selectedDate={new Date()}
                   onDateChange={handleCopyItem}
@@ -269,7 +269,7 @@ const DayItem = ({
             </button>
 
             {isSnoozeDropdownOpen && (
-              <div className="absolute right-0 mt-8 w-40 bg-white rounded-md shadow-lg z-10">
+              <div className="absolute right-0 mt-8 w-40 bg-bg-main rounded-md shadow-lg z-10">
                 <Calendar
                   selectedDate={new Date()}
                   onDateChange={handleSnoozeItem}
@@ -291,10 +291,10 @@ const DayItem = ({
               </button>
 
               {isDropdownOpen && (
-                <div className="absolute right-0 mt-8 w-36 bg-white rounded-md shadow-lg z-10">
+                <div className="absolute right-0 mt-8 w-36 bg-bg-main rounded-md shadow-lg z-10">
                   <button
                     onClick={onDropActionClick}
-                    className="w-full text-left px-4 py-3 text-sm  hover:bg-gray-100 flex items-center"
+                    className="w-full text-left px-4 py-3 text-sm  hover:bg-bg-hover flex items-center"
                     aria-label="Drop item"
                     title="Drop item"
                   >
@@ -304,7 +304,7 @@ const DayItem = ({
 
                   <button
                     onClick={onDeleteActionClick}
-                    className="w-full text-left px-4 py-3 text-sm hover:bg-gray-100 flex items-center"
+                    className="w-full text-left px-4 py-3 text-sm hover:bg-bg-hover flex items-center"
                     aria-label="Delete item"
                     title="Delete item"
                   >

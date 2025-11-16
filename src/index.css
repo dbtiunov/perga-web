@@ -14,7 +14,6 @@ body {
 body {
   min-width: 100%;
   min-height: 100vh;
-  background-color: #f3f4f6;
   display: flex;
 }
 
@@ -27,4 +26,58 @@ body {
 
 button {
   cursor: pointer;
+}
+
+/* Light Theme variables */
+:root {
+  /* Background */
+  --bg-main: #ffffff; /* white */
+  --bg-hover: oklch(96.7% 0.003 264.542); /* gray-100 */
+
+  --bg-muted: #f3f4f6; /* gray-100 */
+
+  --bg-sidebar: oklch(27.8% 0.033 256.848); /* gray-800 */
+
+  --bg-green: oklch(62.7% 0.194 149.214); /* green-600 */
+  --bg-blue: oklch(54.6% 0.245 262.881); /* blue-600 */
+  --bg-red: oklch(57.7% 0.245 27.325); /* red-600 */
+  --bg-yellow: oklch(68.1% 0.162 75.834); /* yellow-600 */
+
+  /* Text */
+  --text-main: oklch(44.6% 0.03 256.802); /* gray-600 */
+  --text-muted: oklch(70.7% 0.022 261.325); /* gray-400 */
+
+  /* Borders */
+  --border-main: oklch(87.2% 0.01 258.338); /* gray-300 */
+  --border-green: oklch(62.7% 0.194 149.214); /* green-600 */
+  --border-blue: oklch(54.6% 0.245 262.881); /* blue-600 */
+
+}
+
+/* Dark Theme variables */
+.dark {
+  --bg-main: oklch(27.8% 0.033 256.848); /* gray-800 */
+  --bg-hover: oklch(87.2% 0.01 258.338); /* gray-300 */
+
+  --text-main: oklch(70.7% 0.022 261.325); /* gray-400 */
+  --text-muted: oklch(44.6% 0.03 256.802); /* gray-600 */
+}
+
+/* Tailwind v4 theme tokens mapped to our CSS variables */
+@theme {
+  --color-bg-main: var(--bg-main);
+  --color-bg-hover: var(--bg-hover);
+
+  --color-text-main: var(--text-main);
+  --color-text-muted: var(--text-muted);
+
+  --color-bg-green: var(--bg-green);
+  --color-bg-blue: var(--bg-blue);
+  --color-bg-red: var(--bg-red);
+  --color-bg-yellow: var(--bg-yellow);
+
+  --color-border-main: var(--border-main);
+  --color-border-green: var(--border-green);
+  --color-border-blue: var(--border-blue);
+
 }

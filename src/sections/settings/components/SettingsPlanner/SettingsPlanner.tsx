@@ -96,9 +96,9 @@ const SettingsPlanner: React.FC = () => {
   return (
     <div className="w-full md:max-w-2/5">
       <fieldset className="border border-gray-400 rounded-md p-8">
-        <legend className="px-2 text-gray-600">Agendas</legend>
+        <legend className="px-2 text-text-main">Agendas</legend>
 
-        <p className="text-sm text-gray-600 mb-10">
+        <p className="text-sm text-text-main mb-10">
           Create and manage custom agendas to organize your tasks. A Monthly agenda is created
           automatically for each month.
         </p>
@@ -107,7 +107,7 @@ const SettingsPlanner: React.FC = () => {
           <button
             type="button"
             onClick={() => setShowArchived((prev) => !prev)}
-            className="text-sm text-gray-600 hover:underline focus:outline-none focus-visible:ring-2
+            className="text-sm text-text-main hover:underline focus:outline-none focus-visible:ring-2
                            focus-visible:ring-gray-400"
           >
             <span className="inline-flex items-center gap-1">
