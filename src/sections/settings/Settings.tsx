@@ -9,20 +9,20 @@ const Settings = () => {
   return (
     <div className="container">
       <div className="flex flex-col md:flex-row w-full">
-        {/* Sidebar */}
-        <aside className="w-full md:w-56 md:min-h-screen bg-bg-settings-sidebar px-4 py-6 border-b-1 md:border-b-0 md:border-r-1 border-border-settings-sidebar">
+        {/* Settings Sidebar */}
+        <aside className="w-full md:w-56 md:min-h-screen bg-bg-settings-sidebar p-6 border-b-1 md:border-b-0 md:border-r-1 border-border-settings-sidebar">
           <nav className="space-y-1" aria-label="Settings sections">
-            <h3 className="text-2xl font-light mb-6">Settings</h3>
+            <h3 className="text-2xl mb-6">Settings</h3>
 
             {sections.map((section) => (
               <NavLink
                 key={section.to}
                 to={section.to}
                 className={({ isActive }: { isActive: boolean }) =>
-                  `block w-full text-left mb-2 px-3 py-2 rounded transition-colors text-sm ${
+                  `block w-full text-left mb-2 px-3 py-2 rounded transition-colors text-sm text-text-main ${
                     isActive
-                      ? 'text-gray-100 bg-gray-600 font-semibold'
-                      : 'text-text-main hover:bg-bg-hover'
+                      ? 'bg-bg-settings-sidebar-active text-text-settings-sidebar-active'
+                      : 'bg-bg-settings-sidebar'
                   }`
                 }
               >

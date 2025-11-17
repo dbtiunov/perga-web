@@ -52,7 +52,7 @@ const AgendaLine: React.FC<AgendaLineProps> = ({
   return (
     <div
       className={`group flex items-center gap-2 min-h-[2.5rem] transition-colors duration-200 hover:bg-bg-hover
-                  rounded-md ${isArchived ? 'bg-gray-100 italic opacity-80' : ''}`}
+                  rounded ${isArchived ? 'text-text-muted' : ''}`}
       draggable={!isEmptyLine && !isArchived}
       onDragStart={!isEmptyLine && !isArchived ? () => onDragStart?.(agenda) : undefined}
       onDragEnd={!isEmptyLine && !isArchived ? () => onDragEnd?.() : undefined}

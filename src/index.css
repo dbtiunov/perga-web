@@ -39,6 +39,7 @@ button {
   --bg-sidebar-hover: oklch(27.8% 0.033 256.848); /* gray-800 */
 
   --bg-settings-sidebar: oklch(96.7% 0.003 264.542); /* gray-100 */
+  --bg-settings-sidebar-active: oklch(37.3% 0.034 259.733); /* gray-700 */
 
   --bg-green: oklch(62.7% 0.194 149.214); /* green-600 */
   --bg-blue: oklch(54.6% 0.245 262.881); /* blue-600 */
@@ -52,6 +53,7 @@ button {
   --text-sidebar: oklch(87.2% 0.01 258.338); /* gray-300 */
   --text-sidebar-hover: oklch(96.7% 0.003 264.542); /* gray-100 */
 
+  --text-settings-sidebar-active: oklch(96.7% 0.003 264.542); /* gray-100 */
 
   /* Borders */
   --border-main: oklch(87.2% 0.01 258.338); /* gray-300 */
@@ -60,7 +62,6 @@ button {
 
   --border-green: oklch(62.7% 0.194 149.214); /* green-600 */
   --border-blue: oklch(54.6% 0.245 262.881); /* blue-600 */
-
 }
 
 /* Dark Theme variables */
@@ -69,9 +70,10 @@ button {
   --bg-hover: oklch(37.3% 0.034 259.733); /* gray-700 */
 
   --bg-settings-sidebar: oklch(27.8% 0.033 256.848); /* gray-800 */
+  --bg-settings-sidebar-active: oklch(37.3% 0.034 259.733); /* gray-700 */
 
   --text-main: oklch(96.7% 0.003 264.542); /* gray-100 */
-  --text-muted: oklch(87.2% 0.01 258.338); /* gray-300 */
+  --text-muted: oklch(70.7% 0.022 261.325); /* gray-400 */
 
   --border-settings-sidebar: oklch(27.8% 0.033 256.848); /* gray-800 */
 }
@@ -86,12 +88,13 @@ button {
   --color-bg-sidebar-hover: var(--bg-sidebar-hover);
 
   --color-bg-settings-sidebar: var(--bg-settings-sidebar);
+  --color-bg-settings-sidebar-active: var(--bg-settings-sidebar-active);
 
   --color-text-main: var(--text-main);
   --color-text-muted: var(--text-muted);
-
   --color-text-sidebar: var(--text-sidebar);
   --color-text-sidebar-hover: var(--text-sidebar-hover);
+  --color-text-settings-sidebar-active: var(--text-settings-sidebar-active);
 
   --color-bg-green: var(--bg-green);
   --color-bg-blue: var(--bg-blue);
@@ -104,5 +107,4 @@ button {
 
   --color-border-green: var(--border-green);
   --color-border-blue: var(--border-blue);
-
 }

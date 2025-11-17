@@ -121,7 +121,7 @@ const SettingsProfile: React.FC = () => {
   return (
     <div className="w-full md:max-w-2/5">
       <form onSubmit={handleProfileUpdate}>
-        <fieldset className="border border-gray-400 rounded-md p-8">
+        <fieldset className="border border-gray-400 rounded p-8">
           <legend className="px-2 text-text-main">Edit Profile</legend>
 
           <div className="space-y-5">
@@ -135,7 +135,7 @@ const SettingsProfile: React.FC = () => {
                 value={username}
                 required
                 onChange={(e) => setUsername(e.target.value)}
-                className="shadow appearance-none border border-gray-400 rounded w-full py-1.5 px-2 text-text-main leading-tight
+                className="shadow appearance-none border rounded w-full py-1.5 px-2 text-text-main leading-tight
                                 focus:outline-none focus:shadow-outline text-sm"
               />
             </div>
@@ -167,9 +167,9 @@ const SettingsProfile: React.FC = () => {
                     value="sunday"
                     checked={weekStartDay === 'sunday'}
                     onChange={() => setWeekStartDay('sunday')}
-                    className="h-4 w-4 text-blue-600 focus:ring-blue-500"
+                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 cursor-pointer"
                   />
-                  <label htmlFor="sunday" className="ml-2 block text-sm text-text-main">
+                  <label htmlFor="sunday" className="ml-2 block text-sm text-text-main cursor-pointer">
                     Sunday
                   </label>
                 </div>
@@ -181,9 +181,9 @@ const SettingsProfile: React.FC = () => {
                     value="monday"
                     checked={weekStartDay === 'monday'}
                     onChange={() => setWeekStartDay('monday')}
-                    className="h-4 w-4 text-blue-600 focus:ring-blue-500"
+                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 cursor-pointer"
                   />
-                  <label htmlFor="monday" className="ml-2 block text-sm text-text-main">
+                  <label htmlFor="monday" className="ml-2 block text-sm text-text-main cursor-pointer">
                     Monday
                   </label>
                 </div>
@@ -206,7 +206,7 @@ const SettingsProfile: React.FC = () => {
       </form>
 
       <form onSubmit={handlePasswordUpdate}>
-        <fieldset className="border border-gray-400 rounded-md p-8 mt-10">
+        <fieldset className="border border-gray-400 rounded p-8 mt-10">
           <legend className="px-2 text-text-main">Change Password</legend>
 
           <div className="space-y-5">

@@ -33,22 +33,6 @@ export const usePlannerAgendas = (selectedDate: Date) => {
   const currentItemsOrder = useRef<Map<number, number[]>>(new Map());
   const updatedItemsOrder = useRef<Map<number, number[]>>(new Map());
 
-  // Fetch planner agendas and their items
-  const fetchAgendasWithItems = useCallback(async (date: Date) => {
-    try {
-      const response = await getPlannerAgendas(['monthly', 'custom'], formatDate(date));
-      const agendas = response.data;
-      setPlannerAgendas(agendas);
-
-      if (agendas.length > 0) {
-        const agendaIds = agendas.map((agenda) => agenda.id);
-        await fetchAgendaItems(agendaIds);
-      }
-    } catch (error) {
-      console.error('Error fetching planner agendas:', error);
-    }
-  }, []);
-
   // Fetch items only for specific agendas
   const fetchAgendaItems = useCallback(async (agendaIds: number[]) => {
     if (!agendaIds?.length) {
@@ -66,6 +50,22 @@ export const usePlannerAgendas = (selectedDate: Date) => {
       console.error('Error fetching agenda items:', error);
     }
   }, []);
+
+  // Fetch planner agendas and their items
+  const fetchAgendasWithItems = useCallback(async (date: Date) => {
+    try {
+      const response = await getPlannerAgendas(['monthly', 'custom'], formatDate(date));
+      const agendas = response.data;
+      setPlannerAgendas(agendas);
+
+      if (agendas.length > 0) {
+        const agendaIds = agendas.map((agenda) => agenda.id);
+        await fetchAgendaItems(agendaIds);
+      }
+    } catch (error) {
+      console.error('Error fetching planner agendas:', error);
+    }
+  }, [fetchAgendaItems]);
 
   const handleAddAgendaItem = async (agendaId: number, text: string) => {
     if (!text.trim()) {

@@ -83,10 +83,10 @@ const PlannerAgendas: React.FC<PlannerAgendasProps> = ({
         .filter((agenda) => agenda.id !== copyAgendasMap.nextMonth.id)
         .map((agenda) => (
           <div key={agenda.id}>
-            <div className="flex items-center justify-between mb-3 group">
+            <div className="flex items-center mb-3 group hover:bg-bg-hover rounded text-text-main">
               <button
                 type="button"
-                className="flex items-center cursor-pointer focus:outline-none"
+                className="flex flex-grow items-center cursor-pointer focus:outline-none p-2"
                 onClick={() => toggleAgendaCollapse(agenda.id)}
                 aria-expanded={!collapsedAgendas[agenda.id]}
                 aria-controls={`agenda-${agenda.id}`}
@@ -94,12 +94,12 @@ const PlannerAgendas: React.FC<PlannerAgendasProps> = ({
                 <div
                   className={`mr-2 transform transition-transform ${collapsedAgendas[agenda.id] ? '' : 'rotate-90'}`}
                 >
-                  <Icon name="rightChevron" size="24" className="h-4 w-4 text-text-main" />
+                  <Icon name="rightChevron" size="24" className="h-4 w-4" />
                 </div>
-                <h3 className="text-text-main">{agenda.name}</h3>
+                <h3>{agenda.name}</h3>
               </button>
 
-              <div className="pl-2 text-text-main hover:text-gray-800 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
+              <div className="p-2 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
                 <AgendaActionsDropdown agenda={agenda} fetchAgendaItems={fetchAgendaItems} />
               </div>
             </div>

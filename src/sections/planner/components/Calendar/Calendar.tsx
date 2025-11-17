@@ -76,7 +76,7 @@ const Calendar: React.FC<CalendarProps> = ({
   };
 
   return (
-    <div className="bg-bg-main absolute right-0 mt-1 shadow-lg z-10 w-64 origin-top-right border-border-main border-1">
+    <div className="bg-bg-main rounded absolute right-0 mt-1 shadow-lg z-10 w-64 origin-top-right border-border-main border-1">
       {(title || predefinedDates?.length) && (
         <div className="border-gray-200 border-b-1">
           {title && <div className="px-4 py-3 text-xs uppercase text-text-main">{title}</div>}
@@ -138,7 +138,7 @@ const Calendar: React.FC<CalendarProps> = ({
               <button
                 key={day}
                 onClick={() => handleDateClick(day)}
-                className={`h-8 w-8 flex items-center justify-center rounded-md text-sm
+                className={`h-8 w-8 flex items-center justify-center rounded text-sm
                               ${
                                 isSelected
                                   ? 'bg-blue-500 text-white'

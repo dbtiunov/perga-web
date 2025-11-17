@@ -163,7 +163,7 @@ const DayItem = ({
 
   return (
     <div
-      className={`group flex items-center gap-2 min-h-[2.5rem] transition-opacity duration-200 hover:bg-bg-hover rounded-md
+      className={`group flex items-center gap-2 min-h-[2.5rem] transition-opacity duration-200 hover:bg-bg-hover rounded
                      ${isDragging ? 'opacity-50' : 'opacity-100'}`}
       draggable={canDrag}
       onDragStart={canDrag ? handleDragStart : undefined}
@@ -247,7 +247,7 @@ const DayItem = ({
             </button>
 
             {isCopyDropdownOpen && (
-              <div className="absolute right-0 mt-8 w-40 bg-bg-main rounded-md shadow-lg z-10">
+              <div className="absolute right-0 mt-8 w-40 bg-bg-main rounded shadow-lg z-10">
                 <Calendar
                   selectedDate={new Date()}
                   onDateChange={handleCopyItem}
@@ -269,7 +269,7 @@ const DayItem = ({
             </button>
 
             {isSnoozeDropdownOpen && (
-              <div className="absolute right-0 mt-8 w-40 bg-bg-main rounded-md shadow-lg z-10">
+              <div className="absolute right-0 mt-8 w-40 bg-bg-main rounded shadow-lg z-10">
                 <Calendar
                   selectedDate={new Date()}
                   onDateChange={handleSnoozeItem}
@@ -291,7 +291,7 @@ const DayItem = ({
               </button>
 
               {isDropdownOpen && (
-                <div className="absolute right-0 mt-8 w-36 bg-bg-main rounded-md shadow-lg z-10">
+                <div className="absolute right-0 mt-8 w-36 bg-bg-main rounded shadow-lg z-10 border-border-main border-1">
                   <button
                     onClick={onDropActionClick}
                     className="w-full text-left px-4 py-3 text-sm  hover:bg-bg-hover flex items-center"

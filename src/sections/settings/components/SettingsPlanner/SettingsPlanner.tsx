@@ -95,11 +95,11 @@ const SettingsPlanner: React.FC = () => {
 
   return (
     <div className="w-full md:max-w-2/5">
-      <fieldset className="border border-gray-400 rounded-md p-8">
+      <fieldset className="border border-gray-400 rounded p-8">
         <legend className="px-2 text-text-main">Agendas</legend>
 
         <p className="text-sm text-text-main mb-10">
-          Create and manage custom agendas to organize your tasks. A Monthly agenda is created
+          Create and manage custom agendas to organize your tasks. A&nbsp;monthly agenda is created
           automatically for each month.
         </p>
 

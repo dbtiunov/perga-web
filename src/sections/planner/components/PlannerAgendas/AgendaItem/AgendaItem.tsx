@@ -208,7 +208,7 @@ const AgendaItem = ({
     <div
       className={`group flex items-center gap-2 min-h-[2.5rem] p-2
                      ${isDragging ? 'opacity-50' : 'opacity-100'}
-                     transition-opacity transition-colors duration-200 hover:bg-bg-hover rounded-md`}
+                     transition-opacity duration-200 hover:bg-bg-hover rounded`}
       draggable={canDrag}
       onDragStart={canDrag ? handleDragStart : undefined}
       onDragEnd={canDrag ? handleDragEnd : undefined}
@@ -288,7 +288,7 @@ const AgendaItem = ({
             </button>
 
             {isCopyDropdownOpen && (
-              <div className="absolute right-0 mt-8 w-70 bg-bg-main rounded-md shadow-lg z-10">
+              <div className="absolute right-0 mt-8 w-70 bg-bg-main rounded shadow-lg z-10 border-border-main border-1">
                 <div className="px-4 py-3 text-xs uppercase text-text-main">Copy to</div>
                 <div>
                   {copyDates.map((copyDate) => (
@@ -354,7 +354,7 @@ const AgendaItem = ({
             </button>
 
             {isMoveDropdownOpen && (
-              <div className="absolute right-0 mt-8 w-70 bg-bg-main rounded-md shadow-lg z-10">
+              <div className="absolute right-0 mt-8 w-70 bg-bg-main rounded shadow-lg z-10 border-border-main border-1">
                 <div className="px-4 py-3 text-xs uppercase text-text-main">Move to</div>
                 <div>
                   {copyAgendasMap?.currentMonth.id !== item.agenda_id && (
@@ -400,7 +400,7 @@ const AgendaItem = ({
             </button>
 
             {isDropdownOpen && (
-              <div className="absolute right-0 mt-8 w-36 bg-bg-main rounded-md shadow-lg z-10">
+              <div className="absolute right-0 mt-8 w-36 bg-bg-main rounded shadow-lg z-10 border-border-main border-1">
                 <button
                   onClick={onDropActionClick}
                   className="w-full text-left px-4 py-3 text-sm  hover:bg-bg-hover flex items-center"
