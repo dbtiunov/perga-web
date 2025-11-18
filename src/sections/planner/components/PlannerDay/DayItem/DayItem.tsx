@@ -221,7 +221,8 @@ const DayItem = ({
             setIsEditing(false);
             onUpdateItem(item.id, { text: value });
           }}
-          className={`min-w-0 flex-1 bg-transparent border-none focus:outline-none focus:ring-0 ${isEmptyItem ? 'px-15' : 'px-2'}`}
+          className={`min-w-0 flex-1 bg-transparent border-none focus:outline-none focus:ring-0
+                        ${isEmptyItem ? 'px-15' : 'px-2'}`}
           placeholder={isEmptyItem ? 'Jot something...' : ''}
         />
       ) : (

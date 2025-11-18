@@ -169,7 +169,10 @@ const SettingsProfile: React.FC = () => {
                     onChange={() => setWeekStartDay('sunday')}
                     className="h-4 w-4 text-blue-600 focus:ring-blue-500 cursor-pointer"
                   />
-                  <label htmlFor="sunday" className="ml-2 block text-sm text-text-main cursor-pointer">
+                  <label
+                    htmlFor="sunday"
+                    className="ml-2 block text-sm text-text-main cursor-pointer"
+                  >
                     Sunday
                   </label>
                 </div>
@@ -183,7 +186,10 @@ const SettingsProfile: React.FC = () => {
                     onChange={() => setWeekStartDay('monday')}
                     className="h-4 w-4 text-blue-600 focus:ring-blue-500 cursor-pointer"
                   />
-                  <label htmlFor="monday" className="ml-2 block text-sm text-text-main cursor-pointer">
+                  <label
+                    htmlFor="monday"
+                    className="ml-2 block text-sm text-text-main cursor-pointer"
+                  >
                     Monday
                   </label>
                 </div>
