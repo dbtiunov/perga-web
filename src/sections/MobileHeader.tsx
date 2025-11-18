@@ -11,15 +11,21 @@ const MobileHeader = ({ toggleSidebar }: MobileHeaderProps) => {
   // Get the current section name based on the route
   const getSectionName = () => {
     const path = location.pathname;
-    if (path.includes('planner')) return 'Planner';
-    if (path.includes('projects')) return 'Projects';
-    if (path.includes('notes')) return 'Notes';
-    if (path.includes('settings')) return 'Settings';
-    return 'Perga';
+
+    let sectionName: string;
+    if (path.includes('planner')) {
+      sectionName = 'Planner';
+    } else if (path.includes('settings')) {
+      sectionName = 'Settings';
+    } else {
+      sectionName = 'Perga';
+    }
+
+    return sectionName;
   };
 
   return (
-    <header className="md:hidden bg-gray-700 text-white p-4 flex items-center justify-between fixed top-0 left-0 right-0 z-40">
+    <header className="md:hidden bg-bg-sidebar text-text-main p-4 flex items-center justify-between fixed top-0 left-0 right-0 z-40">
       <button
         onClick={toggleSidebar}
         className="p-1"

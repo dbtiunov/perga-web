@@ -48,7 +48,7 @@ const DateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onDateChange 
   };
 
   return (
-    <div className="flex items-center space-x-2 text-gray-600">
+    <div className="flex items-center space-x-2 text-text-main">
       <button
         onClick={handlePreviousDay}
         className="p-1"

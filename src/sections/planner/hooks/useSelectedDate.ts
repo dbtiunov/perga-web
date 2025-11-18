@@ -1,8 +1,11 @@
 import { useState, useEffect } from 'react';
 
+import Storage from '@common/utils/storage';
+import { StorageKeys } from '@common/utils/storageKeys';
+
 export const useSelectedDate = () => {
   const [selectedDate, setSelectedDate] = useState(() => {
-    const savedDate = localStorage.getItem('selectedDate');
+    const savedDate = Storage.get(StorageKeys.SelectedDate, null);
     if (savedDate) {
       return new Date(savedDate);
     }
@@ -11,7 +14,7 @@ export const useSelectedDate = () => {
 
   // Save selectedDate to localStorage whenever it changes
   useEffect(() => {
-    localStorage.setItem('selectedDate', selectedDate.toISOString());
+    Storage.set(StorageKeys.SelectedDate, selectedDate.toISOString());
   }, [selectedDate]);
 
   return {

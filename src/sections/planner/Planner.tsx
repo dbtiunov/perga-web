@@ -1,7 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
+
+import Storage from '@common/utils/storage';
+import { StorageKeys } from '@common/utils/storageKeys';
 import PlannerAgendas from '@planner/components/PlannerAgendas/PlannerAgendas.tsx';
 import PlannerDay from '@planner/components/PlannerDay/PlannerDay.tsx';
-import { PlannerLocalStorage } from '@planner/const.ts';
 import { usePlannerAgendas } from '@planner/hooks/usePlannerAgendas.ts';
 import { usePlannerDays } from '@planner/hooks/usePlannerDays.ts';
 import { useSelectedDate } from '@planner/hooks/useSelectedDate.ts';
@@ -19,14 +21,14 @@ const Planner = () => {
 
   // Track if viewport is at least md to apply resizable width only on md+
   const [isMd, setIsMd] = useState<boolean>(() => {
-    if (typeof window === 'undefined'){
+    if (typeof window === 'undefined') {
       // assume md on SSR to avoid layout shift
       return true;
     }
     return window.matchMedia(mdQuery).matches;
   });
   useEffect(() => {
-    if (typeof window === 'undefined'){
+    if (typeof window === 'undefined') {
       return;
     }
 
@@ -75,7 +77,7 @@ const Planner = () => {
       return DEFAULT_LEFT_PANE_WIDTH_PERCENT;
     }
 
-    const savedWidthRaw = window.localStorage.getItem(PlannerLocalStorage.LeftPaneWidthKey);
+    const savedWidthRaw = Storage.get(StorageKeys.LeftPaneWidth, null);
     const savedWidthParsed = savedWidthRaw ? parseFloat(savedWidthRaw) : NaN;
     if (isNaN(savedWidthParsed)) {
       return DEFAULT_LEFT_PANE_WIDTH_PERCENT;
@@ -113,15 +115,7 @@ const Planner = () => {
     const onMouseMove = (e: MouseEvent) => handleMouseMove(e.clientX);
     const onMouseUp = () => {
       setIsDragging(false);
-
-      try {
-        window.localStorage.setItem(
-          PlannerLocalStorage.LeftPaneWidthKey,
-          String(leftPaneWidthPercent),
-        );
-      } catch {
-        /* ignore if localStorage is unavailable */
-      }
+      Storage.set(StorageKeys.LeftPaneWidth, String(leftPaneWidthPercent));
     };
 
     window.addEventListener('mousemove', onMouseMove);
@@ -135,41 +129,6 @@ const Planner = () => {
     };
   }, [isDragging, leftPaneWidthPercent]);
 
-  // Touch support
-  useEffect(() => {
-    if (typeof window === 'undefined' || !isDragging) {
-      return;
-    }
-
-    const onTouchMove = (e: TouchEvent) => {
-      if (e.touches[0]) {
-        handleMouseMove(e.touches[0].clientX);
-      }
-    };
-    const onTouchEnd = () => {
-      setIsDragging(false);
-
-      try {
-        window.localStorage.setItem(
-          PlannerLocalStorage.LeftPaneWidthKey,
-          String(leftPaneWidthPercent),
-        );
-      } catch {
-        /* ignore if localStorage is unavailable */
-      }
-    };
-
-    window.addEventListener('touchmove', onTouchMove, { passive: false });
-    window.addEventListener('touchend', onTouchEnd);
-    window.addEventListener('touchcancel', onTouchEnd);
-
-    return () => {
-      window.removeEventListener('touchmove', onTouchMove);
-      window.removeEventListener('touchend', onTouchEnd);
-      window.removeEventListener('touchcancel', onTouchEnd);
-    };
-  }, [isDragging, leftPaneWidthPercent]);
-
   const leftPaneStyle = useMemo(
     () => ({ width: `${leftPaneWidthPercent}%` }),
     [leftPaneWidthPercent],
@@ -178,7 +137,7 @@ const Planner = () => {
   return (
     <div
       ref={plannerContainerRef}
-      className="md:h-screen flex flex-col md:flex-row w-full bg-white overflow-auto md:overflow-hidden"
+      className="md:h-screen flex flex-col md:flex-row w-full bg-bg-main overflow-auto md:overflow-hidden"
     >
       {/* Left pane (days) */}
       <div

@@ -119,14 +119,14 @@ const SettingsProfile: React.FC = () => {
   };
 
   return (
-    <div className="px-0 md:px-6 mb-4 w-full md:max-w-2/5">
+    <div className="w-full md:max-w-2/5">
       <form onSubmit={handleProfileUpdate}>
-        <fieldset className="border border-gray-400 rounded-md p-8 mb-6">
-          <legend className="px-2 text-gray-600">Edit Profile</legend>
+        <fieldset className="border border-gray-400 rounded p-8">
+          <legend className="px-2 text-text-main">Edit Profile</legend>
 
           <div className="space-y-5">
             <div className="mb-6">
-              <label className="block text-gray-600 text-sm font-medium mb-1" htmlFor="username">
+              <label className="block text-text-main text-sm font-medium mb-1" htmlFor="username">
                 Username
               </label>
               <input
@@ -135,13 +135,13 @@ const SettingsProfile: React.FC = () => {
                 value={username}
                 required
                 onChange={(e) => setUsername(e.target.value)}
-                className="shadow appearance-none border border-gray-400 rounded w-full py-1.5 px-2 text-gray-600 leading-tight
+                className="shadow appearance-none border rounded w-full py-1.5 px-2 text-text-main leading-tight
                                 focus:outline-none focus:shadow-outline text-sm"
               />
             </div>
 
             <div className="mb-6">
-              <label className="block text-gray-600 text-sm font-medium mb-1" htmlFor="email">
+              <label className="block text-text-main text-sm font-medium mb-1" htmlFor="email">
                 Email
               </label>
               <input
@@ -150,13 +150,13 @@ const SettingsProfile: React.FC = () => {
                 value={email}
                 required
                 onChange={(e) => setEmail(e.target.value)}
-                className="shadow appearance-none border rounded w-full py-1.5 px-2 text-gray-600 leading-tight
+                className="shadow appearance-none border rounded w-full py-1.5 px-2 text-text-main leading-tight
                                 focus:outline-none focus:shadow-outline text-sm"
               />
             </div>
 
             <div className="space-y-2">
-              <h4 className="text-gray-600 text-sm font-medium">Week Starts On</h4>
+              <h4 className="text-text-main text-sm font-medium">Week Starts On</h4>
 
               <div className="flex space-x-4">
                 <div className="flex items-center">
@@ -167,9 +167,12 @@ const SettingsProfile: React.FC = () => {
                     value="sunday"
                     checked={weekStartDay === 'sunday'}
                     onChange={() => setWeekStartDay('sunday')}
-                    className="h-4 w-4 text-blue-600 focus:ring-blue-500"
+                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 cursor-pointer"
                   />
-                  <label htmlFor="sunday" className="ml-2 block text-sm text-gray-600">
+                  <label
+                    htmlFor="sunday"
+                    className="ml-2 block text-sm text-text-main cursor-pointer"
+                  >
                     Sunday
                   </label>
                 </div>
@@ -181,9 +184,12 @@ const SettingsProfile: React.FC = () => {
                     value="monday"
                     checked={weekStartDay === 'monday'}
                     onChange={() => setWeekStartDay('monday')}
-                    className="h-4 w-4 text-blue-600 focus:ring-blue-500"
+                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 cursor-pointer"
                   />
-                  <label htmlFor="monday" className="ml-2 block text-sm text-gray-600">
+                  <label
+                    htmlFor="monday"
+                    className="ml-2 block text-sm text-text-main cursor-pointer"
+                  >
                     Monday
                   </label>
                 </div>
@@ -206,12 +212,12 @@ const SettingsProfile: React.FC = () => {
       </form>
 
       <form onSubmit={handlePasswordUpdate}>
-        <fieldset className="border border-gray-400 rounded-md p-8 mb-6">
-          <legend className="px-2 text-gray-600">Change Password</legend>
+        <fieldset className="border border-gray-400 rounded p-8 mt-10">
+          <legend className="px-2 text-text-main">Change Password</legend>
 
           <div className="space-y-5">
             <div className="mb-6">
-              <label className="text-gray-600 text-sm font-medium mb-1" htmlFor="currentPassword">
+              <label className="text-text-main text-sm font-medium mb-1" htmlFor="currentPassword">
                 Current Password
               </label>
               <input
@@ -219,13 +225,13 @@ const SettingsProfile: React.FC = () => {
                 type="password"
                 value={currentPassword}
                 onChange={(e) => setCurrentPassword(e.target.value)}
-                className="shadow appearance-none border rounded w-full py-1.5 px-2 text-gray-600 leading-tight
+                className="shadow appearance-none border rounded w-full py-1.5 px-2 text-text-main leading-tight
                                 focus:outline-none focus:shadow-outline text-sm"
               />
             </div>
 
             <div className="mb-6">
-              <label className="text-gray-600 text-sm font-medium mb-1" htmlFor="newPassword">
+              <label className="text-text-main text-sm font-medium mb-1" htmlFor="newPassword">
                 New Password
               </label>
               <input
@@ -233,7 +239,7 @@ const SettingsProfile: React.FC = () => {
                 type="password"
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
-                className="shadow appearance-none border rounded w-full py-1.5 px-2 text-gray-600 leading-tight
+                className="shadow appearance-none border rounded w-full py-1.5 px-2 text-text-main leading-tight
                                 focus:outline-none focus:shadow-outline text-sm"
               />
             </div>

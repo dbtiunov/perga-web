@@ -65,23 +65,16 @@ const AgendaActionsDropdown: React.FC<AgendaActionsDropdownProps> = ({
       </button>
 
       {open && (
-        <div className="absolute right-0 mt-8 w-56 bg-white rounded-md shadow-lg z-10">
+        <div className="absolute right-0 mt-8 w-56 bg-bg-main rounded shadow-lg z-10 border-border-main border-1">
           {(Object.keys(ACTION_LABELS) as PlannerAgendaAction[]).map((action) => (
             <button
               key={action}
               type="button"
-              className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 flex items-center disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full text-left px-4 py-3 text-text-main text-sm bg-bg-main hover:bg-bg-hover flex items-center disabled:opacity-50 disabled:cursor-not-allowed"
               onClick={() => handleAction(action)}
               disabled={!!loadingAction}
             >
-              {loadingAction === action ? (
-                <span className="inline-flex items-center gap-2">
-                  <span className="h-4 w-4 animate-spin rounded-full border-2 border-indigo-200 border-t-indigo-600" />
-                  {ACTION_LABELS[action]}
-                </span>
-              ) : (
-                ACTION_LABELS[action]
-              )}
+              {ACTION_LABELS[action]}
             </button>
           ))}
         </div>
