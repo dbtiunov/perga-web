@@ -13,7 +13,7 @@ import {
   snoozePlannerDayItem,
 } from '@api/planner_days';
 import { REFRESH_EVENT } from '@common/events';
-import { formatDate, getNextDay } from '@planner/utils/dateUtils';
+import { formatDateForAPI, getNextDay } from '@common/utils/date_utils';
 
 export const usePlannerDays = (selectedDate: Date) => {
   const [daysItems, setDaysItems] = useState<PlannerDayItem[]>([]);
@@ -31,8 +31,8 @@ export const usePlannerDays = (selectedDate: Date) => {
   const fetchDaysItems = useCallback(async () => {
     try {
       const nextDay = getNextDay(selectedDate);
-      const selectedDateStr = formatDate(selectedDate);
-      const nextDayStr = formatDate(nextDay);
+      const selectedDateStr = formatDateForAPI(selectedDate);
+      const nextDayStr = formatDateForAPI(nextDay);
 
       const response = await getItemsByDays([selectedDateStr, nextDayStr]);
 
@@ -55,7 +55,7 @@ export const usePlannerDays = (selectedDate: Date) => {
     try {
       const response = await createPlannerDayItem({
         text: itemText,
-        day: formatDate(date),
+        day: formatDateForAPI(date),
       });
       setDaysItems([...daysItems, response.data]);
     } catch (error) {
@@ -102,9 +102,9 @@ export const usePlannerDays = (selectedDate: Date) => {
 
   const handleCopyDayItem = async (itemId: number, day: Date) => {
     try {
-      const response = await copyPlannerDayItem(itemId, formatDate(day));
+      const response = await copyPlannerDayItem(itemId, formatDateForAPI(day));
 
-      const nextDayStr = formatDate(getNextDay(selectedDate));
+      const nextDayStr = formatDateForAPI(getNextDay(selectedDate));
       if (response.data.day === nextDayStr) {
         setDaysItems([...daysItems, response.data]);
       }
@@ -115,7 +115,7 @@ export const usePlannerDays = (selectedDate: Date) => {
 
   const handleSnoozeDayItem = async (itemId: number, day: Date) => {
     try {
-      const response = await snoozePlannerDayItem(itemId, formatDate(day));
+      const response = await snoozePlannerDayItem(itemId, formatDateForAPI(day));
 
       // Update the original item's state to 'snoozed'
       const updatedItems = daysItems.map((item) =>
@@ -123,8 +123,8 @@ export const usePlannerDays = (selectedDate: Date) => {
       );
 
       // Add the new item to the current state if its date is currently shown
-      const selectedDateStr = formatDate(selectedDate);
-      const nextDayStr = formatDate(getNextDay(selectedDate));
+      const selectedDateStr = formatDateForAPI(selectedDate);
+      const nextDayStr = formatDateForAPI(getNextDay(selectedDate));
 
       if (response.data.day === selectedDateStr || response.data.day === nextDayStr) {
         setDaysItems([...updatedItems, response.data]);
@@ -184,7 +184,7 @@ export const usePlannerDays = (selectedDate: Date) => {
   };
 
   const getItemsForDate = (date: Date) => {
-    const dateStr = formatDate(date);
+    const dateStr = formatDateForAPI(date);
     return daysItems.filter((item) => item.day === dateStr);
   };
 

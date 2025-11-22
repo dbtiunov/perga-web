@@ -1,7 +1,15 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 
 import { Icon } from '@common/Icon';
+import {
+  formatDateForDisplay,
+  formatDateWeekDayShort,
+  getNextDay,
+  getPrevDay,
+  isSameDay
+} from '@common/utils/date_utils';
 import Calendar from '@planner/components/Calendar/Calendar';
+import { DATE_SELECTOR_DAYS_COUNT } from "@planner/const";
 
 interface DateSelectorProps {
   selectedDate: Date;
@@ -26,32 +34,33 @@ const DateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onDateChange 
     };
   }, []);
 
-  const handlePreviousDay = () => {
-    const newDate = new Date(selectedDate);
-    newDate.setDate(newDate.getDate() - 1);
-    onDateChange(newDate);
-  };
+  const datesList = useMemo(() => {
+    const count = Math.max(1, DATE_SELECTOR_DAYS_COUNT);
+    const half = Math.floor(count / 2);
+    const dates: Date[] = [];
 
-  const handleNextDay = () => {
-    const newDate = new Date(selectedDate);
-    newDate.setDate(newDate.getDate() + 1);
-    onDateChange(newDate);
-  };
+    // Start from selectedDate - half, move forward
+    const start = new Date(selectedDate);
+    start.setDate(start.getDate() - half);
+    for (let i = 0; i < count; i++) {
+      const d = new Date(start);
+      d.setDate(start.getDate() + i);
+      dates.push(d);
+    }
+    return dates;
+  }, [selectedDate]);
 
-  const handleCalendarButtonClick = () => {
-    setIsCalendarOpen(!isCalendarOpen);
-  };
-
-  const handleCalendarDateChange = (date: Date) => {
+  const handlePickDate = (date: Date) => {
     onDateChange(date);
     setIsCalendarOpen(false);
   };
 
   return (
-    <div className="flex items-center space-x-2 text-text-main">
+    <div className="p-5 flex items-center gap-3 text-text-main justify-center">
+      {/* Left arrow */}
       <button
-        onClick={handlePreviousDay}
-        className="p-1"
+        onClick={() => onDateChange(getPrevDay(selectedDate))}
+        className='mt-1 mr-2'
         aria-label="Previous day"
         title="Previous day"
       >
@@ -60,10 +69,38 @@ const DateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onDateChange 
         </div>
       </button>
 
-      <div className="relative" ref={calendarRef}>
+      {/* Dates */}
+      <div className="flex items-center justify-center gap-2 md:gap-3">
+        {datesList.map((date) => {
+          const isSelected = isSameDay(date, selectedDate);
+          const dayLabel = formatDateWeekDayShort(date);
+          const dateLabel = date.getDate();
+
+          return (
+            <button
+              key={date.toLocaleDateString()}
+              onClick={() => !isSameDay(date, selectedDate) && onDateChange(date)}
+              className={
+                `flex flex-col items-center justify-center h-12 w-12
+                   ${isSelected ? 'text-text-main' : 'text-text-muted'
+                }`
+              }
+              aria-current={isSelected ? 'date' : undefined}
+              title={formatDateForDisplay(date)}
+            >
+              <span className={`text-2xs md:text-xs ${isSelected ? 'font-semibold' : ''}`}>{dayLabel}</span>
+              <div className="flex items-center gap-1">
+                <span className={`text-base md:text-lg leading-none ${isSelected ? 'font-semibold' : ''}`}>{dateLabel}</span>
+              </div>
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Calendar + Right arrow */}
+      <div className="relative mt-2 mx-2" ref={calendarRef}>
         <button
-          onClick={handleCalendarButtonClick}
-          className="p-1"
+          onClick={() => setIsCalendarOpen((value) => !value)}
           aria-label="Open calendar"
           title="Open calendar"
         >
@@ -73,13 +110,18 @@ const DateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onDateChange 
         {isCalendarOpen && (
           <Calendar
             selectedDate={selectedDate}
-            onDateChange={handleCalendarDateChange}
+            onDateChange={handlePickDate}
             predefinedDates={[{ label: 'Today', date: new Date() }]}
           />
         )}
       </div>
 
-      <button onClick={handleNextDay} className="p-1" aria-label="Next day" title="Next day">
+      <button
+        onClick={() => onDateChange(getNextDay(selectedDate))}
+        className="mt-1 ml-4"
+        aria-label="Next day"
+        title="Next day"
+      >
         <Icon name="rightChevron" size={20} />
       </button>
     </div>

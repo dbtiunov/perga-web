@@ -1,9 +1,9 @@
 import React, { useState, useMemo } from 'react';
 
 import { Icon } from '@common/Icon';
-import { useAuth } from '@contexts/hooks/useAuth.ts';
-import { DAY_NAMES } from '@planner/const.ts';
-import { formatDateForDisplayShort, formatDateMonthName } from '@planner/utils/dateUtils.ts';
+import { formatDateForDisplay, formatDateMonthName } from '@common/utils/date_utils';
+import { useAuth } from '@contexts/hooks/useAuth';
+import { DAY_NAMES } from '@planner/const';
 
 interface CalendarProps {
   selectedDate: Date;
@@ -89,7 +89,7 @@ const Calendar: React.FC<CalendarProps> = ({
                   onClick={() => onDateChange(predefinedDate.date)}
                   className="text-sm px-4 py-3 hover:bg-bg-hover text-left"
                 >
-                  {predefinedDate.label} ({formatDateForDisplayShort(predefinedDate.date)})
+                  {predefinedDate.label} ({formatDateForDisplay(predefinedDate.date)})
                 </button>
               ))}
             </div>
@@ -138,12 +138,8 @@ const Calendar: React.FC<CalendarProps> = ({
               <button
                 key={day}
                 onClick={() => handleDateClick(day)}
-                className={`h-8 w-8 flex items-center justify-center rounded text-sm
-                              ${
-                                isSelected
-                                  ? 'bg-blue-500 text-white'
-                                  : 'hover:bg-bg-hover text-text-main transition-colors'
-                              }`}
+                className={`h-8 w-8 flex items-center justify-center rounded text-sm transition-colors
+                              ${isSelected ? 'bg-blue-500 text-white' : 'hover:bg-bg-hover text-text-main '}`}
               >
                 {day}
               </button>

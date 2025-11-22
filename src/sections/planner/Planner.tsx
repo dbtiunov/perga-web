@@ -1,13 +1,14 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 
+import { getNextDay } from '@common/utils/date_utils.ts';
 import Storage from '@common/utils/storage';
-import { StorageKeys } from '@common/utils/storageKeys';
+import { Storage_keys } from '@common/utils/storage_keys.ts';
 import PlannerAgendas from '@planner/components/PlannerAgendas/PlannerAgendas.tsx';
 import PlannerDay from '@planner/components/PlannerDay/PlannerDay.tsx';
+import DateSelector from '@planner/components/DateSelector/DateSelector.tsx';
 import { usePlannerAgendas } from '@planner/hooks/usePlannerAgendas.ts';
 import { usePlannerDays } from '@planner/hooks/usePlannerDays.ts';
 import { useSelectedDate } from '@planner/hooks/useSelectedDate.ts';
-import { getNextDay } from '@planner/utils/dateUtils';
 
 const DEFAULT_LEFT_PANE_WIDTH_PERCENT = 66.6667; // w-2/3
 const MIN_LEFT_PANE_WIDTH_PERCENT = 30;
@@ -77,7 +78,7 @@ const Planner = () => {
       return DEFAULT_LEFT_PANE_WIDTH_PERCENT;
     }
 
-    const savedWidthRaw = Storage.get(StorageKeys.LeftPaneWidth, null);
+    const savedWidthRaw = Storage.get(Storage_keys.LeftPaneWidth, null);
     const savedWidthParsed = savedWidthRaw ? parseFloat(savedWidthRaw) : NaN;
     if (isNaN(savedWidthParsed)) {
       return DEFAULT_LEFT_PANE_WIDTH_PERCENT;
@@ -115,7 +116,7 @@ const Planner = () => {
     const onMouseMove = (e: MouseEvent) => handleMouseMove(e.clientX);
     const onMouseUp = () => {
       setIsDragging(false);
-      Storage.set(StorageKeys.LeftPaneWidth, String(leftPaneWidthPercent));
+      Storage.set(Storage_keys.LeftPaneWidth, String(leftPaneWidthPercent));
     };
 
     window.addEventListener('mousemove', onMouseMove);
@@ -144,6 +145,8 @@ const Planner = () => {
         className="w-full md:flex-none md:overflow-auto md:min-h-0 flex flex-col"
         style={isMd ? leftPaneStyle : undefined}
       >
+        <DateSelector selectedDate={selectedDate} onDateChange={setSelectedDate} />
+
         <PlannerDay
           date={selectedDate}
           dayItems={daysItems}
@@ -157,7 +160,6 @@ const Planner = () => {
           onDeleteDayItem={handleDeleteDayItem}
           onCopyDayItem={handleCopyDayItem}
           onSnoozeDayItem={handleSnoozeDayItem}
-          onDateChange={setSelectedDate}
         />
         <PlannerDay
           date={getNextDay(selectedDate)}
@@ -189,7 +191,7 @@ const Planner = () => {
       </div>
 
       {/* Right pane (agendas) */}
-      <div className="w-full md:flex-1 overflow-auto min-h-0 px-8 py-10">
+      <div className="w-full md:flex-1 overflow-auto min-h-0 px-8 py-5">
         <PlannerAgendas
           plannerAgendas={plannerAgendas}
           plannerAgendaItems={plannerAgendaItems}

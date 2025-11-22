@@ -13,8 +13,8 @@ import {
   movePlannerAgendaItem,
 } from '@api/planner_agendas';
 import { REFRESH_EVENT } from '@common/events';
+import { formatDateForAPI, formatDateMonthName } from '@common/utils/date_utils';
 import { useToast } from '@contexts/hooks/useToast';
-import { formatDate, formatDateMonthName } from '@planner/utils/dateUtils.ts';
 import { PlannerItemState } from '@/api';
 
 export const usePlannerAgendas = (selectedDate: Date) => {
@@ -55,7 +55,7 @@ export const usePlannerAgendas = (selectedDate: Date) => {
   const fetchAgendasWithItems = useCallback(
     async (date: Date) => {
       try {
-        const response = await getPlannerAgendas(['monthly', 'custom'], formatDate(date));
+        const response = await getPlannerAgendas(['monthly', 'custom'], formatDateForAPI(date));
         const agendas = response.data;
         setPlannerAgendas(agendas);
 

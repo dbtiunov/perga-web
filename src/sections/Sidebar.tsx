@@ -6,7 +6,7 @@ import { useAuth } from '@contexts/hooks/useAuth.ts';
 import { Icon } from '@common/Icon';
 import { triggerRefresh } from '@common/events';
 import Storage from '@common/utils/storage';
-import { StorageKeys } from '@common/utils/storageKeys';
+import { Storage_keys } from '@common/utils/storage_keys.ts';
 import { applyThemeClass } from '@common/utils/theme';
 
 const Sidebar = () => {
@@ -18,7 +18,7 @@ const Sidebar = () => {
   const spinTimeoutRef = useRef<number | null>(null);
 
   const [isDarkThemeEnabled, setIsDarkThemeEnabled] = useState<boolean>(() => {
-    return Storage.getBoolean(StorageKeys.IsDarkThemeEnabled, false);
+    return Storage.getBoolean(Storage_keys.IsDarkThemeEnabled, false);
   });
 
   const handleRefreshClick = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -61,7 +61,7 @@ const Sidebar = () => {
 
     setIsDarkThemeEnabled((prev) => {
       const next = !prev;
-      Storage.setBoolean(StorageKeys.IsDarkThemeEnabled, next);
+      Storage.setBoolean(Storage_keys.IsDarkThemeEnabled, next);
       applyThemeClass(next);
       return next;
     });
