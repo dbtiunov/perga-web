@@ -43,9 +43,9 @@ const DateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onDateChange 
     const start = new Date(selectedDate);
     start.setDate(start.getDate() - half);
     for (let i = 0; i < count; i++) {
-      const d = new Date(start);
-      d.setDate(start.getDate() + i);
-      dates.push(d);
+      const date = new Date(start);
+      date.setDate(start.getDate() + i);
+      dates.push(date);
     }
     return dates;
   }, [selectedDate]);
