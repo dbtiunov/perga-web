@@ -25,7 +25,7 @@ const MobileHeader = ({ toggleSidebar }: MobileHeaderProps) => {
   };
 
   return (
-    <header className="md:hidden bg-bg-sidebar text-text-main p-4 flex items-center justify-between fixed top-0 left-0 right-0 z-40">
+    <header className="md:hidden bg-bg-sidebar text-text-sidebar p-4 flex items-center justify-between fixed top-0 left-0 right-0 z-40">
       <button
         onClick={toggleSidebar}
         className="p-1"

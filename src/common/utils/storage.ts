@@ -92,19 +92,12 @@ export function getBoolean(key: string, defaultValue = false): boolean {
   let result: boolean;
   switch (raw) {
     case 'true':
-      result = true;
-      break;
     case '1':
       result = true;
       break;
     case 'false':
-      result = false;
-      break;
     case '0':
       result = false;
-      break;
-    case 'null':
-      result = defaultValue;
       break;
     default:
       result = defaultValue;

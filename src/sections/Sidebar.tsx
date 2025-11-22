@@ -6,7 +6,7 @@ import { useAuth } from '@contexts/hooks/useAuth.ts';
 import { Icon } from '@common/Icon';
 import { triggerRefresh } from '@common/events';
 import Storage from '@common/utils/storage';
-import { StorageKeys } from '@common/utils/storageKeys';
+import { StorageKeys } from '@common/utils/storage_keys.ts';
 import { applyThemeClass } from '@common/utils/theme';
 
 const Sidebar = () => {

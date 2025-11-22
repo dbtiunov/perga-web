@@ -1,12 +1,12 @@
 import { useState, useRef, KeyboardEvent, useEffect } from 'react';
 import * as React from 'react';
-import Calendar from '@planner/components/Calendar/Calendar';
 
 import { PlannerItemState } from '@api/planner_base';
 import { PlannerDayItem } from '@api/planner_days';
-import { Icon } from '@common/Icon.tsx';
-import { ITEM_TEXT_MAX_LENGTH } from '@planner/const.ts';
-import { getNextDay, getNextMonth, getNextWeek } from '@planner/utils/dateUtils.ts';
+import { Icon } from '@common/Icon';
+import { getNextDay, getNextMonth, getNextWeek } from '@common/utils/date_utils';
+import Calendar from '@planner/components/Calendar/Calendar';
+import { ITEM_TEXT_MAX_LENGTH } from '@planner/const';
 
 interface DayItemProps {
   item: PlannerDayItem;

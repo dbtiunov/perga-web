@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 import Storage from '@common/utils/storage';
-import { StorageKeys } from '@common/utils/storageKeys';
+import { StorageKeys } from '@common/utils/storage_keys.ts';
 
 const AUTH_API_URL = `${import.meta.env.VITE_API_BASE_URL}/auth`;
 

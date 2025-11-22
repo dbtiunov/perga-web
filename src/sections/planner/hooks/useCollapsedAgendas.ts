@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 
 import Storage from '@common/utils/storage';
-import { StorageKeys } from '@common/utils/storageKeys';
+import { StorageKeys } from '@common/utils/storage_keys.ts';
 
 export const useCollapsedAgendas = () => {
   // Initialize collapsedAgendas from localStorage if available

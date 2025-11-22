@@ -3,9 +3,9 @@ import * as React from 'react';
 
 import { PlannerAgendaItem, PlannerAgenda } from '@api/planner_agendas';
 import { PlannerItemState } from '@api/planner_base';
-import { Icon } from '@common/Icon.tsx';
-import { ITEM_TEXT_MAX_LENGTH } from '@planner/const.ts';
-import { getNextDay, formatDateForDisplayShort } from '@planner/utils/dateUtils';
+import { Icon } from '@common/Icon';
+import { getNextDay, formatDateForDisplay } from '@common/utils/date_utils';
+import { ITEM_TEXT_MAX_LENGTH } from '@planner/const';
 
 interface AgendaItemProps {
   item: PlannerAgendaItem;
@@ -173,19 +173,19 @@ const AgendaItem = ({
     const tomorrow = getNextDay(today);
     copyDates.push({
       date: today,
-      label: `${formatDateForDisplayShort(today)} (Today)`,
+      label: formatDateForDisplay(today, true),
       key: 'today',
     });
     copyDates.push({
       date: tomorrow,
-      label: `${formatDateForDisplayShort(tomorrow)} (Tomorrow)`,
+      label: formatDateForDisplay(tomorrow, true),
       key: 'tomorrow',
     });
 
     if (![today.toDateString(), tomorrow.toDateString()].includes(selectedDate.toDateString())) {
       copyDates.push({
         date: selectedDate,
-        label: formatDateForDisplayShort(selectedDate),
+        label: formatDateForDisplay(selectedDate, true),
         key: 'selected_date',
       });
     }
@@ -194,10 +194,12 @@ const AgendaItem = ({
     if (![today.toDateString(), tomorrow.toDateString()].includes(nextDate.toDateString())) {
       copyDates.push({
         date: nextDate,
-        label: formatDateForDisplayShort(nextDate),
+        label: formatDateForDisplay(nextDate, true),
         key: 'next_date',
       });
     }
+
+    copyDates.sort((a, b) => a.date.getTime() - b.date.getTime());
   }
 
   const copyCustomAgendas = copyAgendasMap?.customAgendas.filter(
