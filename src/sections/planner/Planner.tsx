@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { getNextDay } from '@common/utils/date_utils.ts';
 import Storage from '@common/utils/storage';
-import { Storage_keys } from '@common/utils/storage_keys.ts';
+import { StorageKeys } from '@common/utils/storage_keys.ts';
 import PlannerAgendas from '@planner/components/PlannerAgendas/PlannerAgendas.tsx';
 import PlannerDay from '@planner/components/PlannerDay/PlannerDay.tsx';
 import DateSelector from '@planner/components/DateSelector/DateSelector.tsx';
@@ -78,7 +78,7 @@ const Planner = () => {
       return DEFAULT_LEFT_PANE_WIDTH_PERCENT;
     }
 
-    const savedWidthRaw = Storage.get(Storage_keys.LeftPaneWidth, null);
+    const savedWidthRaw = Storage.get(StorageKeys.LeftPaneWidth, null);
     const savedWidthParsed = savedWidthRaw ? parseFloat(savedWidthRaw) : NaN;
     if (isNaN(savedWidthParsed)) {
       return DEFAULT_LEFT_PANE_WIDTH_PERCENT;
@@ -116,7 +116,7 @@ const Planner = () => {
     const onMouseMove = (e: MouseEvent) => handleMouseMove(e.clientX);
     const onMouseUp = () => {
       setIsDragging(false);
-      Storage.set(Storage_keys.LeftPaneWidth, String(leftPaneWidthPercent));
+      Storage.set(StorageKeys.LeftPaneWidth, String(leftPaneWidthPercent));
     };
 
     window.addEventListener('mousemove', onMouseMove);

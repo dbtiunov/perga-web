@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 import Storage from '@common/utils/storage';
-import { Storage_keys } from '@common/utils/storage_keys.ts';
+import { StorageKeys } from '@common/utils/storage_keys.ts';
 
 const AUTH_API_URL = `${import.meta.env.VITE_API_BASE_URL}/auth`;
 
@@ -46,17 +46,17 @@ export interface RefreshTokenRequest {
 }
 
 export const storeToken = (token: Token) => {
-  Storage.set(Storage_keys.AuthToken, token.access_token);
-  Storage.set(Storage_keys.TokenType, token.token_type);
+  Storage.set(StorageKeys.AuthToken, token.access_token);
+  Storage.set(StorageKeys.TokenType, token.token_type);
   if (token.refresh_token) {
-    Storage.set(Storage_keys.RefreshToken, token.refresh_token);
+    Storage.set(StorageKeys.RefreshToken, token.refresh_token);
   }
 };
 
 export const getToken = (): Token | null => {
-  const access_token = Storage.get(Storage_keys.AuthToken, null);
-  const token_type = Storage.get(Storage_keys.TokenType, null);
-  const refresh_token = Storage.get(Storage_keys.RefreshToken, null);
+  const access_token = Storage.get(StorageKeys.AuthToken, null);
+  const token_type = Storage.get(StorageKeys.TokenType, null);
+  const refresh_token = Storage.get(StorageKeys.RefreshToken, null);
 
   if (access_token && token_type) {
     return { access_token, token_type, refresh_token: refresh_token || undefined };
@@ -66,9 +66,9 @@ export const getToken = (): Token | null => {
 };
 
 export const removeToken = () => {
-  Storage.remove(Storage_keys.AuthToken);
-  Storage.remove(Storage_keys.TokenType);
-  Storage.remove(Storage_keys.RefreshToken);
+  Storage.remove(StorageKeys.AuthToken);
+  Storage.remove(StorageKeys.TokenType);
+  Storage.remove(StorageKeys.RefreshToken);
 };
 
 export const isAuthenticated = (): boolean => {

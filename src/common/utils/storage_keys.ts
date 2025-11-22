@@ -1,5 +1,5 @@
 /** Centralized list of localStorage keys used across the app */
-export enum Storage_keys {
+export enum StorageKeys {
   // Auth
   AuthToken = 'auth:authToken',
   TokenType = 'auth:tokenType',
