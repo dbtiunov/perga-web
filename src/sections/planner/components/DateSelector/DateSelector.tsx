@@ -6,10 +6,10 @@ import {
   formatDateWeekDayShort,
   getNextDay,
   getPrevDay,
-  isSameDay
+  isSameDay,
 } from '@common/utils/date_utils';
 import Calendar from '@planner/components/Calendar/Calendar';
-import { DATE_SELECTOR_DAYS_COUNT } from "@planner/const";
+import { DATE_SELECTOR_DAYS_COUNT } from '@planner/const';
 
 interface DateSelectorProps {
   selectedDate: Date;
@@ -60,7 +60,7 @@ const DateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onDateChange 
       {/* Left arrow */}
       <button
         onClick={() => onDateChange(getPrevDay(selectedDate))}
-        className='mt-1 mr-2'
+        className="mt-1"
         aria-label="Previous day"
         title="Previous day"
       >
@@ -70,7 +70,7 @@ const DateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onDateChange 
       </button>
 
       {/* Dates */}
-      <div className="flex items-center justify-center gap-2 md:gap-3">
+      <div className="flex items-center justify-center gap-2">
         {datesList.map((date) => {
           const isSelected = isSameDay(date, selectedDate);
           const dayLabel = formatDateWeekDayShort(date);
@@ -80,17 +80,20 @@ const DateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onDateChange 
             <button
               key={date.toLocaleDateString()}
               onClick={() => !isSameDay(date, selectedDate) && onDateChange(date)}
-              className={
-                `flex flex-col items-center justify-center h-12 w-12
-                   ${isSelected ? 'text-text-main' : 'text-text-muted'
-                }`
-              }
+              className={`flex flex-col items-center justify-center h-12 w-10
+                   ${isSelected ? 'text-text-main' : 'text-text-muted'}`}
               aria-current={isSelected ? 'date' : undefined}
               title={formatDateForDisplay(date)}
             >
-              <span className={`text-2xs md:text-xs ${isSelected ? 'font-semibold' : ''}`}>{dayLabel}</span>
+              <span className={`text-2xs md:text-xs ${isSelected ? 'font-semibold' : ''}`}>
+                {dayLabel}
+              </span>
               <div className="flex items-center gap-1">
-                <span className={`text-base md:text-lg leading-none ${isSelected ? 'font-semibold' : ''}`}>{dateLabel}</span>
+                <span
+                  className={`text-base md:text-lg leading-none ${isSelected ? 'font-semibold' : ''}`}
+                >
+                  {dateLabel}
+                </span>
               </div>
             </button>
           );
@@ -98,7 +101,7 @@ const DateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onDateChange 
       </div>
 
       {/* Calendar + Right arrow */}
-      <div className="relative mt-2 mx-2" ref={calendarRef}>
+      <div className="relative mt-2 mx-1" ref={calendarRef}>
         <button
           onClick={() => setIsCalendarOpen((value) => !value)}
           aria-label="Open calendar"
@@ -118,7 +121,7 @@ const DateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onDateChange 
 
       <button
         onClick={() => onDateChange(getNextDay(selectedDate))}
-        className="mt-1 ml-4"
+        className="mt-1"
         aria-label="Next day"
         title="Next day"
       >

@@ -70,7 +70,7 @@ const AgendaActionsDropdown: React.FC<AgendaActionsDropdownProps> = ({
             <button
               key={action}
               type="button"
-              className="w-full text-left px-4 py-3 text-text-main text-sm bg-bg-main hover:bg-bg-hover flex items-center disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full text-left px-4 py-3 text-sm hover:bg-bg-hover flex items-center disabled:opacity-50 disabled:cursor-not-allowed"
               onClick={() => handleAction(action)}
               disabled={!!loadingAction}
             >
