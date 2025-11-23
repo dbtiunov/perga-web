@@ -16,6 +16,7 @@ Personal organizer that helps you plan and organize your days and months efficie
 - Monthly and custom agendas
 - User authentication and settings
 - Responsive design with mobile support
+- Dark theme
 
 <p>
   <img src="docs/assets/planner_screenshot.png" alt="Planner Screenshot" width="300" />
