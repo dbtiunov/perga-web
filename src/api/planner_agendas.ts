@@ -36,13 +36,13 @@ const AGENDAS_API_URL = `${PLANNER_API_BASE_URL}/agendas/`;
 // Planner agenda endpoints
 export const getPlannerAgendas = (
   agendaTypes: string[],
-  day: string | null = null,
+  selectedDay: string | null = null,
   withCounts: boolean = false,
 ) =>
   axios.get<PlannerAgenda[]>(AGENDAS_API_URL, {
     params: {
       agenda_types: agendaTypes,
-      day,
+      selected_day: selectedDay,
       with_counts: withCounts,
     },
     paramsSerializer: {
