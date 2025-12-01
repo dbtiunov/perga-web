@@ -29,7 +29,7 @@ You can try out Perga without installation by visiting demo version at [https://
 ## Documentation
 
 For detailed documentation, please visit:
-[https://dbtiunov.github.io/perga-docs/docs/perga-web](https://dbtiunov.github.io/perga-docs/docs/perga-web)
+[https://docs.getperga.me/docs/perga-web](https://docs.getperga.me/docs/perga-web)
 
 ## License
 
