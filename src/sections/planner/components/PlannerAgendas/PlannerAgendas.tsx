@@ -6,6 +6,7 @@ import { Icon } from '@common/Icon.tsx';
 import AgendaItem from '@planner/components/PlannerAgendas/AgendaItem/AgendaItem.tsx';
 import { useCollapsedAgendas } from '@planner/hooks/useCollapsedAgendas.ts';
 import AgendaActionsDropdown from '@planner/components/PlannerAgendas/AgendaActionsDropdown';
+import {formatDateMonthName} from "@common/utils/date_utils.ts";
 
 interface PlannerAgendasProps {
   plannerAgendas: PlannerAgenda[];
@@ -24,7 +25,7 @@ interface PlannerAgendasProps {
   onCopyAgendaItem: (itemId: number, toAgendaId: number) => void;
   onMoveAgendaItem: (itemId: number, fromAgendaId: number, toAgendaId: number) => void;
   onCopyAgendaItemToDay?: (date: Date, text: string) => void;
-  selectedDate?: Date;
+  selectedDate: Date;
   copyAgendasMap: {
     currentMonth: PlannerAgenda;
     nextMonth: PlannerAgenda;
@@ -77,10 +78,12 @@ const PlannerAgendas: React.FC<PlannerAgendasProps> = ({
     });
   };
 
+  const selectedMonthName = formatDateMonthName(selectedDate);
+
   return (
     <div className="space-y-4">
       {plannerAgendas
-        .filter((agenda) => agenda.id !== copyAgendasMap.nextMonth.id)
+        .filter((agenda) => agenda.agenda_type === 'custom' || agenda.name === selectedMonthName)
         .map((agenda) => (
           <div key={agenda.id}>
             <div className="flex items-center mb-3 group hover:bg-bg-hover rounded text-text-main">

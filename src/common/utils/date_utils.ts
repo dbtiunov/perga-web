@@ -26,9 +26,9 @@ export const formatDateForDisplay = (date: Date, withRelativeTag: boolean = fals
 
     if (isSameDay(date, today)) {
       formattedDate += ' (Today)';
-    } else if (isSameDay(today, yesterday)) {
+    } else if (isSameDay(date, yesterday)) {
       formattedDate += ' (Yesterday)';
-    } else if (isSameDay(today, tomorrow)) {
+    } else if (isSameDay(date, tomorrow)) {
       formattedDate += ' (Tomorrow)';
     }
   }
