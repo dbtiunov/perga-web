@@ -69,7 +69,7 @@ const Signin: React.FC = () => {
                 type="text"
                 required
                 value={username}
-                placeholder="Username"
+                placeholder="Username or email"
                 onChange={(e) => setUsername(e.target.value)}
                 className="appearance-none rounded-none relative block w-full px-3 py-2 border border-border-main
                            placeholder-gray-500 text-text-main rounded-t-md focus:outline-none focus:z-10 sm:text-sm"
