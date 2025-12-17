@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.0.2] - 2025-12-17
+
+### Changed
+- Use dark theme by default
+
 ## [1.0.1] - 2025-12-16
 
 ### Fixed
