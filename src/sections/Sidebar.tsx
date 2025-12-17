@@ -18,7 +18,7 @@ const Sidebar = () => {
   const spinTimeoutRef = useRef<number | null>(null);
 
   const [isDarkThemeEnabled, setIsDarkThemeEnabled] = useState<boolean>(() => {
-    return Storage.getBoolean(StorageKeys.IsDarkThemeEnabled, false);
+    return Storage.getBoolean(StorageKeys.IsDarkThemeEnabled, true);
   });
 
   const handleRefreshClick = (e: React.MouseEvent<HTMLButtonElement>) => {

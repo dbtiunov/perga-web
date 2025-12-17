@@ -15,6 +15,7 @@ export function initTheme(): void {
     return;
   }
 
-  const isDark = Storage.getBoolean(StorageKeys.IsDarkThemeEnabled);
+  // Default to dark theme when no preference is stored
+  const isDark = Storage.getBoolean(StorageKeys.IsDarkThemeEnabled, true);
   applyThemeClass(isDark);
 }
