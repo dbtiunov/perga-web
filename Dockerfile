@@ -20,12 +20,14 @@ COPY vite.config.ts .
 COPY index.html .
 COPY src ./src
 
-# Declare ARG (build-time var) and pass ARG into ENV for Vite
+# Declare ARG for build-time variables
 ARG VITE_API_BASE_URL
-ENV VITE_API_BASE_URL=${VITE_API_BASE_URL}
+ARG VITE_IS_SIGNUP_DISABLED
 
-# Build the application
-RUN npm run build
+# Build the application with environment variables
+RUN VITE_API_BASE_URL=${VITE_API_BASE_URL} \
+    VITE_IS_SIGNUP_DISABLED=${VITE_IS_SIGNUP_DISABLED} \
+    npm run build
 
 ## Runner stage
 FROM nginx:alpine AS runner

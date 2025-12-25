@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.0.3] - 2025-12-25
+
+### Fixed
+- Fixed vite vars and added github container workflow
+
 ## [1.0.2] - 2025-12-17
 
 ### Changed
