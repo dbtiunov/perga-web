@@ -1,9 +1,11 @@
 import axios from 'axios';
 
+import { getConfig } from "@/config.ts";
 import Storage from '@common/utils/storage';
 import { StorageKeys } from '@common/utils/storage_keys.ts';
 
-const AUTH_API_URL = `${import.meta.env.VITE_API_BASE_URL}/auth`;
+const { API_BASE_URL } = getConfig();
+const AUTH_API_URL = `${API_BASE_URL}/auth`;
 
 export type WeekStartDay = 'monday' | 'sunday';
 

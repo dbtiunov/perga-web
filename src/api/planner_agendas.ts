@@ -1,5 +1,6 @@
 import axios from 'axios';
 
+import { getConfig } from "@/config.ts";
 import { PlannerItemState, BasePlannerItem } from './planner_base.ts';
 
 export type PlannerAgendaType = 'monthly' | 'custom' | 'archived';
@@ -30,7 +31,8 @@ export interface PlannerAgendaItemUpdate {
 }
 
 // API base URLs
-const PLANNER_API_BASE_URL = `${import.meta.env.VITE_API_BASE_URL}/planner`;
+const { API_BASE_URL } = getConfig();
+const PLANNER_API_BASE_URL = `${API_BASE_URL}/planner`;
 const AGENDAS_API_URL = `${PLANNER_API_BASE_URL}/agendas/`;
 
 // Planner agenda endpoints

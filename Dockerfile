@@ -21,8 +21,8 @@ COPY index.html .
 COPY src ./src
 
 # Declare ARG for build-time variables
-ARG VITE_API_BASE_URL
-ARG VITE_IS_SIGNUP_DISABLED
+ARG VITE_API_BASE_URL=http://localhost:8000
+ARG VITE_IS_SIGNUP_DISABLED=false
 
 # Build the application with environment variables
 RUN VITE_API_BASE_URL=${VITE_API_BASE_URL} \
@@ -33,7 +33,10 @@ RUN VITE_API_BASE_URL=${VITE_API_BASE_URL} \
 FROM nginx:alpine AS runner
 COPY --from=builder /app/dist /usr/share/nginx/html
 COPY nginx/nginx.conf /etc/nginx/nginx.conf
+COPY docker-entrypoint.sh /docker-entrypoint.sh
+
+RUN chmod +x /docker-entrypoint.sh
 
 EXPOSE 80
 
-CMD ["nginx", "-g", "daemon off;"]
+ENTRYPOINT ["/docker-entrypoint.sh"]
