@@ -25,10 +25,6 @@ COPY src ./src
 COPY config.json.template ./
 COPY scripts ./scripts
 
-# Declare ARG for build-time variables
-ARG API_BASE_URL=http://localhost:8000
-ARG IS_SIGNUP_DISABLED=false
-
 # Expose as env vars for the build step
 ENV API_BASE_URL=${API_BASE_URL}
 ENV IS_SIGNUP_DISABLED=${IS_SIGNUP_DISABLED}
