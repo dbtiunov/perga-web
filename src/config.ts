@@ -35,7 +35,8 @@ export async function initConfig(): Promise<Config> {
 
 export function getConfig(): Config {
   if (!config) {
-    throw new Error('Config not initialized. Call initConfig() first.');
+    void initConfig();
   }
-  return config;
+
+  return config as Config;
 }

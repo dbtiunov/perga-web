@@ -16,27 +16,44 @@ COPY tailwind.config.js .
 COPY eslint.config.js .
 COPY vite.config.ts .
 
-# Copy app code
+# Copy app code and assets
 COPY index.html .
+COPY public ./public
 COPY src ./src
 
-# Declare ARG for build-time variables
-ARG VITE_API_BASE_URL=http://localhost:8000
-ARG VITE_IS_SIGNUP_DISABLED=false
+# Copy config template and generator script
+COPY config.json.template ./
+COPY scripts ./scripts
 
-# Build the application with environment variables
-RUN VITE_API_BASE_URL=${VITE_API_BASE_URL} \
-    VITE_IS_SIGNUP_DISABLED=${VITE_IS_SIGNUP_DISABLED} \
-    npm run build
+# Declare ARG for build-time variables
+ARG API_BASE_URL=http://localhost:8000
+ARG IS_SIGNUP_DISABLED=false
+
+# Expose as env vars for the build step
+ENV API_BASE_URL=${API_BASE_URL}
+ENV IS_SIGNUP_DISABLED=${IS_SIGNUP_DISABLED}
+
+# Build the application (build script generates public/config.json then builds)
+RUN npm run build
 
 ## Runner stage
 FROM nginx:alpine AS runner
-COPY --from=builder /app/dist /usr/share/nginx/html
-COPY nginx/nginx.conf /etc/nginx/nginx.conf
-COPY docker-entrypoint.sh /docker-entrypoint.sh
 
+# Install envsubst for runtime configuration generation
+RUN apk add --no-cache gettext
+
+# Copy built assets
+COPY --from=builder /app/dist /usr/share/nginx/html
+
+# Nginx config
+COPY nginx/nginx.conf /etc/nginx/nginx.conf
+
+# Copy runtime config template and entrypoint
+COPY config.json.template /etc/perga/config.json.template
+COPY docker-entrypoint.sh /docker-entrypoint.sh
 RUN chmod +x /docker-entrypoint.sh
 
 EXPOSE 80
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
+CMD ["nginx", "-g", "daemon off;"]

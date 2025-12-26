@@ -3,10 +3,11 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      args:
-        VITE_API_BASE_URL: ${VITE_API_BASE_URL}
     ports:
       - '3000:80'
     env_file:
       - .env
+    environment:
+      API_BASE_URL: ${API_BASE_URL}
+      IS_SIGNUP_DISABLED: ${IS_SIGNUP_DISABLED}
     restart: unless-stopped
