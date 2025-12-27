@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.4] - 2025-12-26
+
+### Changed
+- Use config.json for providing runtime vars instead of build time vars from .env
+- It is actually breaking changes, but since nobody is using this project yet
+
 ## [1.0.3] - 2025-12-25
 
 ### Fixed

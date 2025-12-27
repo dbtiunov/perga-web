@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 import { PlannerItemState, BasePlannerItem } from './planner_base.ts';
+import { getConfig } from "@/config.ts";
 
 export interface PlannerDayItem extends BasePlannerItem {
   day: string;
@@ -19,8 +20,8 @@ export interface PlannerDayItemUpdate {
 }
 
 // API base URLs
-const API_BASE_URL = `${import.meta.env.VITE_API_BASE_URL}/planner`;
-const DAYS_API_URL = `${API_BASE_URL}/days/items`;
+const { API_BASE_URL } = getConfig();
+const DAYS_API_URL = `${API_BASE_URL}/planner/days/items`;
 
 export const getItemsByDays = (days: string[]) =>
   axios.get<Record<string, PlannerDayItem[]>>(`${DAYS_API_URL}/`, {
