@@ -18,12 +18,12 @@ COPY vite.config.ts .
 
 # Copy app code and assets
 COPY index.html .
-COPY public ./public
 COPY src ./src
 
 # Copy config template and generator script
 COPY config.json.template ./
 COPY scripts ./scripts
+RUN mkdir -p public
 
 # Build the application (build script generates public/config.json then builds)
 RUN npm run build
