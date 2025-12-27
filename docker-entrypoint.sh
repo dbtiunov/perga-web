@@ -5,9 +5,10 @@ set -euo pipefail
 : "${API_BASE_URL:=http://localhost:8000}"
 : "${IS_SIGNUP_DISABLED:=false}"
 
-# Ensure boolean looks like a JSON boolean (true/false) not 1/0/True/False
+# Ensure boolean strings like true/True/1 and false/False/0
 case "$(printf %s "$IS_SIGNUP_DISABLED" | tr '[:upper:]' '[:lower:]')" in
-  true|false) IS_SIGNUP_DISABLED=$(printf %s "$IS_SIGNUP_DISABLED" | tr '[:upper:]' '[:lower:]') ;;
+  true|1) IS_SIGNUP_DISABLED=true ;;
+  false|0) IS_SIGNUP_DISABLED=false ;;
   *) IS_SIGNUP_DISABLED=false ;;
 esac
 
