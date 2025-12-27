@@ -42,6 +42,8 @@ template = template.replace(/\$\{(\w+)}/g, (_, key) => {
   return value;
 });
 
+// Ensure the output directory exists and write config.json file
+fs.mkdirSync(path.dirname(outputPath), { recursive: true });
 fs.writeFileSync(outputPath, template);
 
 console.log("File /public/config.json generated from template");
