@@ -25,10 +25,6 @@ COPY src ./src
 COPY config.json.template ./
 COPY scripts ./scripts
 
-# Expose as env vars for the build step
-ENV API_BASE_URL=${API_BASE_URL}
-ENV IS_SIGNUP_DISABLED=${IS_SIGNUP_DISABLED}
-
 # Build the application (build script generates public/config.json then builds)
 RUN npm run build
 

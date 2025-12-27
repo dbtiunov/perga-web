@@ -7,13 +7,36 @@ dotenv.config();
 const templatePath = path.resolve("config.json.template");
 const outputPath = path.resolve("public/config.json");
 
-// Read template and insert vars from .env
+// Safe defaults for build-time. Runtime can override via docker-entrypoint.
+const DEFAULTS = {
+  API_BASE_URL: "http://localhost:8080/api/v1",
+  IS_SIGNUP_DISABLED: "false",
+};
+
+function normalizeBooleanString(value) {
+  if (value === null){
+    return null;
+  }
+
+  const cleaned_value = String(value).trim().toLowerCase();
+  if (!["true", "True", "1", "false", "False", "0"].includes(cleaned_value)) {
+    return null;
+  }
+
+  return cleaned_value;
+}
+
+// Read template and insert vars from env or defaults
 let template = fs.readFileSync(templatePath, "utf-8");
 template = template.replace(/\$\{(\w+)}/g, (_, key) => {
-  const value = process.env[key];
+  let value = process.env[key];
 
-  if (value === undefined) {
-    throw new Error(`Environment variable ${key} is not defined`);
+  if (["IS_SIGNUP_DISABLED"].includes(key)) {
+    value = normalizeBooleanString(value);
+  }
+
+  if (value === undefined || value === null || value === "") {
+    value = DEFAULTS[key];
   }
 
   return value;
