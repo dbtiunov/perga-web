@@ -195,7 +195,7 @@ export const usePlannerAgendas = (selectedDate: Date) => {
     }
   };
 
-  const previousMonthRef = useRef(0);
+  const previousMonthRef = useRef(-1);
   useEffect(() => {
     const currentMonth = selectedDate.getMonth();
     const previousMonth = previousMonthRef.current;

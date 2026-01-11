@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.0.5] - 2026-01-11
+
+### Fixed
+- Fixed not working january agenda fetching
+
 ## [1.0.4] - 2025-12-26
 
 ### Changed
