@@ -18,6 +18,7 @@ export default defineConfig({
       '@auth': path.resolve(__dirname, './src/sections/auth'),
       '@planner': path.resolve(__dirname, './src/sections/planner'),
       '@settings': path.resolve(__dirname, './src/sections/settings'),
+      '@notes': path.resolve(__dirname, './src/sections/notes'),
     },
   },
 });

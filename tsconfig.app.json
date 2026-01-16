@@ -29,7 +29,8 @@
       "@sections/*": ["src/sections/*"],
       "@auth/*": ["src/sections/auth/*"],
       "@planner/*": ["src/sections/planner/*"],
-      "@settings/*": ["src/sections/settings/*"]
+      "@settings/*": ["src/sections/settings/*"],
+      "@notes/*": ["src/sections/notes/*"]
     },
 
     /* Linting */

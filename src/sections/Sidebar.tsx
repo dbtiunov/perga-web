@@ -49,6 +49,11 @@ const Sidebar = () => {
       label: 'Planner',
       icon: <Icon name="planner" size="20" fill="white" className="h-8 w-8" />,
     },
+    {
+      path: '/notes/',
+      label: 'Notes',
+      icon: <Icon name="notes" size="20" className="h-8 w-8" />,
+    },
   ];
 
   const handleLogout = () => {
