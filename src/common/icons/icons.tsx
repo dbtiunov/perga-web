@@ -14,10 +14,21 @@ export const icons = {
       <path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z" />
     </svg>
   ),
-  notes: (
+  notes1: (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-      <path d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" />
-      <path d="M6 6h5m-5 4h8m-8 4h6" stroke="currentColor" strokeWidth="1" />
+        <path fillRule="evenodd" clipRule="evenodd" d="M4 2a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2V4a2 2 0 00-2-2H4zm0 2h12v12H4V4z"/>
+        <rect x="6" y="6" width="8" height="1" rx="0.5" />
+        <rect x="6" y="9" width="7" height="1" rx="0.5" />
+        <rect x="6" y="12" width="6" height="1" rx="0.5" />
+    </svg>
+  ),
+  // second option, not sure yet
+  notes2: (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+      <path fillRule="evenodd" clipRule="evenodd" d="M4 2a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2V4a2 2 0 00-2-2H4z"/>
+      <line x1="6" y1="6" x2="14" y2="6" stroke="black" strokeWidth="1" strokeLinecap="round"/>
+      <line x1="6" y1="9" x2="13" y2="9" stroke="black" strokeWidth="1" strokeLinecap="round"/>
+      <line x1="6" y1="12" x2="12" y2="12" stroke="black" strokeWidth="1" strokeLinecap="round"/>
     </svg>
   ),
   logout: (
@@ -201,4 +212,12 @@ export const icons = {
       />
     </svg>
   ),
+  folder: (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+      <path fillRule="evenodd" clipRule="evenodd" d="M2 4a2 2 0 012-2h4l2 2h8a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V4z"/>
+      <rect x="5" y="7" width="6" height="1" rx="0.5" fill="white"/>
+      <rect x="5" y="9" width="5" height="1" rx="0.5" fill="white"/>
+      <rect x="5" y="11" width="4" height="1" rx="0.5" fill="white"/>
+    </svg>
+  )
 };

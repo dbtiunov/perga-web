@@ -52,7 +52,7 @@ const Sidebar = () => {
     {
       path: '/notes/',
       label: 'Notes',
-      icon: <Icon name="notes" size="20" className="h-8 w-8" />,
+      icon: <Icon name="notes2" size="20" fill="white" className="h-8 w-8" />,
     },
   ];
 
