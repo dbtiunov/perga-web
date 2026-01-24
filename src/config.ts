@@ -25,7 +25,7 @@ export async function initConfig(): Promise<Config> {
 
     // use default config
     config = {
-      API_BASE_URL: 'http://localhost:8000',
+      API_BASE_URL: 'http://localhost:8080/api/v1',
       IS_SIGNUP_DISABLED: false
     };
   }
