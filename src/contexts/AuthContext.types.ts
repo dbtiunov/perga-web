@@ -1,15 +1,16 @@
 import { createContext } from 'react';
-import { User, UserSignin, UserSignup, UserUpdate, UpdatePasswordRequest } from '@api/auth';
+
+import { UserDTO, UserSigninDTO, UserSignupDTO, UserUpdateDTO, UpdatePasswordDTO } from '@api/auth';
 
 export interface AuthContextType {
   isAuthenticated: boolean;
-  user: User | null;
-  signin: (credentials: UserSignin) => Promise<void>;
-  signup: (userData: UserSignup) => Promise<void>;
+  user: UserDTO | null;
+  signin: (credentials: UserSigninDTO) => Promise<void>;
+  signup: (userData: UserSignupDTO) => Promise<void>;
   logout: () => void;
   fetchUser: () => void;
-  updateUser: (userData: UserUpdate) => Promise<void>;
-  updatePassword: (data: UpdatePasswordRequest) => Promise<void>;
+  updateUser: (userData: UserUpdateDTO) => Promise<void>;
+  updatePassword: (data: UpdatePasswordDTO) => Promise<void>;
   isLoading: boolean;
 }
 

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 
-import { getConfig } from "@/config.ts";
+import { getConfig } from '@/config.ts';
 import { useAuth } from '@contexts/hooks/useAuth.ts';
 
 const Signin: React.FC = () => {

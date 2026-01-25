@@ -10,7 +10,7 @@ let config: Config | null = null;
  */
 export async function initConfig(): Promise<Config> {
   try {
-    const response = await fetch('/config.json', { cache: "no-store" });
+    const response = await fetch('/config.json', { cache: 'no-store' });
     if (!response.ok) {
       throw new Error(`Failed to load config: ${response.status}`);
     }

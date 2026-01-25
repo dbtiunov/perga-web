@@ -1,8 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 
+import type { PlannerItemStateDTO, PlannerAgendaDTO, PlannerAgendaItemDTO } from '@api/planner';
 import {
-  PlannerAgenda,
-  PlannerAgendaItem,
   getPlannerAgendas,
   getItemsByAgendas,
   createPlannerAgendaItem,
@@ -11,19 +10,18 @@ import {
   reorderPlannerAgendaItems,
   copyPlannerAgendaItem,
   movePlannerAgendaItem,
-} from '@api/planner_agendas';
+} from '@api/planner';
 import { REFRESH_EVENT } from '@common/events';
 import { formatDateForAPI, formatDateMonthName } from '@common/utils/date_utils';
 import { useToast } from '@contexts/hooks/useToast';
-import { PlannerItemState } from '@/api';
 
 export const usePlannerAgendas = (selectedDate: Date) => {
-  const [plannerAgendas, setPlannerAgendas] = useState<PlannerAgenda[]>([]);
-  const [plannerAgendaItems, setPlannerAgendaItems] = useState<Record<number, PlannerAgendaItem[]>>(
+  const [plannerAgendas, setPlannerAgendas] = useState<PlannerAgendaDTO[]>([]);
+  const [plannerAgendaItems, setPlannerAgendaItems] = useState<Record<number, PlannerAgendaItemDTO[]>>(
     {},
   );
 
-  const [dragAgendaItem, setDragAgendaItem] = useState<PlannerAgendaItem | null>(null);
+  const [dragAgendaItem, setDragAgendaItem] = useState<PlannerAgendaItemDTO | null>(null);
 
   // Lock to prevent multiple updates for the same item
   const updatingItemsRef = useRef<Set<number>>(new Set());
@@ -92,7 +90,7 @@ export const usePlannerAgendas = (selectedDate: Date) => {
   const handleUpdateAgendaItem = async (
     itemId: number,
     agendaId: number,
-    changes: { text?: string; state?: PlannerItemState },
+    changes: { text?: string; state?: PlannerItemStateDTO },
   ) => {
     // prevent multiple execution for the same item and empty text
     if (updatingItemsRef.current.has(itemId) || changes.text?.trim() === '') {
@@ -104,7 +102,7 @@ export const usePlannerAgendas = (selectedDate: Date) => {
     const prev = { ...plannerAgendaItems };
     const prevItems = plannerAgendaItems[agendaId];
     const prevItem = prevItems.find((item) => item.id === itemId);
-    const optimisticItem = { ...prevItem, ...changes } as PlannerAgendaItem;
+    const optimisticItem = { ...prevItem, ...changes } as PlannerAgendaItemDTO;
     setPlannerAgendaItems({
       ...plannerAgendaItems,
       [agendaId]: prevItems.map((item) => (item.id === itemId ? optimisticItem : item)),
@@ -139,7 +137,7 @@ export const usePlannerAgendas = (selectedDate: Date) => {
     }
   };
 
-  const handleDragStartAgendaItem = (item: PlannerAgendaItem) => {
+  const handleDragStartAgendaItem = (item: PlannerAgendaItemDTO) => {
     setDragAgendaItem(item);
   };
 
@@ -154,7 +152,7 @@ export const usePlannerAgendas = (selectedDate: Date) => {
 
   // Optimistic reorder that is called frequently during item drag
   // Update state without API request and save it to ref
-  const handleReorderAgendaItems = (agendaId: number, items: PlannerAgendaItem[]) => {
+  const handleReorderAgendaItems = (agendaId: number, items: PlannerAgendaItemDTO[]) => {
     currentItemsOrder.current.set(
       agendaId,
       (plannerAgendaItems[agendaId] || []).map((item) => item.id),

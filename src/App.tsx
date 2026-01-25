@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 
-import { getConfig } from "@/config.ts";
+import { getConfig } from '@/config.ts';
 import { setupAxiosInterceptors } from '@api/auth';
 import ProtectedRoute from '@auth/ProtectedRoute';
 import Signin from '@auth/Signin';

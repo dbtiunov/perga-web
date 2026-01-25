@@ -1,9 +1,8 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useToast } from '@contexts/hooks/useToast';
 
-import { PlannerItemState } from '@api/planner_base';
+import type { PlannerItemStateDTO, PlannerDayItemDTO } from '@api/planner';
 import {
-  PlannerDayItem,
   getItemsByDays,
   createPlannerDayItem,
   updatePlannerDayItem,
@@ -11,13 +10,13 @@ import {
   reorderPlannerDayItems,
   copyPlannerDayItem,
   snoozePlannerDayItem,
-} from '@api/planner_days';
+} from '@api/planner';
 import { REFRESH_EVENT } from '@common/events';
 import { formatDateForAPI, getNextDay } from '@common/utils/date_utils';
 
 export const usePlannerDays = (selectedDate: Date) => {
-  const [daysItems, setDaysItems] = useState<PlannerDayItem[]>([]);
-  const [dragDayItem, setDragDayItem] = useState<PlannerDayItem | null>(null);
+  const [daysItems, setDaysItems] = useState<PlannerDayItemDTO[]>([]);
+  const [dragDayItem, setDragDayItem] = useState<PlannerDayItemDTO | null>(null);
 
   // Lock to prevent multiple updates for the same item
   const updatingItemsRef = useRef<Set<number>>(new Set());
@@ -74,7 +73,7 @@ export const usePlannerDays = (selectedDate: Date) => {
 
   const handleUpdateDayItem = async (
     itemId: number,
-    changes: { text?: string; day?: string; state?: PlannerItemState },
+    changes: { text?: string; day?: string; state?: PlannerItemStateDTO },
   ) => {
     // prevent multiple execution for the same item and empty text
     if (updatingItemsRef.current.has(itemId) || changes.text?.trim() === '') {
@@ -85,7 +84,7 @@ export const usePlannerDays = (selectedDate: Date) => {
     // use optimistic update for better ui interactivity
     const prev = [...daysItems];
     const prevItem = prev.find((item) => item.id === itemId);
-    const optimisticItem = { ...prevItem, ...changes } as PlannerDayItem;
+    const optimisticItem = { ...prevItem, ...changes } as PlannerDayItemDTO;
     setDaysItems(daysItems.map((item) => (item.id === itemId ? optimisticItem : item)));
 
     try {
@@ -119,7 +118,7 @@ export const usePlannerDays = (selectedDate: Date) => {
 
       // Update the original item's state to 'snoozed'
       const updatedItems = daysItems.map((item) =>
-        item.id === itemId ? { ...item, state: 'snoozed' as PlannerItemState } : item,
+        item.id === itemId ? { ...item, state: 'snoozed' as PlannerItemStateDTO } : item,
       );
 
       // Add the new item to the current state if its date is currently shown
@@ -136,7 +135,7 @@ export const usePlannerDays = (selectedDate: Date) => {
     }
   };
 
-  const handleDayItemDragStart = (item: PlannerDayItem) => {
+  const handleDayItemDragStart = (item: PlannerDayItemDTO) => {
     setDragDayItem(item);
   };
 
@@ -151,7 +150,7 @@ export const usePlannerDays = (selectedDate: Date) => {
 
   // Optimistic reorder that is called frequently during item drag
   // Update state without API request and save it to ref
-  const handleReorderDayItems = (items: PlannerDayItem[]) => {
+  const handleReorderDayItems = (items: PlannerDayItemDTO[]) => {
     currentItemsOrder.current = daysItems.map((item) => item.id);
     setDaysItems(items);
     updatedItemsOrder.current = items.map((item) => item.id);

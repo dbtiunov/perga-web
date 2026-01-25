@@ -1,19 +1,18 @@
 import { useState, useRef, KeyboardEvent, useEffect } from 'react';
 import * as React from 'react';
 
-import { PlannerAgendaItem, PlannerAgenda } from '@api/planner_agendas';
-import { PlannerItemState } from '@api/planner_base';
+import type { PlannerItemStateDTO, PlannerAgendaItemDTO, PlannerAgendaDTO } from '@api/planner';
 import { Icon } from '@common/Icon';
 import { getNextDay, formatDateForDisplay } from '@common/utils/date_utils';
 import { ITEM_TEXT_MAX_LENGTH } from '@planner/const';
 
 interface AgendaItemProps {
-  item: PlannerAgendaItem;
+  item: PlannerAgendaItemDTO;
   onDragStartItem?: () => void;
   onDragEndItem?: () => void;
   onUpdateItem: (
     itemId: number,
-    changes: { text?: string; day?: string; state?: PlannerItemState },
+    changes: { text?: string; day?: string; state?: PlannerItemStateDTO },
   ) => void;
   onDeleteItem?: (itemId: number) => void;
   onCopyItem?: (itemId: number, toAgendaId: number) => void;
@@ -21,9 +20,9 @@ interface AgendaItemProps {
   onCopyToDay?: (date: Date, text: string) => void;
   selectedDate?: Date;
   copyAgendasMap?: {
-    currentMonth: PlannerAgenda;
-    nextMonth: PlannerAgenda;
-    customAgendas: PlannerAgenda[];
+    currentMonth: PlannerAgendaDTO;
+    nextMonth: PlannerAgendaDTO;
+    customAgendas: PlannerAgendaDTO[];
   };
 }
 
@@ -53,7 +52,7 @@ const AgendaItem = ({
   const moveDropdownRef = useRef<HTMLDivElement>(null);
 
   const onToggleCheckbox = () => {
-    let newState: PlannerItemState;
+    let newState: PlannerItemStateDTO;
 
     if (item.state === 'todo') {
       newState = 'completed';

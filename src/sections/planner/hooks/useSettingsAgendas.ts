@@ -1,19 +1,18 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 
+import type { PlannerAgendaDTO, PlannerAgendaUpdateDTO } from '@api/planner';
 import {
-  PlannerAgenda,
-  PlannerAgendaUpdate,
   getPlannerAgendas,
   createPlannerAgenda,
   updatePlannerAgenda,
   deletePlannerAgenda,
   reorderPlannerAgendas,
-} from '@api/planner_agendas';
+} from '@api/planner';
 import { REFRESH_EVENT } from '@common/events';
 import { useToast } from '@contexts/hooks/useToast';
 
 export const useSettingsAgendas = () => {
-  const [settingsAgendas, setSettingsAgendas] = useState<PlannerAgenda[]>([]);
+  const [settingsAgendas, setSettingsAgendas] = useState<PlannerAgendaDTO[]>([]);
 
   const updatingItemsRef = useRef<Set<number>>(new Set());
   const { showError } = useToast();
@@ -46,7 +45,7 @@ export const useSettingsAgendas = () => {
     }
   };
 
-  const handleUpdateAgenda = async (agendaId: number, changes: PlannerAgendaUpdate) => {
+  const handleUpdateAgenda = async (agendaId: number, changes: PlannerAgendaUpdateDTO) => {
     // prevent multiple execution for the same item and empty name (when provided)
     if (
       updatingItemsRef.current.has(agendaId) ||
@@ -59,7 +58,7 @@ export const useSettingsAgendas = () => {
     // use optimistic update for better ui interactivity
     const prev = settingsAgendas;
     const prevAgenda = prev.find((agenda) => agenda.id === agendaId);
-    const optimisticAgenda = { ...prevAgenda, ...changes } as PlannerAgenda;
+    const optimisticAgenda = { ...prevAgenda, ...changes } as PlannerAgendaDTO;
     setSettingsAgendas(
       settingsAgendas.map((agenda) => (agenda.id === agendaId ? optimisticAgenda : agenda)),
     );
@@ -109,7 +108,7 @@ export const useSettingsAgendas = () => {
     };
   }, [fetchSettingsAgendas]);
 
-  const handleReorderAgendas = async (agendas: PlannerAgenda[]) => {
+  const handleReorderAgendas = async (agendas: PlannerAgendaDTO[]) => {
     const prev = [...settingsAgendas];
     setSettingsAgendas(agendas);
     try {

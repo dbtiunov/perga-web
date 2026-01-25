@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-import { type PlannerAgenda } from '@api/planner_agendas.ts';
+import type { PlannerAgendaDTO } from '@api/planner';
 import { Icon } from '@common/Icon.tsx';
 import { useSettingsAgendas } from '@planner/hooks/useSettingsAgendas.ts';
 import AgendaLine from '@settings/components/SettingsPlanner/AgendaLine/AgendaLine.tsx';
@@ -16,7 +16,7 @@ const SettingsPlanner: React.FC = () => {
 
   const [showArchived, setShowArchived] = useState(false);
 
-  const emptyAgendaLine: PlannerAgenda = {
+  const emptyAgendaLine: PlannerAgendaDTO = {
     id: -1,
     name: '',
     agenda_type: 'custom',
@@ -38,8 +38,8 @@ const SettingsPlanner: React.FC = () => {
   };
 
   // Local view state for optimistic drag-and-drop reorder without spamming API
-  const [agendasView, setAgendasView] = useState<PlannerAgenda[]>(settingsAgendas);
-  const draggingAgendaRef = useRef<PlannerAgenda | null>(null);
+  const [agendasView, setAgendasView] = useState<PlannerAgendaDTO[]>(settingsAgendas);
+  const draggingAgendaRef = useRef<PlannerAgendaDTO | null>(null);
   const initialOrderRef = useRef<number[] | null>(null);
 
   // Keep local view in sync with server when not dragging
@@ -50,12 +50,12 @@ const SettingsPlanner: React.FC = () => {
     }
   }, [settingsAgendas]);
 
-  const handleDragStart = (agenda: PlannerAgenda) => {
+  const handleDragStart = (agenda: PlannerAgendaDTO) => {
     draggingAgendaRef.current = agenda;
     initialOrderRef.current = agendasView.map((agenda) => agenda.id);
   };
 
-  const handleDragOverAgenda = (target: PlannerAgenda) => {
+  const handleDragOverAgenda = (target: PlannerAgendaDTO) => {
     const dragging = draggingAgendaRef.current;
     if (!dragging || dragging.id === target.id) {
       return;
@@ -133,7 +133,7 @@ const SettingsPlanner: React.FC = () => {
         <div className="space-y-1">
           {agendasView
             .filter((agenda) => agenda.agenda_type === 'custom')
-            .map((agenda: PlannerAgenda) => (
+            .map((agenda: PlannerAgendaDTO) => (
               <div key={agenda.id}>
                 <AgendaLine
                   agenda={agenda}
@@ -148,7 +148,7 @@ const SettingsPlanner: React.FC = () => {
           {showArchived &&
             agendasView
               .filter((agenda) => agenda.agenda_type === 'archived')
-              .map((agenda: PlannerAgenda) => (
+              .map((agenda: PlannerAgendaDTO) => (
                 <div key={agenda.id}>
                   <AgendaLine
                     agenda={agenda}

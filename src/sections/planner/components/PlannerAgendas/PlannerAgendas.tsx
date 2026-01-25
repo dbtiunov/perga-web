@@ -1,25 +1,24 @@
 import React, { useEffect } from 'react';
 
-import { PlannerAgenda, PlannerAgendaItem } from '@api/planner_agendas';
-import { PlannerItemState } from '@/api/planner_base.ts';
+import type { PlannerItemStateDTO, PlannerAgendaDTO, PlannerAgendaItemDTO } from '@api/planner';
 import { Icon } from '@common/Icon.tsx';
+import { formatDateMonthName } from '@common/utils/date_utils.ts';
 import AgendaItem from '@planner/components/PlannerAgendas/AgendaItem/AgendaItem.tsx';
 import { useCollapsedAgendas } from '@planner/hooks/useCollapsedAgendas.ts';
 import AgendaActionsDropdown from '@planner/components/PlannerAgendas/AgendaActionsDropdown';
-import {formatDateMonthName} from "@common/utils/date_utils.ts";
 
 interface PlannerAgendasProps {
-  plannerAgendas: PlannerAgenda[];
-  plannerAgendaItems: Record<number, PlannerAgendaItem[]>;
-  dragAgendaItem: PlannerAgendaItem | null;
-  onDragStartAgendaItem: (item: PlannerAgendaItem) => void;
+  plannerAgendas: PlannerAgendaDTO[];
+  plannerAgendaItems: Record<number, PlannerAgendaItemDTO[]>;
+  dragAgendaItem: PlannerAgendaItemDTO | null;
+  onDragStartAgendaItem: (item: PlannerAgendaItemDTO) => void;
   onDragEndAgendaItem: () => void;
-  onReorderAgendaItems: (agendaId: number, items: PlannerAgendaItem[]) => void;
+  onReorderAgendaItems: (agendaId: number, items: PlannerAgendaItemDTO[]) => void;
   onAddAgendaItem: (agendaId: number, text: string) => void;
   onUpdateAgendaItem: (
     itemId: number,
     agendaId: number,
-    changes: { text?: string; state?: PlannerItemState },
+    changes: { text?: string; state?: PlannerItemStateDTO },
   ) => void;
   onDeleteAgendaItem: (itemId: number, agendaId: number) => void;
   onCopyAgendaItem: (itemId: number, toAgendaId: number) => void;
@@ -27,9 +26,9 @@ interface PlannerAgendasProps {
   onCopyAgendaItemToDay?: (date: Date, text: string) => void;
   selectedDate: Date;
   copyAgendasMap: {
-    currentMonth: PlannerAgenda;
-    nextMonth: PlannerAgenda;
-    customAgendas: PlannerAgenda[];
+    currentMonth: PlannerAgendaDTO;
+    nextMonth: PlannerAgendaDTO;
+    customAgendas: PlannerAgendaDTO[];
   };
   fetchAgendaItems: (agendaIds: number[]) => Promise<void> | void;
 }

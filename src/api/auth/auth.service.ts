@@ -1,53 +1,37 @@
 import axios from 'axios';
 
-import { getConfig } from "@/config.ts";
-import Storage from '@common/utils/storage';
+import { getConfig } from '@/config.ts';
+import Storage from '@common/utils/storage.ts';
 import { StorageKeys } from '@common/utils/storage_keys.ts';
+
+import type {
+  UserDTO, UserUpdateDTO, UserSignupDTO, UserSigninDTO, TokenDTO, UpdatePasswordDTO, RefreshTokenDTO
+} from './auth.dto';
 
 const { API_BASE_URL } = getConfig();
 const AUTH_API_URL = `${API_BASE_URL}/auth`;
 
-export type WeekStartDay = 'monday' | 'sunday';
+// API methods
+export const signup = (userData: UserSignupDTO) =>
+  axios.post<UserDTO>(`${AUTH_API_URL}/signup/`, userData);
 
-export interface User {
-  username: string;
-  email: string;
-  week_start_day: WeekStartDay;
-}
+export const signin = (userData: UserSigninDTO) =>
+  axios.post<TokenDTO>(`${AUTH_API_URL}/access_token_json/`, userData);
 
-export interface UserUpdate {
-  username?: string;
-  email?: string;
-  week_start_day?: WeekStartDay;
-}
+export const refreshToken = (refreshTokenData: RefreshTokenDTO) =>
+  axios.post<TokenDTO>(`${AUTH_API_URL}/refresh_token/`, refreshTokenData);
 
-export interface UpdatePasswordRequest {
-  current_password: string;
-  new_password: string;
-}
+export const getUser = () => axios.get<UserDTO>(`${AUTH_API_URL}/user/`);
 
-export interface UserSignin {
-  username: string;
-  password: string;
-}
+export const updateUser = (userData: UserUpdateDTO) =>
+  axios.put<UserDTO>(`${AUTH_API_URL}/user/`, userData);
 
-export interface UserSignup {
-  username: string;
-  email: string;
-  password: string;
-}
+export const updatePassword = (data: UpdatePasswordDTO) =>
+  axios.put<void>(`${AUTH_API_URL}/user/password/`, data);
 
-export interface Token {
-  access_token: string;
-  token_type: string;
-  refresh_token?: string;
-}
 
-export interface RefreshTokenRequest {
-  refresh_token: string;
-}
-
-export const storeToken = (token: Token) => {
+// Token methods
+export const storeToken = (token: TokenDTO) => {
   Storage.set(StorageKeys.AuthToken, token.access_token);
   Storage.set(StorageKeys.TokenType, token.token_type);
   if (token.refresh_token) {
@@ -55,7 +39,7 @@ export const storeToken = (token: Token) => {
   }
 };
 
-export const getToken = (): Token | null => {
+export const getToken = (): TokenDTO | null => {
   const access_token = Storage.get(StorageKeys.AuthToken, null);
   const token_type = Storage.get(StorageKeys.TokenType, null);
   const refresh_token = Storage.get(StorageKeys.RefreshToken, null);
@@ -76,24 +60,6 @@ export const removeToken = () => {
 export const isAuthenticated = (): boolean => {
   return Boolean(getToken());
 };
-
-// Create a new user
-export const signup = (userData: UserSignup) =>
-  axios.post<User>(`${AUTH_API_URL}/signup/`, userData);
-
-export const signin = (userData: UserSignin) =>
-  axios.post<Token>(`${AUTH_API_URL}/access_token_json/`, userData);
-
-export const refreshToken = (refreshTokenData: RefreshTokenRequest) =>
-  axios.post<Token>(`${AUTH_API_URL}/refresh_token/`, refreshTokenData);
-
-export const getUser = () => axios.get<User>(`${AUTH_API_URL}/user/`);
-
-export const updateUser = (userData: UserUpdate) =>
-  axios.put<User>(`${AUTH_API_URL}/user/`, userData);
-
-export const updatePassword = (data: UpdatePasswordRequest) =>
-  axios.put<void>(`${AUTH_API_URL}/user/password/`, data);
 
 // Configure axios to include the token in all requests
 export const setupAxiosInterceptors = () => {

@@ -1,19 +1,16 @@
 import React, { useState, useEffect, ReactNode, useCallback } from 'react';
+
+import type { UserDTO, UserSignupDTO, UserSigninDTO, UserUpdateDTO, UpdatePasswordDTO } from '@api/auth';
 import {
   signin,
   signup,
   storeToken,
   removeToken,
   isAuthenticated,
-  UserSignin,
-  UserSignup,
-  UserUpdate,
   updateUser,
   getUser,
-  User,
   updatePassword,
-  UpdatePasswordRequest,
-} from '@/api';
+} from '@api/auth';
 import { AuthContext } from './AuthContext.types';
 
 interface AuthProviderProps {
@@ -21,7 +18,7 @@ interface AuthProviderProps {
 }
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<UserDTO | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   const handleFetchUser = useCallback(async () => {
@@ -53,7 +50,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     checkAuth();
   }, [handleFetchUser]);
 
-  const handleSignin = async (credentials: UserSignin) => {
+  const handleSignin = async (credentials: UserSigninDTO) => {
     setIsLoading(true);
     try {
       const response = await signin(credentials);
@@ -65,7 +62,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
-  const handleSignup = async (userData: UserSignup) => {
+  const handleSignup = async (userData: UserSignupDTO) => {
     setIsLoading(true);
     try {
       const response = await signup(userData);
@@ -86,13 +83,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     setUser(null);
   };
 
-  const handleUpdateUser = async (userData: UserUpdate) => {
+  const handleUpdateUser = async (userData: UserUpdateDTO) => {
     await updateUser(userData);
     // Fetch updated user data to refresh the local state
     await handleFetchUser();
   };
 
-  const handleUpdatePassword = async (data: UpdatePasswordRequest) => {
+  const handleUpdatePassword = async (data: UpdatePasswordDTO) => {
     await updatePassword(data);
     // No need to refetch user as password change doesn't alter user profile fields
   };

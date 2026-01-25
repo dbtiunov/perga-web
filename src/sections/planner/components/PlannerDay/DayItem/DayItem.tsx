@@ -1,20 +1,19 @@
 import { useState, useRef, KeyboardEvent, useEffect } from 'react';
 import * as React from 'react';
 
-import { PlannerItemState } from '@api/planner_base';
-import { PlannerDayItem } from '@api/planner_days';
+import type { PlannerItemStateDTO, PlannerDayItemDTO } from '@api/planner';
 import { Icon } from '@common/Icon';
 import { getNextDay, getNextMonth, getNextWeek } from '@common/utils/date_utils';
 import Calendar from '@planner/components/Calendar/Calendar';
 import { ITEM_TEXT_MAX_LENGTH } from '@planner/const';
 
 interface DayItemProps {
-  item: PlannerDayItem;
+  item: PlannerDayItemDTO;
   onDragStartItem?: () => void;
   onDragEndItem?: () => void;
   onUpdateItem: (
     itemId: number,
-    changes: { text?: string; day?: string; state?: PlannerItemState },
+    changes: { text?: string; day?: string; state?: PlannerItemStateDTO },
   ) => void;
   onDeleteItem?: (itemId: number) => void;
   onCopyItem?: (itemId: number, date: Date) => void;
@@ -45,7 +44,7 @@ const DayItem = ({
   const snoozeDropdownRef = useRef<HTMLDivElement>(null);
 
   const onToggleCheckbox = () => {
-    let newState: PlannerItemState;
+    let newState: PlannerItemStateDTO;
 
     if (item.state === 'todo') {
       newState = 'completed';

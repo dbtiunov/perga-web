@@ -1,20 +1,17 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-import {
-  type PlannerAgenda,
-  type PlannerAgendaAction,
-  actionPlannerAgenda,
-} from '@api/planner_agendas';
+import type { PlannerAgendaDTO, PlannerAgendaActionDTO } from '@api/planner';
+import { actionPlannerAgenda } from '@api/planner';
 import { Icon } from '@common/Icon.tsx';
 import { useToast } from '@contexts/hooks/useToast';
 
-const ACTION_LABELS: Record<PlannerAgendaAction, string> = {
+const ACTION_LABELS: Record<PlannerAgendaActionDTO, string> = {
   delete_finished_items: 'Delete finished items',
   sort_items_by_state: 'Sort items by state',
 };
 
 interface AgendaActionsDropdownProps {
-  agenda: PlannerAgenda;
+  agenda: PlannerAgendaDTO;
   fetchAgendaItems: (agendaIds: number[]) => Promise<void> | void;
 }
 
@@ -23,7 +20,7 @@ const AgendaActionsDropdown: React.FC<AgendaActionsDropdownProps> = ({
   fetchAgendaItems,
 }) => {
   const [open, setOpen] = useState(false);
-  const [loadingAction, setLoadingAction] = useState<PlannerAgendaAction | null>(null);
+  const [loadingAction, setLoadingAction] = useState<PlannerAgendaActionDTO | null>(null);
   const ref = useRef<HTMLDivElement>(null);
   const { showError } = useToast();
 
@@ -37,7 +34,7 @@ const AgendaActionsDropdown: React.FC<AgendaActionsDropdownProps> = ({
     return () => window.removeEventListener('click', handler);
   }, []);
 
-  const handleAction = async (action: PlannerAgendaAction) => {
+  const handleAction = async (action: PlannerAgendaActionDTO) => {
     try {
       setLoadingAction(action);
       await actionPlannerAgenda(agenda.id, action);
@@ -66,7 +63,7 @@ const AgendaActionsDropdown: React.FC<AgendaActionsDropdownProps> = ({
 
       {open && (
         <div className="absolute right-0 mt-8 w-56 bg-bg-main rounded shadow-lg z-10 border-border-main border-1">
-          {(Object.keys(ACTION_LABELS) as PlannerAgendaAction[]).map((action) => (
+          {(Object.keys(ACTION_LABELS) as PlannerAgendaActionDTO[]).map((action) => (
             <button
               key={action}
               type="button"

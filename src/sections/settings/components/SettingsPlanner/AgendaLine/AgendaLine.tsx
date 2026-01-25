@@ -1,16 +1,16 @@
 import React, { KeyboardEvent, useRef, useState } from 'react';
 
-import { PlannerAgenda, PlannerAgendaUpdate } from '@api/planner_agendas.ts';
+import type { PlannerAgendaDTO, PlannerAgendaUpdateDTO } from '@api/planner';
 import { Icon } from '@common/Icon.tsx';
 import { AGENDA_NAME_MAX_LENGTH } from '@planner/const.ts';
 
 interface AgendaLineProps {
-  agenda: PlannerAgenda;
-  onUpdateAgenda: (agendaId: number, changes: PlannerAgendaUpdate) => void;
+  agenda: PlannerAgendaDTO;
+  onUpdateAgenda: (agendaId: number, changes: PlannerAgendaUpdateDTO) => void;
   onDeleteAgenda?: (agendaId: number) => void;
-  onDragStart?: (agenda: PlannerAgenda) => void;
+  onDragStart?: (agenda: PlannerAgendaDTO) => void;
   onDragEnd?: () => void;
-  onDragOverAgenda?: (agenda: PlannerAgenda) => void;
+  onDragOverAgenda?: (agenda: PlannerAgendaDTO) => void;
 }
 
 const AgendaLine: React.FC<AgendaLineProps> = ({
