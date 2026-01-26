@@ -78,7 +78,7 @@ const Planner = () => {
       return DEFAULT_LEFT_PANE_WIDTH_PERCENT;
     }
 
-    const savedWidthRaw = Storage.get(StorageKeys.LeftPaneWidth, null);
+    const savedWidthRaw = Storage.get(StorageKeys.PlannerLeftPaneWidth, null);
     const savedWidthParsed = savedWidthRaw ? parseFloat(savedWidthRaw) : NaN;
     if (isNaN(savedWidthParsed)) {
       return DEFAULT_LEFT_PANE_WIDTH_PERCENT;
@@ -116,7 +116,7 @@ const Planner = () => {
     const onMouseMove = (e: MouseEvent) => handleMouseMove(e.clientX);
     const onMouseUp = () => {
       setIsDragging(false);
-      Storage.set(StorageKeys.LeftPaneWidth, String(leftPaneWidthPercent));
+      Storage.set(StorageKeys.PlannerLeftPaneWidth, String(leftPaneWidthPercent));
     };
 
     window.addEventListener('mousemove', onMouseMove);
