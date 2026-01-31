@@ -80,7 +80,7 @@ const PlannerAgendas: React.FC<PlannerAgendasProps> = ({
   const selectedMonthName = formatDateMonthName(selectedDate);
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 px-8 py-5">
       {plannerAgendas
         .filter((agenda) => agenda.agenda_type === 'custom' || agenda.name === selectedMonthName)
         .map((agenda) => (

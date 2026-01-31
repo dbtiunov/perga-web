@@ -134,7 +134,7 @@ const TwoPaneLayout: React.FC<TwoPaneLayoutProps> = ({
       </div>
 
       {/* Right pane */}
-      <div className="w-full md:flex-1 overflow-auto min-h-0 px-8 py-5">
+      <div className="w-full md:flex-1 overflow-auto min-h-0">
         {rightPane}
       </div>
     </div>

@@ -1,5 +1,6 @@
-import { StorageKeys } from '@common/utils/storage_keys.ts';
 import TwoPaneLayout from '@common/components/TwoPaneLayout/TwoPaneLayout.tsx';
+import { StorageKeys } from '@common/utils/storage_keys.ts';
+import { NotesFolders } from '@notes/components/NotesFolders/NotesFolders';
 
 const DEFAULT_LEFT_PANE_WIDTH_PERCENT = 20; // w-1/5
 const MIN_LEFT_PANE_WIDTH_PERCENT = 10;
@@ -12,7 +13,7 @@ const Notes = () => {
       defaultLeftWidthPercent={DEFAULT_LEFT_PANE_WIDTH_PERCENT}
       minLeftWidthPercent={MIN_LEFT_PANE_WIDTH_PERCENT}
       maxLeftWidthPercent={MAX_LEFT_PANE_WIDTH_PERCENT}
-      leftPane={<h2>LEFT PANE</h2>}
+      leftPane={<NotesFolders />}
       rightPane={<h2>RIGHT PANE</h2>}
     />
   );
