@@ -1,5 +1,6 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useMemo } from 'react';
 
+import { Dropdown } from '@common/components/Dropdown';
 import { Icon } from '@common/Icon';
 import {
   formatDateForDisplay,
@@ -17,23 +18,6 @@ interface DateSelectorProps {
 }
 
 const DateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onDateChange }) => {
-  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
-  const calendarRef = useRef<HTMLDivElement>(null);
-
-  // Close calendar when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (calendarRef.current && !calendarRef.current.contains(event.target as Node)) {
-        setIsCalendarOpen(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
-
   const datesList = useMemo(() => {
     const count = Math.max(1, DATE_SELECTOR_DAYS_COUNT);
     const half = Math.floor(count / 2);
@@ -52,7 +36,6 @@ const DateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onDateChange 
 
   const handlePickDate = (date: Date) => {
     onDateChange(date);
-    setIsCalendarOpen(false);
   };
 
   return (
@@ -100,24 +83,17 @@ const DateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onDateChange 
         })}
       </div>
 
-      {/* Calendar + Right arrow */}
-      <div className="relative mt-2 mx-1" ref={calendarRef}>
-        <button
-          onClick={() => setIsCalendarOpen((value) => !value)}
-          aria-label="Open calendar"
-          title="Open calendar"
-        >
-          <Icon name="planner" size={20} fill="currentColor" />
-        </button>
-
-        {isCalendarOpen && (
-          <Calendar
-            selectedDate={selectedDate}
-            onDateChange={handlePickDate}
-            predefinedDates={[{ label: 'Today', date: new Date() }]}
-          />
-        )}
-      </div>
+      <Dropdown
+        buttonIcon={<Icon name="planner" size={20} fill="currentColor" />}
+        buttonTitle="Open calendar"
+        className="mt-2 mx-1"
+      >
+        <Calendar
+          selectedDate={selectedDate}
+          onDateChange={handlePickDate}
+          predefinedDates={[{ label: 'Today', date: new Date() }]}
+        />
+      </Dropdown>
 
       <button
         onClick={() => onDateChange(getNextDay(selectedDate))}

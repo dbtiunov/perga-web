@@ -1,11 +1,19 @@
 import React, { useEffect } from 'react';
 
-import type { PlannerItemStateDTO, PlannerAgendaDTO, PlannerAgendaItemDTO } from '@api/planner';
+import type {
+  PlannerItemStateDTO,
+  PlannerAgendaDTO,
+  PlannerAgendaItemDTO,
+  PlannerAgendaActionDTO,
+} from '@api/planner';
+import { actionPlannerAgenda } from '@api/planner';
+import { Dropdown, DropdownItem } from '@common/components/Dropdown';
 import { Icon } from '@common/Icon.tsx';
 import { formatDateMonthName } from '@common/utils/date_utils.ts';
+import { useToast } from '@contexts/hooks/useToast.ts';
 import AgendaItem from '@planner/components/PlannerAgendas/AgendaItem/AgendaItem.tsx';
 import { useCollapsedAgendas } from '@planner/hooks/useCollapsedAgendas.ts';
-import AgendaActionsDropdown from '@planner/components/PlannerAgendas/AgendaActionsDropdown';
+import { AGENDA_ACTION_LABELS } from '@planner/const';
 
 interface PlannerAgendasProps {
   plannerAgendas: PlannerAgendaDTO[];
@@ -79,6 +87,18 @@ const PlannerAgendas: React.FC<PlannerAgendasProps> = ({
 
   const selectedMonthName = formatDateMonthName(selectedDate);
 
+  const { showError } = useToast();
+
+  const handleAction = async (agenda: PlannerAgendaDTO, action: PlannerAgendaActionDTO) => {
+    try {
+      await actionPlannerAgenda(agenda.id, action);
+      await fetchAgendaItems([agenda.id]);
+    } catch (e) {
+      console.error('Agenda action failed', e);
+      showError('Failed to perform action');
+    }
+  };
+
   return (
     <div className="space-y-4 px-8 py-5">
       {plannerAgendas
@@ -101,9 +121,23 @@ const PlannerAgendas: React.FC<PlannerAgendasProps> = ({
                 <h3>{agenda.name}</h3>
               </button>
 
-              <div className="p-2 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
-                <AgendaActionsDropdown agenda={agenda} fetchAgendaItems={fetchAgendaItems} />
-              </div>
+              <Dropdown
+                buttonIcon={<Icon name="dots" size={48} className="h-6 w-6" />}
+                buttonTitle="Agenda actions"
+                buttonClassName="p-2 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity"
+                className="inline-flex"
+                dropdownClassName="w-56 mt-8"
+              >
+                {(Object.keys(AGENDA_ACTION_LABELS) as PlannerAgendaActionDTO[]).map((action) => (
+                  <DropdownItem
+                    key={action}
+                    onClick={() => handleAction(agenda, action)}
+                    className="py-3"
+                  >
+                    {AGENDA_ACTION_LABELS[action]}
+                  </DropdownItem>
+                ))}
+              </Dropdown>
             </div>
 
             {!collapsedAgendas[agenda.id] && (

@@ -1,7 +1,8 @@
-import { useState, useRef, KeyboardEvent, useEffect } from 'react';
+import { useState, useRef, KeyboardEvent } from 'react';
 import * as React from 'react';
 
 import type { PlannerItemStateDTO, PlannerAgendaItemDTO, PlannerAgendaDTO } from '@api/planner';
+import { Dropdown, DropdownItem } from '@common/components/Dropdown';
 import { Icon } from '@common/Icon';
 import { getNextDay, formatDateForDisplay } from '@common/utils/date_utils';
 import { ITEM_TEXT_MAX_LENGTH } from '@planner/const';
@@ -43,13 +44,7 @@ const AgendaItem = ({
   const [isEditing, setIsEditing] = useState(isEmptyItem);
   const [isDragging, setIsDragging] = useState(false);
   const [value, setValue] = useState(item.text);
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [isCopyDropdownOpen, setIsCopyDropdownOpen] = useState(false);
-  const [isMoveDropdownOpen, setIsMoveDropdownOpen] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
-  const dropdownRef = useRef<HTMLDivElement>(null);
-  const copyDropdownRef = useRef<HTMLDivElement>(null);
-  const moveDropdownRef = useRef<HTMLDivElement>(null);
 
   const onToggleCheckbox = () => {
     let newState: PlannerItemStateDTO;
@@ -65,24 +60,10 @@ const AgendaItem = ({
 
   const onDropActionClick = () => {
     onUpdateItem(item.id, { state: 'dropped' });
-    setIsDropdownOpen(false);
   };
 
   const onDeleteActionClick = () => {
     onDeleteItem?.(item.id);
-    setIsDropdownOpen(false);
-  };
-
-  const onCopyActionClick = () => {
-    setIsCopyDropdownOpen(!isCopyDropdownOpen);
-    setIsMoveDropdownOpen(false);
-    setIsDropdownOpen(false);
-  };
-
-  const onMoveActionClick = () => {
-    setIsMoveDropdownOpen(!isMoveDropdownOpen);
-    setIsCopyDropdownOpen(false);
-    setIsDropdownOpen(false);
   };
 
   const handleCopyToAgenda = (toAgendaId: number | undefined) => {
@@ -90,7 +71,6 @@ const AgendaItem = ({
       return;
     }
     onCopyItem?.(item.id, toAgendaId);
-    setIsCopyDropdownOpen(false);
   };
 
   const handleMoveToAgenda = (toAgendaId: number | undefined) => {
@@ -98,28 +78,7 @@ const AgendaItem = ({
       return;
     }
     onMoveItem?.(item.id, item.agenda_id, toAgendaId);
-    setIsMoveDropdownOpen(false);
   };
-
-  // Close dropdown when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setIsDropdownOpen(false);
-      }
-      if (copyDropdownRef.current && !copyDropdownRef.current.contains(event.target as Node)) {
-        setIsCopyDropdownOpen(false);
-      }
-      if (moveDropdownRef.current && !moveDropdownRef.current.contains(event.target as Node)) {
-        setIsMoveDropdownOpen(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
 
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
@@ -156,10 +115,6 @@ const AgendaItem = ({
       e.target.style.opacity = '1';
     }
     onDragEndItem?.();
-  };
-
-  const onExtraActionsClick = () => {
-    setIsDropdownOpen(!isDropdownOpen);
   };
 
   const canDrag: boolean = !isEmptyItem;
@@ -278,150 +233,110 @@ const AgendaItem = ({
 
       {showExtraActions && (
         <div className="flex-none relative opacity-100 md:opacity-0 md:group-hover:opacity-100 text-text-main p-1 bg-transparent transition-opacity">
-          <div className="inline-flex relative" ref={copyDropdownRef}>
-            <button
-              onClick={onCopyActionClick}
-              className="inline-flex"
-              aria-label="Copy item"
-              title="Copy item"
-            >
-              <Icon name="copy" size={48} className="h-6 w-6" />
-            </button>
+          <Dropdown
+            buttonIcon={<Icon name="copy" size={48} className="h-6 w-6" />}
+            buttonTitle="Copy item"
+            className="inline-flex ml-2"
+            dropdownClassName="w-56 mt-8"
+          >
+            <div className="px-4 py-3 text-xs uppercase text-text-main">Copy to</div>
+            <div>
+              {copyDates.map((copyDate) => (
+                <DropdownItem
+                  key={copyDate.key}
+                  onClick={() => onCopyToDay?.(copyDate.date, item.text)}
+                >
+                  {copyDate.label}
+                </DropdownItem>
+              ))}
+            </div>
+            <div className="border-t border-gray-200" />
+            <div>
+              {copyAgendasMap?.currentMonth.id !== item.agenda_id && (
+                <DropdownItem
+                  onClick={() => handleCopyToAgenda(copyAgendasMap?.currentMonth.id)}
+                >
+                  Current month ({copyAgendasMap?.currentMonth.name})
+                </DropdownItem>
+              )}
+              {copyAgendasMap?.nextMonth.id !== item.agenda_id && (
+                <DropdownItem
+                  onClick={() => handleCopyToAgenda(copyAgendasMap?.nextMonth.id)}
+                >
+                  Next month ({copyAgendasMap?.nextMonth.name})
+                </DropdownItem>
+              )}
+            </div>
+            {copyCustomAgendas && copyCustomAgendas.length > 0 && (
+              <div>
+                {copyCustomAgendas.map((customAgenda) => (
+                  <DropdownItem
+                    key={customAgenda.id}
+                    onClick={() => handleCopyToAgenda(customAgenda.id)}
+                  >
+                    {customAgenda.name}
+                  </DropdownItem>
+                ))}
+              </div>
+            )}
+          </Dropdown>
 
-            {isCopyDropdownOpen && (
-              <div className="absolute right-0 mt-8 w-70 bg-bg-main rounded shadow-lg z-10 border-border-main border-1">
-                <div className="px-4 py-3 text-xs uppercase text-text-main">Copy to</div>
+          <Dropdown
+            buttonIcon={<Icon name="move" size={48} className="h-6 w-6" />}
+            buttonTitle="Move item"
+            className="inline-flex ml-2"
+            dropdownClassName="w-56 mt-8"
+          >
+            <div className="px-4 py-3 text-xs uppercase text-text-main">Move to</div>
+              <div>
+                {copyAgendasMap?.currentMonth.id !== item.agenda_id && (
+                  <DropdownItem
+                    onClick={() => handleMoveToAgenda(copyAgendasMap?.currentMonth.id)}
+                  >
+                    Current month ({copyAgendasMap?.currentMonth.name})
+                  </DropdownItem>
+                )}
+                {copyAgendasMap?.nextMonth.id !== item.agenda_id && (
+                  <DropdownItem
+                    onClick={() => handleMoveToAgenda(copyAgendasMap?.nextMonth.id)}
+                  >
+                    Next month ({copyAgendasMap?.nextMonth.name})
+                  </DropdownItem>
+                )}
+              </div>
+              {copyCustomAgendas && copyCustomAgendas?.length > 0 && (
                 <div>
-                  {copyDates.map((copyDate) => (
-                    <button
-                      key={copyDate.key}
-                      className="w-full text-left px-4 py-3 text-sm hover:bg-bg-hover flex items-center"
-                      onClick={() => {
-                        onCopyToDay?.(copyDate.date, item.text);
-                        setIsCopyDropdownOpen(false);
-                      }}
+                  {copyCustomAgendas.map((customAgenda) => (
+                    <DropdownItem
+                      key={customAgenda.id}
+                      onClick={() => handleMoveToAgenda(customAgenda.id)}
                     >
-                      {copyDate.label}
-                    </button>
+                      {customAgenda.name}
+                    </DropdownItem>
                   ))}
                 </div>
-                <div className="border-t border-gray-200" />
-                <div>
-                  {copyAgendasMap?.currentMonth.id !== item.agenda_id && (
-                    <button
-                      className="w-full text-left px-4 py-3 text-sm hover:bg-bg-hover flex items-center"
-                      onClick={() => handleCopyToAgenda(copyAgendasMap?.currentMonth.id)}
-                    >
-                      Current month ({copyAgendasMap?.currentMonth.name})
-                    </button>
-                  )}
-                  {copyAgendasMap?.nextMonth.id !== item.agenda_id && (
-                    <button
-                      className="w-full text-left px-4 py-3 text-sm hover:bg-bg-hover flex items-center"
-                      onClick={() => handleCopyToAgenda(copyAgendasMap?.nextMonth.id)}
-                    >
-                      Next month ({copyAgendasMap?.nextMonth.name})
-                    </button>
-                  )}
-                </div>
-                {copyCustomAgendas && copyCustomAgendas.length > 0 && (
-                  <div>
-                    <div className="border-t border-border-main" />
-                    <div className="max-h-64 overflow-auto">
-                      {copyCustomAgendas.map((customAgenda) => (
-                        <button
-                          key={customAgenda.id}
-                          className="w-full text-left px-4 py-3 text-sm hover:bg-bg-hover"
-                          onClick={() => handleCopyToAgenda(customAgenda.id)}
-                        >
-                          {customAgenda.name}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
+              )}
+          </Dropdown>
 
-          <div className="inline-flex relative ml-2" ref={moveDropdownRef}>
-            <button
-              onClick={onMoveActionClick}
-              className="inline-flex"
-              aria-label="Move item"
-              title="Move item"
+          <Dropdown
+            buttonIcon={<Icon name="dots" size={48} className="h-6 w-6" />}
+            buttonTitle="Extra actions"
+            className="inline-flex ml-2"
+            dropdownClassName="w-40 mt-8"
+          >
+            <DropdownItem
+              onClick={onDropActionClick}
+              title='Drop item'
             >
-              <Icon name="move" size={48} className="h-6 w-6" />
-            </button>
-
-            {isMoveDropdownOpen && (
-              <div className="absolute right-0 mt-8 w-70 bg-bg-main rounded shadow-lg z-10 border-border-main border-1">
-                <div className="px-4 py-3 text-xs uppercase text-text-main">Move to</div>
-                <div>
-                  {copyAgendasMap?.currentMonth.id !== item.agenda_id && (
-                    <button
-                      className="w-full text-left px-4 py-3 text-sm hover:bg-bg-hover flex items-center"
-                      onClick={() => handleMoveToAgenda(copyAgendasMap?.currentMonth.id)}
-                    >
-                      Current month ({copyAgendasMap?.currentMonth.name})
-                    </button>
-                  )}
-                  {copyAgendasMap?.nextMonth.id !== item.agenda_id && (
-                    <button
-                      className="w-full text-left px-4 py-3 text-sm hover:bg-bg-hover flex items-center"
-                      onClick={() => handleMoveToAgenda(copyAgendasMap?.nextMonth.id)}
-                    >
-                      Next month ({copyAgendasMap?.nextMonth.name})
-                    </button>
-                  )}
-                </div>
-                {copyCustomAgendas && copyCustomAgendas?.length > 0 && (
-                  <div>
-                    <div className="border-t border-border-main" />
-                    <div className="max-h-64 overflow-auto">
-                      {copyCustomAgendas.map((customAgenda) => (
-                        <button
-                          key={customAgenda.id}
-                          className="w-full text-left px-4 py-3 text-sm hover:bg-bg-hover"
-                          onClick={() => handleMoveToAgenda(customAgenda.id)}
-                        >
-                          {customAgenda.name}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-
-          <div className="inline-flex relative ml-2" ref={dropdownRef}>
-            <button onClick={onExtraActionsClick} aria-label="Extra actions" title="Extra actions">
-              <Icon name="dots" size={48} className="h-6 w-6" />
-            </button>
-
-            {isDropdownOpen && (
-              <div className="absolute right-0 mt-8 w-36 bg-bg-main rounded shadow-lg z-10 border-border-main border-1">
-                <button
-                  onClick={onDropActionClick}
-                  className="w-full text-left px-4 py-3 text-sm  hover:bg-bg-hover flex items-center"
-                  aria-label="Drop item"
-                  title="Drop item"
-                >
-                  <Icon name="drop" size={48} className="h-4 w-4 mr-2" /> Drop item
-                </button>
-
-                <button
-                  onClick={onDeleteActionClick}
-                  className="w-full text-left px-4 py-3 text-sm hover:bg-bg-hover flex items-center"
-                  aria-label="Delete item"
-                  title="Delete item"
-                >
-                  <Icon name="delete" size={48} className="h-4 w-4 mr-2" /> Delete item
-                </button>
-              </div>
-            )}
-          </div>
+              <Icon name="drop" size={48} className="h-4 w-4 mr-2" /> Drop item
+            </DropdownItem>
+            <DropdownItem
+              onClick={onDeleteActionClick}
+              title='Delete item'
+            >
+              <Icon name="delete" size={48} className="h-4 w-4 mr-2" /> Delete item
+            </DropdownItem>
+          </Dropdown>
         </div>
       )}
     </div>

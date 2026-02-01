@@ -1,7 +1,7 @@
-import { useState, useRef, KeyboardEvent, useEffect } from 'react';
-import * as React from 'react';
+import { useState, useRef, KeyboardEvent, DragEvent } from 'react';
 
 import type { PlannerItemStateDTO, PlannerDayItemDTO } from '@api/planner';
+import { Dropdown, DropdownItem } from '@common/components/Dropdown';
 import { Icon } from '@common/Icon';
 import { getNextDay, getNextMonth, getNextWeek } from '@common/utils/date_utils';
 import Calendar from '@planner/components/Calendar/Calendar';
@@ -35,13 +35,7 @@ const DayItem = ({
   const [isEditing, setIsEditing] = useState(isEmptyItem);
   const [isDragging, setIsDragging] = useState(false);
   const [value, setValue] = useState(item.text);
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [isCopyDropdownOpen, setIsCopyDropdownOpen] = useState(false);
-  const [isSnoozeDropdownOpen, setIsSnoozeDropdownOpen] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
-  const dropdownRef = useRef<HTMLDivElement>(null);
-  const copyDropdownRef = useRef<HTMLDivElement>(null);
-  const snoozeDropdownRef = useRef<HTMLDivElement>(null);
 
   const onToggleCheckbox = () => {
     let newState: PlannerItemStateDTO;
@@ -55,18 +49,6 @@ const DayItem = ({
     onUpdateItem(item.id, { state: newState });
   };
 
-  const onCopyActionClick = () => {
-    setIsCopyDropdownOpen(!isCopyDropdownOpen);
-    setIsSnoozeDropdownOpen(false);
-    setIsDropdownOpen(false);
-  };
-
-  const onSnoozeActionClick = () => {
-    setIsSnoozeDropdownOpen(!isSnoozeDropdownOpen);
-    setIsCopyDropdownOpen(false);
-    setIsDropdownOpen(false);
-  };
-
   const predefinedDates: Array<{ label: string; date: Date }> = [
     { label: 'Next day', date: getNextDay(itemDate) },
     { label: 'Next week', date: getNextWeek(itemDate) },
@@ -75,50 +57,21 @@ const DayItem = ({
 
   const handleCopyItem = (day: Date) => {
     onCopyItem?.(item.id, day);
-    setIsCopyDropdownOpen(false);
   };
 
   const handleSnoozeItem = (day: Date) => {
     onSnoozeItem?.(item.id, day);
-    setIsSnoozeDropdownOpen(false);
-  };
-
-  const onExtraActionsClick = () => {
-    setIsDropdownOpen(!isDropdownOpen);
-    setIsCopyDropdownOpen(false);
-    setIsSnoozeDropdownOpen(false);
   };
 
   const onDropActionClick = () => {
     onUpdateItem(item.id, { state: 'dropped' });
-    setIsDropdownOpen(false);
   };
 
   const onDeleteActionClick = () => {
     onDeleteItem?.(item.id);
-    setIsDropdownOpen(false);
   };
 
   // Close dropdowns when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setIsDropdownOpen(false);
-      }
-      if (copyDropdownRef.current && !copyDropdownRef.current.contains(event.target as Node)) {
-        setIsCopyDropdownOpen(false);
-      }
-      if (snoozeDropdownRef.current && !snoozeDropdownRef.current.contains(event.target as Node)) {
-        setIsSnoozeDropdownOpen(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
-
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       if (item.id >= 0) {
@@ -140,14 +93,14 @@ const DayItem = ({
     }
   };
 
-  const handleDragStart = (e: React.DragEvent<HTMLDivElement>) => {
+  const handleDragStart = (e: DragEvent<HTMLDivElement>) => {
     e.dataTransfer.setData('text/plain', JSON.stringify(item));
     e.dataTransfer.effectAllowed = 'move';
     setIsDragging(true);
     onDragStartItem?.();
   };
 
-  const handleDragEnd = (e: React.DragEvent) => {
+  const handleDragEnd = (e: DragEvent) => {
     setIsDragging(false);
     if (e.target instanceof HTMLElement) {
       e.target.style.opacity = '1';
@@ -235,85 +188,55 @@ const DayItem = ({
       )}
 
       {showActions && (
-        <div className="flex-none relative opacity-100 md:opacity-0 md:group-hover:opacity-100 text-text-main p-2 bg-transparent transition-opacity">
-          <div className="inline-flex relative" ref={copyDropdownRef}>
-            <button
-              onClick={onCopyActionClick}
-              className="inline-flex"
-              aria-label="Copy item"
-              title="Copy item"
-            >
-              <Icon name="copy" size={48} className="h-6 w-6" />
-            </button>
+        <div className="flex-none relative opacity-100 md:opacity-0 md:group-hover:opacity-100 text-text-main p-2 bg-transparent transition-opacity flex">
+          <Dropdown
+            buttonIcon={<Icon name="copy" size={48} className="h-6 w-6" />}
+            buttonTitle="Copy item"
+            className="ml-2"
+            dropdownClassName="w-64"
+          >
+            <Calendar
+              selectedDate={new Date()}
+              onDateChange={handleCopyItem}
+              title="Copy to"
+              predefinedDates={predefinedDates}
+            />
+          </Dropdown>
 
-            {isCopyDropdownOpen && (
-              <div className="absolute right-0 mt-8 w-40 bg-bg-main rounded shadow-lg z-10">
-                <Calendar
-                  selectedDate={new Date()}
-                  onDateChange={handleCopyItem}
-                  title="Copy to"
-                  predefinedDates={predefinedDates}
-                />
-              </div>
-            )}
-          </div>
-
-          <div className="inline-flex relative ml-2" ref={snoozeDropdownRef}>
-            <button
-              onClick={onSnoozeActionClick}
-              className="inline-flex"
-              aria-label="Snooze item"
-              title="Snooze item"
-            >
-              <Icon name="snooze" size={48} className="h-6 w-6" />
-            </button>
-
-            {isSnoozeDropdownOpen && (
-              <div className="absolute right-0 mt-8 w-40 bg-bg-main rounded shadow-lg z-10">
-                <Calendar
-                  selectedDate={new Date()}
-                  onDateChange={handleSnoozeItem}
-                  title="Snooze to"
-                  predefinedDates={predefinedDates}
-                />
-              </div>
-            )}
-          </div>
+          <Dropdown
+            buttonIcon={<Icon name="snooze" size={48} className="h-6 w-6" />}
+            buttonTitle="Snooze item"
+            className="ml-2"
+            dropdownClassName="w-64"
+          >
+            <Calendar
+              selectedDate={new Date()}
+              onDateChange={handleSnoozeItem}
+              title="Snooze to"
+              predefinedDates={predefinedDates}
+            />
+          </Dropdown>
 
           {showExtraActions && (
-            <div className="inline-flex relative ml-2" ref={dropdownRef}>
-              <button
-                onClick={onExtraActionsClick}
-                aria-label="Extra actions"
-                title="Extra actions"
+            <Dropdown
+              buttonIcon={<Icon name="dots" size={48} className="h-6 w-6" />}
+              buttonTitle="Extra actions"
+              className="ml-2"
+              dropdownClassName="w-36"
+            >
+              <DropdownItem
+                onClick={onDropActionClick}
+                title='Drop item'
               >
-                <Icon name="dots" size={48} className="h-6 w-6" />
-              </button>
-
-              {isDropdownOpen && (
-                <div className="absolute right-0 mt-8 w-36 bg-bg-main rounded shadow-lg z-10 border-border-main border-1">
-                  <button
-                    onClick={onDropActionClick}
-                    className="w-full text-left px-4 py-3 text-sm  hover:bg-bg-hover flex items-center"
-                    aria-label="Drop item"
-                    title="Drop item"
-                  >
-                    <Icon name="drop" size={48} className="h-4 w-4 mr-2" />
-                    Drop item
-                  </button>
-
-                  <button
-                    onClick={onDeleteActionClick}
-                    className="w-full text-left px-4 py-3 text-sm hover:bg-bg-hover flex items-center"
-                    aria-label="Delete item"
-                    title="Delete item"
-                  >
-                    <Icon name="delete" size={48} className="h-4 w-4 mr-2" />
-                    Delete item
-                  </button>
-                </div>
-              )}
-            </div>
+                <Icon name="drop" size={48} className="h-4 w-4 mr-2" /> Drop item
+              </DropdownItem>
+              <DropdownItem
+                onClick={onDeleteActionClick}
+                title='Delete item'
+              >
+                <Icon name="delete" size={48} className="h-4 w-4 mr-2" /> Delete item
+              </DropdownItem>
+            </Dropdown>
           )}
         </div>
       )}

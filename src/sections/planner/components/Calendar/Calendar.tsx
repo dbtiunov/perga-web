@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react';
 
+import { useDropdown } from '@common/components/Dropdown';
 import { Icon } from '@common/Icon';
 import { formatDateForDisplay, formatDateMonthName } from '@common/utils/date_utils';
 import { useAuth } from '@contexts/hooks/useAuth';
@@ -23,6 +24,7 @@ const Calendar: React.FC<CalendarProps> = ({
 }) => {
   const [currentMonth, setCurrentMonth] = useState<Date>(() => new Date(selectedDate));
   const { user } = useAuth();
+  const dropdown = useDropdown();
 
   // Reorder day names based on user's week start day preference
   const orderedDayNames = useMemo(() => {
@@ -50,6 +52,7 @@ const Calendar: React.FC<CalendarProps> = ({
     const newDate = new Date(currentMonth);
     newDate.setDate(day);
     onDateChange(newDate);
+    dropdown?.close();
   };
 
   // Get days in month
@@ -76,7 +79,7 @@ const Calendar: React.FC<CalendarProps> = ({
   };
 
   return (
-    <div className="bg-bg-main rounded absolute right-0 mt-1 shadow-lg z-10 w-64 origin-top-right border-border-main border-1">
+    <>
       {(title || predefinedDates?.length) && (
         <div className="border-gray-200 border-b-1">
           {title && <div className="px-4 py-3 text-xs uppercase text-text-main">{title}</div>}
@@ -86,7 +89,10 @@ const Calendar: React.FC<CalendarProps> = ({
               {predefinedDates.map((predefinedDate: { label: string; date: Date }) => (
                 <button
                   key={predefinedDate.label}
-                  onClick={() => onDateChange(predefinedDate.date)}
+                  onClick={() => {
+                    onDateChange(predefinedDate.date);
+                    dropdown?.close();
+                  }}
                   className="text-sm px-4 py-3 hover:bg-bg-hover text-left"
                 >
                   {predefinedDate.label} ({formatDateForDisplay(predefinedDate.date)})
@@ -147,7 +153,7 @@ const Calendar: React.FC<CalendarProps> = ({
           })}
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
