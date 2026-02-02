@@ -144,6 +144,8 @@ const DayItem = ({
                          }`}
           role="checkbox"
           aria-checked={item.state === 'completed'}
+          aria-label={item.state[0].toUpperCase() + item.state.slice(1)}
+          title={item.state[0].toUpperCase() + item.state.slice(1)}
         >
           {item.state === 'completed' && (
             <Icon name="checkboxCompleted" size={48} className="h-3 w-3 text-white" />

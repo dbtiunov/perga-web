@@ -191,6 +191,8 @@ const AgendaItem = ({
                                : 'bg-bg-blue border border-border-blue'
                          }`}
           aria-checked={item.state === 'completed'}
+          aria-label={item.state[0].toUpperCase() + item.state.slice(1)}
+          title={item.state[0].toUpperCase() + item.state.slice(1)}
           role="checkbox"
         >
           {item.state === 'completed' && (
