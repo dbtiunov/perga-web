@@ -21,7 +21,8 @@ export const createNote = (note: NoteCreateDTO) => axios.post<NoteDTO>(`${NOTES_
 export const updateNote = (noteId: number, changes: NoteUpdateDTO) =>
   axios.patch<NoteDTO>(`${NOTES_API_URL}/${noteId}/`, changes);
 
-export const deleteNote = (noteId: number) => axios.delete(`${NOTES_API_URL}/${noteId}/`);
+export const moveNoteToTrash = (noteId: number) =>
+  axios.post<NoteDTO>(`${NOTES_API_URL}/${noteId}/move-to-trash/`);
 
 export const reorderNotes = (orderedNoteIds: number[]) =>
   axios.post(`${NOTES_API_URL}/reorder/`, { ordered_note_ids: orderedNoteIds });
@@ -39,8 +40,8 @@ export const createFolder = (folder: NotesFolderCreateDTO) =>
 export const updateFolder = (folderId: number, changes: NotesFolderUpdateDTO) =>
   axios.patch<NotesFolderDTO>(`${NOTES_API_URL}/folders/${folderId}/`, changes);
 
-export const deleteFolder = (folderId: number) =>
-  axios.delete(`${NOTES_API_URL}/folders/${folderId}/`);
+export const moveFolderToTrash = (folderId: number) =>
+  axios.post<NotesFolderDTO>(`${NOTES_API_URL}/folders/${folderId}/move-to-trash/`);
 
 export const reorderFolders = (orderedFolderIds: number[]) =>
   axios.post(`${NOTES_API_URL}/folders/reorder/`, { ordered_folder_ids: orderedFolderIds });

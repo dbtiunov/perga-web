@@ -1,24 +1,21 @@
 import { useState, useEffect, useCallback } from 'react';
+
+import type { NotesFolderTreeDTO } from '@api/notes';
 import {
   getFoldersTree,
-  deleteFolder as apiDeleteFolder,
-  updateFolder as apiUpdateFolder,
-} from '@api/notes/notes.service';
-import type { NotesFolderTreeDTO } from '@api/notes/notes.dto';
+  moveFolderToTrash,
+  updateFolder,
+} from '@api/notes';
 
 export const useNotes = () => {
   const [foldersTree, setFoldersTree] = useState<NotesFolderTreeDTO[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
 
   const fetchFoldersTree = useCallback(async () => {
-    setIsLoading(true);
     try {
       const response = await getFoldersTree();
       setFoldersTree(response.data as NotesFolderTreeDTO[]);
     } catch (error) {
       console.error('Error fetching notes folders tree:', error);
-    } finally {
-      setIsLoading(false);
     }
   }, []);
 
@@ -26,18 +23,18 @@ export const useNotes = () => {
     void fetchFoldersTree();
   }, [fetchFoldersTree]);
 
-  const deleteFolder = useCallback(async (folderId: number) => {
+  const handleMoveFolderToTrash = useCallback(async (folderId: number) => {
     try {
-      await apiDeleteFolder(folderId);
+      await moveFolderToTrash(folderId);
       await fetchFoldersTree();
     } catch (error) {
-      console.error('Error deleting folder:', error);
+      console.error('Error moving folder to trash:', error);
     }
   }, [fetchFoldersTree]);
 
-  const renameFolder = useCallback(async (folderId: number, name: string) => {
+  const handleRenameFolder = useCallback(async (folderId: number, name: string) => {
     try {
-      await apiUpdateFolder(folderId, { name });
+      await updateFolder(folderId, { name });
       await fetchFoldersTree();
     } catch (error) {
       console.error('Error renaming folder:', error);
@@ -46,9 +43,8 @@ export const useNotes = () => {
 
   return {
     foldersTree,
-    isLoading,
-    refreshFolders: fetchFoldersTree,
-    deleteFolder,
-    renameFolder,
+    fetchFoldersTree,
+    handleRenameFolder,
+    handleMoveFolderToTrash,
   };
 };

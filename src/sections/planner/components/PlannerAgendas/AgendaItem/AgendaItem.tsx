@@ -321,7 +321,7 @@ const AgendaItem = ({
           </Dropdown>
 
           <Dropdown
-            buttonIcon={<Icon name="dots" size={48} className="h-6 w-6" />}
+            buttonIcon={<Icon name="dots" size={20} className="h-6 w-6" />}
             buttonTitle="Extra actions"
             className="inline-flex ml-2"
             dropdownClassName="w-40 mt-8"
@@ -330,13 +330,13 @@ const AgendaItem = ({
               onClick={onDropActionClick}
               title='Drop item'
             >
-              <Icon name="drop" size={48} className="h-4 w-4 mr-2" /> Drop item
+              <Icon name="drop" size={14} className="h-4 w-4 mr-2" /> Drop item
             </DropdownItem>
             <DropdownItem
               onClick={onDeleteActionClick}
               title='Delete item'
             >
-              <Icon name="delete" size={48} className="h-4 w-4 mr-2" /> Delete item
+              <Icon name="delete" size={14} className="h-4 w-4 mr-2" /> Delete item
             </DropdownItem>
           </Dropdown>
         </div>

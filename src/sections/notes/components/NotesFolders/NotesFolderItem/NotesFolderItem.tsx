@@ -1,3 +1,5 @@
+import { useState, useRef, useEffect } from 'react';
+
 import type { NotesFolderTreeDTO } from '@api/notes/notes.dto.ts';
 import { Dropdown, DropdownItem } from '@common/components/Dropdown';
 import { Icon } from '@common/Icon.tsx';
@@ -5,39 +7,76 @@ import { Icon } from '@common/Icon.tsx';
 interface NotesFolderItemProps {
   folder: NotesFolderTreeDTO;
   onRename: (id: number, name: string) => Promise<void>;
-  onDelete: (id: number) => Promise<void>;
+  onMoveToTrash: (id: number) => Promise<void>;
 }
 
-export const NotesFolderItem = ({ folder, onRename, onDelete }: NotesFolderItemProps) => {
-  const handleRename = () => {
-    const newName = prompt('Enter new folder name:', folder.name);
-    if (newName && newName !== folder.name) {
-      void onRename(folder.id, newName);
+export const NotesFolderItem = ({ folder, onRename, onMoveToTrash }: NotesFolderItemProps) => {
+  const [isEditing, setIsEditing] = useState(false);
+  const [renamevalue, setRenamevalue] = useState(folder.name);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    setRenamevalue(folder.name);
+  }, [folder.name]);
+
+  useEffect(() => {
+    if (isEditing && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [isEditing]);
+
+  const handleRenameSubmit = async () => {
+    if (renamevalue && renamevalue !== folder.name) {
+      await onRename(folder.id, renamevalue);
+    } else {
+      setRenamevalue(folder.name);
+    }
+    setIsEditing(false);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      void handleRenameSubmit();
+    } else if (e.key === 'Escape') {
+      setIsEditing(false);
+      setRenamevalue(folder.name);
     }
   };
 
-  const handleDelete = () => {
-    if (confirm(`Are you sure you want to delete folder "${folder.name}"?`)) {
-      void onDelete(folder.id);
-    }
+  const handleTrash = () => {
+    void onMoveToTrash(folder.id);
   };
 
   return (
     <div className="ml-4">
       <div className="mb-3 cursor-pointer flex items-center justify-between hover:bg-bg-hover rounded text-text-main group">
-        <span className="p-2">{folder.name}</span>
+        {isEditing ? (
+          <input
+            ref={inputRef}
+            type="text"
+            value={renamevalue}
+            onChange={(e) => setRenamevalue(e.target.value)}
+            onKeyDown={handleKeyDown}
+            onBlur={handleRenameSubmit}
+            className="flex-1 bg-transparent border-none focus:outline-none focus:ring-0 p-2"
+          />
+        ) : (
+          <span className="p-2 flex-1" onClick={() => setIsEditing(true)}>
+            {folder.name}
+          </span>
+        )}
 
         <Dropdown
-          buttonIcon={<Icon name="dots" size={16} />}
+          buttonIcon={<Icon name="dots" size={20} className="h-6 w-6" />}
           buttonTitle="Folder actions"
-          buttonClassName="opacity-0 group-hover:opacity-100 transition-opacity"
-          dropdownClassName="w-32"
+          buttonClassName="p-2 opacity-0 group-hover:opacity-100 transition-opacity"
+          dropdownClassName="w-40"
         >
-          <DropdownItem onClick={handleRename}>
-            <Icon name="edit" size={14} className="mr-2" /> Rename
+          <DropdownItem onClick={() => setIsEditing(true)}>
+            <Icon name="edit" size={14} className="h-4 w-4 mr-2" /> Rename
           </DropdownItem>
-          <DropdownItem onClick={handleDelete}>
-            <Icon name="delete" size={14} className="mr-2" /> Delete
+          <DropdownItem onClick={handleTrash}>
+            <Icon name="delete" size={14} className="h-4 w-4 mr-2" /> Move to trash
           </DropdownItem>
         </Dropdown>
       </div>
@@ -49,7 +88,7 @@ export const NotesFolderItem = ({ folder, onRename, onDelete }: NotesFolderItemP
               key={subfolder.id}
               folder={subfolder}
               onRename={onRename}
-              onDelete={onDelete}
+              onMoveToTrash={onMoveToTrash}
             />
           ))}
         </div>

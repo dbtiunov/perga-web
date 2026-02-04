@@ -122,7 +122,7 @@ const PlannerAgendas: React.FC<PlannerAgendasProps> = ({
               </button>
 
               <Dropdown
-                buttonIcon={<Icon name="dots" size={48} className="h-6 w-6" />}
+                buttonIcon={<Icon name="dots" size={20} className="h-6 w-6" />}
                 buttonTitle="Agenda actions"
                 buttonClassName="p-2 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity"
                 className="inline-flex"
