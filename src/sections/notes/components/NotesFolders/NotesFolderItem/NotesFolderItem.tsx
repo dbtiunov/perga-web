@@ -7,13 +7,17 @@ import { Icon } from '@common/Icon.tsx';
 interface NotesFolderItemProps {
   folder: NotesFolderTreeDTO;
   onRename: (id: number, name: string) => Promise<void>;
+  onCreateSubfolder: (name: string, parentId: number) => Promise<void>;
   onMoveToTrash: (id: number) => Promise<void>;
 }
 
-export const NotesFolderItem = ({ folder, onRename, onMoveToTrash }: NotesFolderItemProps) => {
+export const NotesFolderItem = ({ folder, onRename, onCreateSubfolder, onMoveToTrash }: NotesFolderItemProps) => {
   const [isEditing, setIsEditing] = useState(false);
+  const [isCreatingSubfolder, setIsCreatingSubfolder] = useState(false);
   const [renamevalue, setRenamevalue] = useState(folder.name);
+  const [newSubfolderName, setNewSubfolderName] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
+  const subfolderInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     setRenamevalue(folder.name);
@@ -25,6 +29,12 @@ export const NotesFolderItem = ({ folder, onRename, onMoveToTrash }: NotesFolder
     }
   }, [isEditing]);
 
+  useEffect(() => {
+    if (isCreatingSubfolder && subfolderInputRef.current) {
+      subfolderInputRef.current.focus();
+    }
+  }, [isCreatingSubfolder]);
+
   const handleRenameSubmit = async () => {
     if (renamevalue && renamevalue !== folder.name) {
       await onRename(folder.id, renamevalue);
@@ -34,12 +44,29 @@ export const NotesFolderItem = ({ folder, onRename, onMoveToTrash }: NotesFolder
     setIsEditing(false);
   };
 
+  const handleSubfolderSubmit = async () => {
+    if (newSubfolderName.trim()) {
+      await onCreateSubfolder(newSubfolderName.trim(), folder.id);
+    }
+    setNewSubfolderName('');
+    setIsCreatingSubfolder(false);
+  };
+
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       void handleRenameSubmit();
     } else if (e.key === 'Escape') {
       setIsEditing(false);
       setRenamevalue(folder.name);
+    }
+  };
+
+  const handleSubfolderKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      void handleSubfolderSubmit();
+    } else if (e.key === 'Escape') {
+      setIsCreatingSubfolder(false);
+      setNewSubfolderName('');
     }
   };
 
@@ -75,19 +102,37 @@ export const NotesFolderItem = ({ folder, onRename, onMoveToTrash }: NotesFolder
           <DropdownItem onClick={() => setIsEditing(true)}>
             <Icon name="edit" size={14} className="h-4 w-4 mr-2" /> Rename
           </DropdownItem>
+          <DropdownItem onClick={() => setIsCreatingSubfolder(true)}>
+            <Icon name="plus" size={14} className="h-4 w-4 mr-2" /> Add subfolder
+          </DropdownItem>
           <DropdownItem onClick={handleTrash}>
-            <Icon name="delete" size={14} className="h-4 w-4 mr-2" /> Move to trash
+            <Icon name="trash" size={14} className="h-4 w-4 mr-2" /> Move to trash
           </DropdownItem>
         </Dropdown>
       </div>
 
-      {folder.subfolders && folder.subfolders.length > 0 && (
+      {(isCreatingSubfolder || (folder.subfolders && folder.subfolders.length > 0)) && (
         <div className="border-l border-gray-200 ml-2">
-          {folder.subfolders.map((subfolder) => (
+          {isCreatingSubfolder && (
+            <div className="ml-4 mb-3 flex items-center bg-bg-hover rounded text-text-main">
+              <input
+                ref={subfolderInputRef}
+                type="text"
+                value={newSubfolderName}
+                onChange={(e) => setNewSubfolderName(e.target.value)}
+                onKeyDown={handleSubfolderKeyDown}
+                onBlur={handleSubfolderSubmit}
+                placeholder="Subfolder name"
+                className="flex-1 bg-transparent border-none focus:outline-none focus:ring-0 p-2"
+              />
+            </div>
+          )}
+          {folder.subfolders && folder.subfolders.map((subfolder) => (
             <NotesFolderItem
               key={subfolder.id}
               folder={subfolder}
               onRename={onRename}
+              onCreateSubfolder={onCreateSubfolder}
               onMoveToTrash={onMoveToTrash}
             />
           ))}

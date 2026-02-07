@@ -236,7 +236,7 @@ const DayItem = ({
                 onClick={onDeleteActionClick}
                 title='Delete item'
               >
-                <Icon name="delete" size={48} className="h-4 w-4 mr-2" /> Delete item
+                <Icon name="trash" size={48} className="h-4 w-4 mr-2" /> Delete item
               </DropdownItem>
             </Dropdown>
           )}

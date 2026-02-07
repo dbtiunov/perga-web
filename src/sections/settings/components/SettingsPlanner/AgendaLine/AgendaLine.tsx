@@ -126,7 +126,7 @@ const AgendaLine: React.FC<AgendaLineProps> = ({
             title="Delete agenda"
             className="disabled:opacity-50"
           >
-            <Icon name="delete" size={24} className="h-5 w-5" />
+            <Icon name="trash" size={24} className="h-5 w-5" />
           </button>
         </div>
       )}

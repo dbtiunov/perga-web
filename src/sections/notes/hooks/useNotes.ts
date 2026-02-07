@@ -5,6 +5,7 @@ import {
   getFoldersTree,
   moveFolderToTrash,
   updateFolder,
+  createFolder,
 } from '@api/notes';
 
 export const useNotes = () => {
@@ -41,10 +42,20 @@ export const useNotes = () => {
     }
   }, [fetchFoldersTree]);
 
+  const handleCreateFolder = useCallback(async (name: string, parentId: number | null = null) => {
+    try {
+      await createFolder({ name, parent_id: parentId });
+      await fetchFoldersTree();
+    } catch (error) {
+      console.error('Error creating folder:', error);
+    }
+  }, [fetchFoldersTree]);
+
   return {
     foldersTree,
     fetchFoldersTree,
     handleRenameFolder,
+    handleCreateFolder,
     handleMoveFolderToTrash,
   };
 };
