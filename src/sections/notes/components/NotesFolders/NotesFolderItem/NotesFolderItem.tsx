@@ -1,11 +1,11 @@
 import { useState, useRef, useEffect } from 'react';
 
-import type { NotesFolderTreeDTO } from '@api/notes';
+import type { NotesFolderTreeWithNotesDTO } from '@api/notes';
 import { Dropdown, DropdownItem } from '@common/components/Dropdown';
 import { Icon } from '@common/components/Icon';
 
 interface NotesFolderItemProps {
-  folder: NotesFolderTreeDTO;
+  folder: NotesFolderTreeWithNotesDTO;
   onRename: (id: number, name: string) => Promise<void>;
   onCreateSubfolder: (name: string, parentId: number) => Promise<void>;
   onCreateNote: (folderId: number) => Promise<void>;
@@ -20,6 +20,7 @@ export const NotesFolderItem = ({
   onMoveToTrash,
 }: NotesFolderItemProps) => {
   const [isEditing, setIsEditing] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
   const [isCreatingSubfolder, setIsCreatingSubfolder] = useState(false);
   const [renamevalue, setRenamevalue] = useState(folder.name);
   const [newSubfolderName, setNewSubfolderName] = useState('');
@@ -54,6 +55,7 @@ export const NotesFolderItem = ({
   const handleSubfolderSubmit = async () => {
     if (newSubfolderName.trim()) {
       await onCreateSubfolder(newSubfolderName.trim(), folder.id);
+      setIsExpanded(true);
     }
     setNewSubfolderName('');
     setIsCreatingSubfolder(false);
@@ -95,7 +97,12 @@ export const NotesFolderItem = ({
             className="flex-1 bg-transparent border-none focus:outline-none focus:ring-0 p-2"
           />
         ) : (
-          <div className="flex items-center flex-1 p-2" onClick={() => setIsEditing(true)}>
+          <div className="flex items-center flex-1 p-2" onClick={() => setIsExpanded(!isExpanded)}>
+            {/*<Icon*/}
+            {/*  name="rightChevron"*/}
+            {/*  size={12}*/}
+            {/*  className={`mr-1 transition-transform ${isExpanded ? 'rotate-90' : ''}`}*/}
+            {/*/>*/}
             <Icon name="folder" size={16} fill="currentColor" className="mr-2 text-text-main" />
             <span>{folder.name}</span>
           </div>
@@ -110,10 +117,20 @@ export const NotesFolderItem = ({
           <DropdownItem onClick={() => setIsEditing(true)}>
             <Icon name="edit" size={14} className="h-4 w-4 mr-2" /> Rename
           </DropdownItem>
-          <DropdownItem onClick={() => setIsCreatingSubfolder(true)}>
+          <DropdownItem
+            onClick={() => {
+              setIsCreatingSubfolder(true);
+              setIsExpanded(true);
+            }}
+          >
             <Icon name="folderPlus" size={14} className="h-4 w-4 mr-2" fill="currentColor" /> Add subfolder
           </DropdownItem>
-          <DropdownItem onClick={() => onCreateNote(folder.id)}>
+          <DropdownItem
+            onClick={() => {
+              void onCreateNote(folder.id);
+              setIsExpanded(true);
+            }}
+          >
             <Icon name="notePlus" size={14} className="h-4 w-4 mr-2" fill="currentColor" /> Create note
           </DropdownItem>
           <DropdownItem onClick={handleTrash}>
@@ -122,8 +139,11 @@ export const NotesFolderItem = ({
         </Dropdown>
       </div>
 
-      {(isCreatingSubfolder || (folder.subfolders && folder.subfolders.length > 0)) && (
-        <div className="border-l border-gray-200 ml-2">
+      {isExpanded &&
+        (isCreatingSubfolder ||
+          (folder.subfolders && folder.subfolders.length > 0) ||
+          (folder.notes && folder.notes.length > 0)) && (
+          <div className="border-l border-gray-200 ml-2">
           {isCreatingSubfolder && (
             <div className="ml-4 mb-3 flex items-center bg-bg-hover rounded text-text-main">
               <input
@@ -138,16 +158,27 @@ export const NotesFolderItem = ({
               />
             </div>
           )}
-          {folder.subfolders && folder.subfolders.map((subfolder) => (
-            <NotesFolderItem
-              key={subfolder.id}
-              folder={subfolder}
-              onRename={onRename}
-              onCreateSubfolder={onCreateSubfolder}
-              onCreateNote={onCreateNote}
-              onMoveToTrash={onMoveToTrash}
-            />
-          ))}
+          {folder.subfolders &&
+            folder.subfolders.map((subfolder) => (
+              <NotesFolderItem
+                key={subfolder.id}
+                folder={subfolder}
+                onRename={onRename}
+                onCreateSubfolder={onCreateSubfolder}
+                onCreateNote={onCreateNote}
+                onMoveToTrash={onMoveToTrash}
+              />
+            ))}
+          {folder.notes &&
+            folder.notes.map((note) => (
+              <div
+                key={note.id}
+                className="ml-4 mb-3 flex items-center p-2 hover:bg-bg-hover rounded text-text-main cursor-pointer"
+              >
+                <Icon name="note" size={16} fill="currentColor" className="mr-2 text-text-main opacity-70" />
+                <span className="truncate">{note.title || 'Untitled Note'}</span>
+              </div>
+            ))}
         </div>
       )}
     </div>

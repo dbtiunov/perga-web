@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 
-import type { NotesFolderTreeDTO } from '@api/notes';
+import type { NotesFolderTreeWithNotesDTO } from '@api/notes';
 import {
   getFoldersTree,
   moveFolderToTrash,
@@ -10,12 +10,12 @@ import {
 } from '@api/notes';
 
 export const useNotes = () => {
-  const [foldersTree, setFoldersTree] = useState<NotesFolderTreeDTO[]>([]);
+  const [foldersTree, setFoldersTree] = useState<NotesFolderTreeWithNotesDTO[]>([]);
 
   const fetchFoldersTree = useCallback(async () => {
     try {
-      const response = await getFoldersTree();
-      setFoldersTree(response.data as NotesFolderTreeDTO[]);
+      const response = await getFoldersTree(true);
+      setFoldersTree(response.data as NotesFolderTreeWithNotesDTO[]);
     } catch (error) {
       console.error('Error fetching notes folders tree:', error);
     }

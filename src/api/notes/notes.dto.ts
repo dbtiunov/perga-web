@@ -21,7 +21,8 @@ export interface NotesFolderTreeDTO extends NotesFolderDTO {
   subfolders: NotesFolderTreeDTO[];
 }
 
-export interface NotesFolderTreeWithNotesDTO extends NotesFolderTreeDTO {
+export interface NotesFolderTreeWithNotesDTO extends NotesFolderDTO {
+  subfolders: NotesFolderTreeWithNotesDTO[];
   notes: NoteDTO[];
 }
 
