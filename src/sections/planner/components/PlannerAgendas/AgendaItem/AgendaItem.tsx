@@ -3,7 +3,7 @@ import * as React from 'react';
 
 import type { PlannerItemStateDTO, PlannerAgendaItemDTO, PlannerAgendaDTO } from '@api/planner';
 import { Dropdown, DropdownItem } from '@common/components/Dropdown';
-import { Icon } from '@common/Icon';
+import { Icon } from '@common/components/Icon';
 import { getNextDay, formatDateForDisplay } from '@common/utils/date_utils';
 import { ITEM_TEXT_MAX_LENGTH } from '@planner/const';
 

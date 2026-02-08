@@ -1,2 +1,2 @@
-export * from './planner.dto.ts';
-export * from './planner.service.ts';
+export * from './planner.dto';
+export * from './planner.service';

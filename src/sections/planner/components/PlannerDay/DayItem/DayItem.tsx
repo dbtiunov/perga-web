@@ -2,7 +2,7 @@ import { useState, useRef, KeyboardEvent, DragEvent } from 'react';
 
 import type { PlannerItemStateDTO, PlannerDayItemDTO } from '@api/planner';
 import { Dropdown, DropdownItem } from '@common/components/Dropdown';
-import { Icon } from '@common/Icon';
+import { Icon } from '@common/components/Icon';
 import { getNextDay, getNextMonth, getNextWeek } from '@common/utils/date_utils';
 import Calendar from '@planner/components/Calendar/Calendar';
 import { ITEM_TEXT_MAX_LENGTH } from '@planner/const';

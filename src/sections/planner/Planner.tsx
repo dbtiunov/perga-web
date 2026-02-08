@@ -1,13 +1,12 @@
-
-import { getNextDay } from '@common/utils/date_utils.ts';
-import { StorageKeys } from '@common/utils/storage_keys.ts';
-import TwoPaneLayout from '@common/components/TwoPaneLayout/TwoPaneLayout.tsx';
-import PlannerAgendas from '@planner/components/PlannerAgendas/PlannerAgendas.tsx';
-import PlannerDay from '@planner/components/PlannerDay/PlannerDay.tsx';
-import DateSelector from '@planner/components/DateSelector/DateSelector.tsx';
-import { usePlannerAgendas } from '@planner/hooks/usePlannerAgendas.ts';
-import { usePlannerDays } from '@planner/hooks/usePlannerDays.ts';
-import { useSelectedDate } from '@planner/hooks/useSelectedDate.ts';
+import { TwoPaneLayout } from '@common/components/TwoPaneLayout';
+import { getNextDay } from '@common/utils/date_utils';
+import { StorageKeys } from '@common/utils/storage_keys';
+import PlannerAgendas from '@planner/components/PlannerAgendas/PlannerAgendas';
+import PlannerDay from '@planner/components/PlannerDay/PlannerDay';
+import DateSelector from '@planner/components/DateSelector/DateSelector';
+import { usePlannerAgendas } from '@planner/hooks/usePlannerAgendas';
+import { usePlannerDays } from '@planner/hooks/usePlannerDays';
+import { useSelectedDate } from '@planner/hooks/useSelectedDate';
 
 const DEFAULT_LEFT_PANE_WIDTH_PERCENT = 66.6667; // w-2/3
 const MIN_LEFT_PANE_WIDTH_PERCENT = 30;

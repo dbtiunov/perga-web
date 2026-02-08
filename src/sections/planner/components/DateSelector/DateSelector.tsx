@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 
 import { Dropdown } from '@common/components/Dropdown';
-import { Icon } from '@common/Icon';
+import { Icon } from '@common/components/Icon';
 import {
   formatDateForDisplay,
   formatDateWeekDayShort,

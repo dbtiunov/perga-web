@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { AxiosError } from 'axios';
 
-import { useAuth } from '@contexts/hooks/useAuth.ts';
+import { useAuth } from '@contexts/hooks/useAuth';
 
 interface ErrorResponse {
   detail?: string;

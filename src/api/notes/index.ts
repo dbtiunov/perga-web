@@ -1,2 +1,2 @@
-export * from './notes.dto.ts';
-export * from './notes.service.ts';
+export * from './notes.dto';
+export * from './notes.service';

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { getConfig } from '@/config.ts';
+import { getConfig } from '@/config';
 import type {
   NoteDTO, NoteCreateDTO, NoteUpdateDTO,
   NotesFolderDTO, NotesFolderCreateDTO, NotesFolderUpdateDTO,

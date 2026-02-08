@@ -8,12 +8,12 @@ import type {
 } from '@api/planner';
 import { actionPlannerAgenda } from '@api/planner';
 import { Dropdown, DropdownItem } from '@common/components/Dropdown';
-import { Icon } from '@common/Icon.tsx';
-import { formatDateMonthName } from '@common/utils/date_utils.ts';
-import { useToast } from '@contexts/hooks/useToast.ts';
-import AgendaItem from '@planner/components/PlannerAgendas/AgendaItem/AgendaItem.tsx';
-import { useCollapsedAgendas } from '@planner/hooks/useCollapsedAgendas.ts';
+import { Icon } from '@common/components/Icon';
+import { formatDateMonthName } from '@common/utils/date_utils';
+import { useToast } from '@contexts/hooks/useToast';
+import AgendaItem from '@planner/components/PlannerAgendas/AgendaItem/AgendaItem';
 import { AGENDA_ACTION_LABELS } from '@planner/const';
+import { useCollapsedAgendas } from '@planner/hooks/useCollapsedAgendas';
 
 interface PlannerAgendasProps {
   plannerAgendas: PlannerAgendaDTO[];

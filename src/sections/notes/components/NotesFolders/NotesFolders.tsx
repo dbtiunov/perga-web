@@ -1,11 +1,18 @@
 import React, { useState, useRef, useEffect } from 'react';
 
-import { Icon } from '@common/Icon.tsx';
-import { NotesFolderItem } from '@notes/components/NotesFolders/NotesFolderItem/NotesFolderItem.tsx';
-import { useNotes } from '@notes/hooks/useNotes.ts';
+import { Dropdown, DropdownItem } from '@common/components/Dropdown';
+import { Icon } from '@common/components/Icon';
+import { NotesFolderItem } from '@notes/components/NotesFolders/NotesFolderItem/NotesFolderItem';
+import { useNotes } from '@notes/hooks/useNotes';
 
 export const NotesFolders: React.FC = () => {
-  const { foldersTree, handleRenameFolder, handleMoveFolderToTrash, handleCreateFolder } = useNotes();
+  const {
+    foldersTree,
+    handleRenameFolder,
+    handleMoveFolderToTrash,
+    handleCreateFolder,
+    handleCreateNote,
+  } = useNotes();
   const [isCreating, setIsCreating] = useState(false);
   const [newFolderName, setNewFolderName] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
@@ -37,13 +44,19 @@ export const NotesFolders: React.FC = () => {
     <div className="space-y-4 px-4 py-5">
       <div className="flex items-center justify-between mb-2">
         <h3 className="text-sm font-semibold text-text-main uppercase tracking-wider">Folders</h3>
-        <button
-          onClick={() => setIsCreating(true)}
-          className="p-1 hover:bg-bg-hover rounded transition-colors text-text-main"
-          title="Create folder"
+        <Dropdown
+          buttonIcon={<Icon name="plus" size={18} />}
+          buttonTitle="Create"
+          buttonClassName="p-1 hover:bg-bg-hover rounded transition-colors text-text-main"
+          dropdownClassName="w-40"
         >
-          <Icon name="plus" size={18} />
-        </button>
+          <DropdownItem onClick={() => setIsCreating(true)}>
+            <Icon name="folderPlus" size={14} className="h-4 w-4 mr-2" fill="currentColor" /> Create folder
+          </DropdownItem>
+          <DropdownItem onClick={() => handleCreateNote()}>
+            <Icon name="notePlus" size={14} className="h-4 w-4 mr-2" fill="currentColor" /> Create note
+          </DropdownItem>
+        </Dropdown>
       </div>
 
       <div>
@@ -67,6 +80,7 @@ export const NotesFolders: React.FC = () => {
             folder={folder}
             onRename={handleRenameFolder}
             onCreateSubfolder={handleCreateFolder}
+            onCreateNote={handleCreateNote}
             onMoveToTrash={handleMoveFolderToTrash}
           />
         ))}

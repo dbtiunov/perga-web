@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 
 import Storage from '@common/utils/storage';
-import { StorageKeys } from '@common/utils/storage_keys.ts';
+import { StorageKeys } from '@common/utils/storage_keys';
 
 export const useSelectedDate = () => {
   const [selectedDate, setSelectedDate] = useState(() => {

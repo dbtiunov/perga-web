@@ -1,8 +1,8 @@
 import React, { KeyboardEvent, useRef, useState } from 'react';
 
 import type { PlannerAgendaDTO, PlannerAgendaUpdateDTO } from '@api/planner';
-import { Icon } from '@common/Icon.tsx';
-import { AGENDA_NAME_MAX_LENGTH } from '@planner/const.ts';
+import { Icon } from '@common/components/Icon';
+import { AGENDA_NAME_MAX_LENGTH } from '@planner/const';
 
 interface AgendaLineProps {
   agenda: PlannerAgendaDTO;

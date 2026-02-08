@@ -1,11 +1,11 @@
 import axios from 'axios';
 
-import { getConfig } from '@/config.ts';
+import { getConfig } from '@/config';
 import type {
   PlannerDayItemDTO, PlannerDayItemCreateDTO, PlannerDayItemUpdateDTO,
   PlannerAgendaDTO, PlannerAgendaCreateDTO, PlannerAgendaUpdateDTO, PlannerAgendaActionDTO,
   PlannerAgendaItemDTO, PlannerAgendaItemCreateDTO, PlannerAgendaItemUpdateDTO,
-} from '@api/planner/planner.dto.ts';
+} from '@api/planner/planner.dto';
 
 // API URLs
 const { API_BASE_URL } = getConfig();

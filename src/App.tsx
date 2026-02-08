@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 
-import { getConfig } from '@/config.ts';
+import { getConfig } from '@/config';
 import { setupAxiosInterceptors } from '@api/auth';
 import ProtectedRoute from '@auth/ProtectedRoute';
 import Signin from '@auth/Signin';
@@ -10,8 +10,8 @@ import Planner from '@planner/Planner';
 import Notes from '@notes/Notes';
 import Layout from '@sections/Layout';
 import Settings from '@settings/Settings';
-import SettingsPlanner from '@settings/components/SettingsPlanner/SettingsPlanner.tsx';
-import SettingsProfile from '@settings/components/SettingsProfile/SettingsProfile.tsx';
+import SettingsPlanner from '@settings/components/SettingsPlanner/SettingsPlanner';
+import SettingsProfile from '@settings/components/SettingsProfile/SettingsProfile';
 
 // Setup axios interceptors for token inclusion before mounting the App
 setupAxiosInterceptors();

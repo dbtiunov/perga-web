@@ -14,7 +14,9 @@ interface IconProps {
 export const Icon: React.FC<IconProps> = ({ name, size = 24, fill = 'none', className = '' }) => {
   const icon = icons[name];
 
-  if (!icon) return null;
+  if (!icon){
+    return null;
+  }
 
   return React.cloneElement(icon, {
     width: size,

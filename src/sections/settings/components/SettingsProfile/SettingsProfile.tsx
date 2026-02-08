@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 
 import type { UserUpdateDTO, UpdatePasswordDTO, WeekStartDayDTO } from "@api/auth";
 import { updateUser, updatePassword } from '@api/auth';
-import { REFRESH_EVENT } from '@common/events.ts';
-import { useAuth } from '@contexts/hooks/useAuth.ts';
-import { useToast } from '@contexts/hooks/useToast.ts';
+import { REFRESH_EVENT } from '@common/events';
+import { useAuth } from '@contexts/hooks/useAuth';
+import { useToast } from '@contexts/hooks/useToast';
 
 const SettingsProfile: React.FC = () => {
   const { user, fetchUser } = useAuth();

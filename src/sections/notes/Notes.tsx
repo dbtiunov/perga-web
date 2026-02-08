@@ -1,5 +1,5 @@
-import TwoPaneLayout from '@common/components/TwoPaneLayout/TwoPaneLayout.tsx';
-import { StorageKeys } from '@common/utils/storage_keys.ts';
+import { TwoPaneLayout } from '@common/components/TwoPaneLayout';
+import { StorageKeys } from '@common/utils/storage_keys';
 import { NotesFolders } from '@notes/components/NotesFolders/NotesFolders';
 
 const DEFAULT_LEFT_PANE_WIDTH_PERCENT = 20; // w-1/5

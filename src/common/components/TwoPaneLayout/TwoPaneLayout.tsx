@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 
 import Storage from '@common/utils/storage';
-import { StorageKeys } from '@common/utils/storage_keys.ts';
+import { StorageKeys } from '@common/utils/storage_keys';
 
 interface TwoPaneLayoutProps {
   leftPane: React.ReactNode;
@@ -15,7 +15,7 @@ interface TwoPaneLayoutProps {
 const RESIZE_HANDLE_WIDTH_PX = 6;
 const mdQuery = '(min-width: 768px)';
 
-const TwoPaneLayout: React.FC<TwoPaneLayoutProps> = ({
+export const TwoPaneLayout: React.FC<TwoPaneLayoutProps> = ({
   leftPane,
   rightPane,
   storageKey,
@@ -140,5 +140,3 @@ const TwoPaneLayout: React.FC<TwoPaneLayoutProps> = ({
     </div>
   );
 };
-
-export default TwoPaneLayout;

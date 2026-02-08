@@ -2,7 +2,7 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 
 import '@/index.css';
-import { initConfig } from '@/config.ts'
+import { initConfig } from '@/config'
 import { initTheme } from '@common/utils/theme';
 
 initConfig().then(async () => {

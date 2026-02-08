@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 
 import type { PlannerAgendaDTO } from '@api/planner';
-import { Icon } from '@common/Icon.tsx';
-import { useSettingsAgendas } from '@planner/hooks/useSettingsAgendas.ts';
-import AgendaLine from '@settings/components/SettingsPlanner/AgendaLine/AgendaLine.tsx';
+import { Icon } from '@common/components/Icon';
+import { useSettingsAgendas } from '@planner/hooks/useSettingsAgendas';
+import AgendaLine from '@settings/components/SettingsPlanner/AgendaLine/AgendaLine';
 
 const SettingsPlanner: React.FC = () => {
   const {

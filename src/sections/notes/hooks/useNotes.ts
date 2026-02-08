@@ -6,6 +6,7 @@ import {
   moveFolderToTrash,
   updateFolder,
   createFolder,
+  createNote,
 } from '@api/notes';
 
 export const useNotes = () => {
@@ -51,11 +52,21 @@ export const useNotes = () => {
     }
   }, [fetchFoldersTree]);
 
+  const handleCreateNote = useCallback(async (folderId: number | null = null) => {
+    try {
+      await createNote({ body: '', folder_id: folderId });
+      await fetchFoldersTree();
+    } catch (error) {
+      console.error('Error creating note:', error);
+    }
+  }, []);
+
   return {
     foldersTree,
     fetchFoldersTree,
     handleRenameFolder,
     handleCreateFolder,
     handleMoveFolderToTrash,
+    handleCreateNote,
   };
 };

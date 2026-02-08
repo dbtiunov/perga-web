@@ -1,8 +1,8 @@
 import axios from 'axios';
 
-import { getConfig } from '@/config.ts';
-import Storage from '@common/utils/storage.ts';
-import { StorageKeys } from '@common/utils/storage_keys.ts';
+import { getConfig } from '@/config';
+import Storage from '@common/utils/storage';
+import { StorageKeys } from '@common/utils/storage_keys';
 
 import type {
   UserDTO, UserUpdateDTO, UserSignupDTO, UserSigninDTO, TokenDTO, UpdatePasswordDTO, RefreshTokenDTO

@@ -1,17 +1,24 @@
 import { useState, useRef, useEffect } from 'react';
 
-import type { NotesFolderTreeDTO } from '@api/notes/notes.dto.ts';
+import type { NotesFolderTreeDTO } from '@api/notes';
 import { Dropdown, DropdownItem } from '@common/components/Dropdown';
-import { Icon } from '@common/Icon.tsx';
+import { Icon } from '@common/components/Icon';
 
 interface NotesFolderItemProps {
   folder: NotesFolderTreeDTO;
   onRename: (id: number, name: string) => Promise<void>;
   onCreateSubfolder: (name: string, parentId: number) => Promise<void>;
+  onCreateNote: (folderId: number) => Promise<void>;
   onMoveToTrash: (id: number) => Promise<void>;
 }
 
-export const NotesFolderItem = ({ folder, onRename, onCreateSubfolder, onMoveToTrash }: NotesFolderItemProps) => {
+export const NotesFolderItem = ({
+  folder,
+  onRename,
+  onCreateSubfolder,
+  onCreateNote,
+  onMoveToTrash,
+}: NotesFolderItemProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [isCreatingSubfolder, setIsCreatingSubfolder] = useState(false);
   const [renamevalue, setRenamevalue] = useState(folder.name);
@@ -88,9 +95,10 @@ export const NotesFolderItem = ({ folder, onRename, onCreateSubfolder, onMoveToT
             className="flex-1 bg-transparent border-none focus:outline-none focus:ring-0 p-2"
           />
         ) : (
-          <span className="p-2 flex-1" onClick={() => setIsEditing(true)}>
-            {folder.name}
-          </span>
+          <div className="flex items-center flex-1 p-2" onClick={() => setIsEditing(true)}>
+            <Icon name="folder" size={16} fill="currentColor" className="mr-2 text-text-main" />
+            <span>{folder.name}</span>
+          </div>
         )}
 
         <Dropdown
@@ -103,7 +111,10 @@ export const NotesFolderItem = ({ folder, onRename, onCreateSubfolder, onMoveToT
             <Icon name="edit" size={14} className="h-4 w-4 mr-2" /> Rename
           </DropdownItem>
           <DropdownItem onClick={() => setIsCreatingSubfolder(true)}>
-            <Icon name="plus" size={14} className="h-4 w-4 mr-2" /> Add subfolder
+            <Icon name="folderPlus" size={14} className="h-4 w-4 mr-2" fill="currentColor" /> Add subfolder
+          </DropdownItem>
+          <DropdownItem onClick={() => onCreateNote(folder.id)}>
+            <Icon name="notePlus" size={14} className="h-4 w-4 mr-2" fill="currentColor" /> Create note
           </DropdownItem>
           <DropdownItem onClick={handleTrash}>
             <Icon name="trash" size={14} className="h-4 w-4 mr-2" /> Move to trash
@@ -133,6 +144,7 @@ export const NotesFolderItem = ({ folder, onRename, onCreateSubfolder, onMoveToT
               folder={subfolder}
               onRename={onRename}
               onCreateSubfolder={onCreateSubfolder}
+              onCreateNote={onCreateNote}
               onMoveToTrash={onMoveToTrash}
             />
           ))}
