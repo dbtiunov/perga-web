@@ -15,6 +15,7 @@ export interface NotesFolderDTO {
   updated_dt: string;
   name: string;
   parent_id: number | null;
+  folder_type: 'regular' | 'trash' | 'archive';
 }
 
 export interface NotesFolderTreeDTO extends NotesFolderDTO {

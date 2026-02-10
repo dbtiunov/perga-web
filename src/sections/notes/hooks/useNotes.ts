@@ -7,10 +7,14 @@ import {
   updateFolder,
   createFolder,
   createNote,
+  emptyTrash,
 } from '@api/notes';
 
 export const useNotes = () => {
   const [foldersTree, setFoldersTree] = useState<NotesFolderTreeWithNotesDTO[]>([]);
+
+  const regularFolders = foldersTree.filter((folder) => folder.folder_type === 'regular');
+  const trashFolder = foldersTree.find((folder) => folder.folder_type === 'trash');
 
   const fetchFoldersTree = useCallback(async () => {
     try {
@@ -61,12 +65,24 @@ export const useNotes = () => {
     }
   }, []);
 
+  const handleEmptyTrash = useCallback(async () => {
+    try {
+      await emptyTrash();
+      await fetchFoldersTree();
+    } catch (error) {
+      console.error('Error emptying trash:', error);
+    }
+  }, [fetchFoldersTree]);
+
   return {
     foldersTree,
+    regularFolders,
+    trashFolder,
     fetchFoldersTree,
     handleRenameFolder,
     handleCreateFolder,
     handleMoveFolderToTrash,
     handleCreateNote,
+    handleEmptyTrash,
   };
 };

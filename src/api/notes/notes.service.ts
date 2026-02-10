@@ -43,5 +43,8 @@ export const updateFolder = (folderId: number, changes: NotesFolderUpdateDTO) =>
 export const moveFolderToTrash = (folderId: number) =>
   axios.post<NotesFolderDTO>(`${NOTES_API_URL}/folders/${folderId}/move-to-trash/`);
 
+export const emptyTrash = () =>
+  axios.post(`${NOTES_API_URL}/empty-trash/`);
+
 export const reorderFolders = (orderedFolderIds: number[]) =>
   axios.post(`${NOTES_API_URL}/folders/reorder/`, { ordered_folder_ids: orderedFolderIds });

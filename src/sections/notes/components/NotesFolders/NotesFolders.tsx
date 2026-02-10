@@ -3,15 +3,18 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Dropdown, DropdownItem } from '@common/components/Dropdown';
 import { Icon } from '@common/components/Icon';
 import { NotesFolderItem } from '@notes/components/NotesFolders/NotesFolderItem/NotesFolderItem';
+import { TrashFolder } from '@notes/components/NotesFolders/TrashFolder/TrashFolder';
 import { useNotes } from '@notes/hooks/useNotes';
 
 export const NotesFolders: React.FC = () => {
   const {
-    foldersTree,
+    regularFolders,
+    trashFolder,
     handleRenameFolder,
     handleMoveFolderToTrash,
     handleCreateFolder,
     handleCreateNote,
+    handleEmptyTrash,
   } = useNotes();
   const [isCreating, setIsCreating] = useState(false);
   const [newFolderName, setNewFolderName] = useState('');
@@ -74,7 +77,7 @@ export const NotesFolders: React.FC = () => {
             />
           </div>
         )}
-        {foldersTree.map((folder) => (
+        {regularFolders.map((folder) => (
           <NotesFolderItem
             key={folder.id}
             folder={folder}
@@ -85,6 +88,13 @@ export const NotesFolders: React.FC = () => {
           />
         ))}
       </div>
+
+      {trashFolder && (
+        <TrashFolder
+          folder={trashFolder}
+          onEmptyTrash={handleEmptyTrash}
+        />
+      )}
     </div>
   );
 };
