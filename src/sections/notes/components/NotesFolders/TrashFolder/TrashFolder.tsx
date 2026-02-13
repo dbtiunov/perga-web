@@ -1,20 +1,59 @@
 import React, { useState } from 'react';
 
-import type { NotesFolderTreeWithNotesDTO } from '@api/notes';
+import type { NotesFolderResponseDTO } from '@api/notes';
 import { Dropdown, DropdownItem } from '@common/components/Dropdown';
 import { Icon } from '@common/components/Icon';
 import { TrashFolderItem } from './TrashFolderItem/TrashFolderItem';
 
 interface TrashFolderProps {
-  folder: NotesFolderTreeWithNotesDTO;
+  folder: NotesFolderResponseDTO;
   onEmptyTrash: () => Promise<void>;
+  onMoveFolderToTrash: (id: number) => Promise<void>;
+  onMoveNoteToTrash: (id: number) => Promise<void>;
+  onMoveFolder: (folderId: number, parentId: number | null) => Promise<void>;
+  onMoveNote: (noteId: number, folderId: number | null) => Promise<void>;
 }
 
-export const TrashFolder: React.FC<TrashFolderProps> = ({ folder, onEmptyTrash }) => {
+export const TrashFolder: React.FC<TrashFolderProps> = ({
+  folder,
+  onEmptyTrash,
+  onMoveFolderToTrash,
+  onMoveNoteToTrash,
+  onMoveFolder,
+  onMoveNote,
+}) => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [isDragOver, setIsDragOver] = useState(false);
+
+  const onDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragOver(true);
+  };
+
+  const onDragLeave = () => {
+    setIsDragOver(false);
+  };
+
+  const onDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragOver(false);
+    const dragType = e.dataTransfer.getData('dragType');
+    const dragId = parseInt(e.dataTransfer.getData('dragId'), 10);
+
+    if (dragType === 'folder') {
+      void onMoveFolderToTrash(dragId);
+    } else if (dragType === 'note') {
+      void onMoveNoteToTrash(dragId);
+    }
+  };
 
   return (
-    <>
+    <div
+      onDragOver={onDragOver}
+      onDragLeave={onDragLeave}
+      onDrop={onDrop}
+      className={`${isDragOver ? 'bg-bg-hover ring-2 ring-red-500 rounded' : ''}`}
+    >
       <div className="mb-3 cursor-pointer flex items-center justify-between hover:bg-bg-hover rounded text-text-main group">
         <div className="flex items-center flex-1 p-2" onClick={() => setIsExpanded(!isExpanded)}>
           <Icon name="trash" size="16" className="mr-2" />
@@ -39,12 +78,22 @@ export const TrashFolder: React.FC<TrashFolderProps> = ({ folder, onEmptyTrash }
           <>
             {folder.subfolders &&
               folder.subfolders.map((subfolder) => (
-                <TrashFolderItem key={subfolder.id} folder={subfolder} />
+                <TrashFolderItem
+                  key={subfolder.id}
+                  folder={subfolder}
+                  onMoveFolder={onMoveFolder}
+                  onMoveNote={onMoveNote}
+                />
               ))}
             {folder.notes &&
               folder.notes.map((note) => (
                 <div
                   key={note.id}
+                  draggable
+                  onDragStart={(e) => {
+                    e.dataTransfer.setData('dragType', 'note');
+                    e.dataTransfer.setData('dragId', note.id.toString());
+                  }}
                   className="ml-4 mb-3 flex items-center p-2 hover:bg-bg-hover rounded text-text-main cursor-pointer"
                 >
                   <Icon name="note" size="16" fill="currentColor" className="mr-2 opacity-70" />
@@ -53,6 +102,6 @@ export const TrashFolder: React.FC<TrashFolderProps> = ({ folder, onEmptyTrash }
               ))}
           </>
         )}
-    </>
+    </div>
   );
 };

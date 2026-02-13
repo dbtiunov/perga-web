@@ -8,16 +8,20 @@ import { useNotes } from '@notes/hooks/useNotes';
 
 export const NotesFolders: React.FC = () => {
   const {
-    regularFolders,
+    rootFolder,
     trashFolder,
     handleRenameFolder,
     handleMoveFolderToTrash,
     handleCreateFolder,
     handleCreateNote,
+    handleMoveNoteToTrash,
     handleEmptyTrash,
+    handleMoveFolder,
+    handleMoveNote,
   } = useNotes();
   const [isCreating, setIsCreating] = useState(false);
   const [newFolderName, setNewFolderName] = useState('');
+  const [isDragHover, setIsDragHover] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -28,7 +32,7 @@ export const NotesFolders: React.FC = () => {
 
   const handleCreateSubmit = async () => {
     if (newFolderName.trim()) {
-      await handleCreateFolder(newFolderName.trim());
+      await handleCreateFolder(newFolderName.trim(), rootFolder?.id);
     }
     setNewFolderName('');
     setIsCreating(false);
@@ -43,10 +47,37 @@ export const NotesFolders: React.FC = () => {
     }
   };
 
+  const onDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragHover(true);
+  };
+
+  const onDragLeave = () => {
+    setIsDragHover(false);
+  };
+
+  const onDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragHover(false);
+    const dragType = e.dataTransfer.getData('dragType');
+    const dragId = parseInt(e.dataTransfer.getData('dragId'), 10);
+
+    if (dragType === 'folder') {
+      void handleMoveFolder(dragId, rootFolder ? rootFolder.id : null);
+    } else if (dragType === 'note') {
+      void handleMoveNote(dragId, rootFolder ? rootFolder.id : null);
+    }
+  };
+
   return (
-    <div className="space-y-4 px-4 py-5">
+    <div
+      className={`space-y-4 px-4 py-5 h-full ${isDragHover ? 'bg-bg-hover ring-2 ring-blue-500 rounded' : ''}`}
+      onDragOver={onDragOver}
+      onDragLeave={onDragLeave}
+      onDrop={onDrop}
+    >
       <div className="flex items-center justify-between mb-2">
-        <h3 className="text-sm font-semibold text-text-main uppercase tracking-wider">Folders</h3>
+        <h3 className="text-sm font-semibold text-text-main uppercase tracking-wider">Notes and Folders</h3>
         <Dropdown
           buttonIcon={<Icon name="plus" size={18} />}
           buttonTitle="Create"
@@ -56,7 +87,7 @@ export const NotesFolders: React.FC = () => {
           <DropdownItem onClick={() => setIsCreating(true)}>
             <Icon name="folderPlus" size={14} className="h-4 w-4 mr-2" fill="currentColor" /> Create folder
           </DropdownItem>
-          <DropdownItem onClick={() => handleCreateNote()}>
+          <DropdownItem onClick={() => handleCreateNote(rootFolder?.id)}>
             <Icon name="notePlus" size={14} className="h-4 w-4 mr-2" fill="currentColor" /> Create note
           </DropdownItem>
         </Dropdown>
@@ -77,15 +108,40 @@ export const NotesFolders: React.FC = () => {
             />
           </div>
         )}
-        {regularFolders.map((folder) => (
+        {!isCreating &&
+          rootFolder &&
+          rootFolder.subfolders.length === 0 &&
+          rootFolder.notes.length === 0 && (
+            <div className="">
+              <p className="text-sm text-text-main/60">No notes yet, add them with Plus icon</p>
+            </div>
+          )}
+        {rootFolder?.subfolders.map((folder) => (
           <NotesFolderItem
             key={folder.id}
             folder={folder}
+            regularFolders={rootFolder.subfolders}
             onRename={handleRenameFolder}
             onCreateSubfolder={handleCreateFolder}
             onCreateNote={handleCreateNote}
             onMoveToTrash={handleMoveFolderToTrash}
+            onMoveFolder={handleMoveFolder}
+            onMoveNote={handleMoveNote}
           />
+        ))}
+        {rootFolder?.notes.map((note) => (
+          <div
+            key={note.id}
+            draggable
+            onDragStart={(e) => {
+              e.dataTransfer.setData('dragType', 'note');
+              e.dataTransfer.setData('dragId', note.id.toString());
+            }}
+            className="ml-4 mb-3 flex items-center p-2 hover:bg-bg-hover rounded text-text-main cursor-pointer"
+          >
+            <Icon name="note" size="16" fill="currentColor" className="mr-2 opacity-70" />
+            <span className="truncate">{note.title || 'Untitled Note'}</span>
+          </div>
         ))}
       </div>
 
@@ -93,6 +149,10 @@ export const NotesFolders: React.FC = () => {
         <TrashFolder
           folder={trashFolder}
           onEmptyTrash={handleEmptyTrash}
+          onMoveFolderToTrash={handleMoveFolderToTrash}
+          onMoveNoteToTrash={handleMoveNoteToTrash}
+          onMoveFolder={handleMoveFolder}
+          onMoveNote={handleMoveNote}
         />
       )}
     </div>
