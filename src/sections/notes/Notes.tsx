@@ -3,7 +3,7 @@ import { StorageKeys } from '@common/utils/storage_keys';
 import { NotesFolders } from '@notes/components/NotesFolders/NotesFolders';
 
 const DEFAULT_LEFT_PANE_WIDTH_PERCENT = 20; // w-1/5
-const MIN_LEFT_PANE_WIDTH_PERCENT = 10;
+const MIN_LEFT_PANE_WIDTH_PERCENT = 15;
 const MAX_LEFT_PANE_WIDTH_PERCENT = 30;
 
 const Notes = () => {

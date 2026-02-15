@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
 
-import { Dropdown, DropdownItem } from '@common/components/Dropdown';
 import { Icon } from '@common/components/Icon';
 import { NotesFolderItem } from '@notes/components/NotesFolders/NotesFolderItem/NotesFolderItem';
 import { TrashFolder } from '@notes/components/NotesFolders/TrashFolder/TrashFolder';
@@ -76,26 +75,30 @@ export const NotesFolders: React.FC = () => {
       onDragLeave={onDragLeave}
       onDrop={onDrop}
     >
-      <div className="flex items-center justify-between mb-2">
-        <h3 className="text-sm font-semibold text-text-main uppercase tracking-wider">Notes and Folders</h3>
-        <Dropdown
-          buttonIcon={<Icon name="plus" size={18} />}
-          buttonTitle="Create"
-          buttonClassName="p-1 hover:bg-bg-hover rounded transition-colors text-text-main"
-          dropdownClassName="w-40"
+      <div className="flex items-center space-x-2 mb-4">
+        <button
+          onClick={() => handleCreateNote(rootFolder?.id)}
+          className="flex-1 flex items-center justify-center p-2 text-sm text-text-main hover:bg-bg-hover rounded border border-border-main transition-colors"
+          title="Add Note"
+          aria-label="Add Note"
         >
-          <DropdownItem onClick={() => setIsCreating(true)}>
-            <Icon name="folderPlus" size={14} className="h-4 w-4 mr-2" fill="currentColor" /> Create folder
-          </DropdownItem>
-          <DropdownItem onClick={() => handleCreateNote(rootFolder?.id)}>
-            <Icon name="notePlus" size={14} className="h-4 w-4 mr-2" fill="currentColor" /> Create note
-          </DropdownItem>
-        </Dropdown>
+          <Icon name="plus" size={14} className="mr-2" fill="currentColor" />
+          <span>Note</span>
+        </button>
+        <button
+          onClick={() => setIsCreating(true)}
+          className="flex-1 flex items-center justify-center p-2 text-sm text-text-main hover:bg-bg-hover rounded border border-border-main transition-colors"
+          title="Add Folder"
+          aria-label="Add Folder"
+        >
+          <Icon name="plus" size={14} className="mr-2" fill="currentColor" />
+          <span>Folder</span>
+        </button>
       </div>
 
       <div>
         {isCreating && (
-          <div className="ml-4 mb-3 flex items-center bg-bg-hover rounded text-text-main">
+          <div className="mb-3 flex items-center bg-bg-hover rounded text-text-main">
             <input
               ref={inputRef}
               type="text"
@@ -113,7 +116,7 @@ export const NotesFolders: React.FC = () => {
           rootFolder.subfolders.length === 0 &&
           rootFolder.notes.length === 0 && (
             <div className="">
-              <p className="text-sm text-text-main/60">No notes yet, add them with Plus icon</p>
+              <p className="text-sm text-text-main/60">No notes here yet</p>
             </div>
           )}
         {rootFolder?.subfolders.map((folder) => (
@@ -137,7 +140,7 @@ export const NotesFolders: React.FC = () => {
               e.dataTransfer.setData('dragType', 'note');
               e.dataTransfer.setData('dragId', note.id.toString());
             }}
-            className="ml-4 mb-3 flex items-center p-2 hover:bg-bg-hover rounded text-text-main cursor-pointer"
+            className="ml-6 mb-3 flex items-center p-2 hover:bg-bg-hover rounded text-text-main cursor-pointer"
           >
             <Icon name="note" size="16" fill="currentColor" className="mr-2 opacity-70" />
             <span className="truncate">{note.title || 'Untitled Note'}</span>

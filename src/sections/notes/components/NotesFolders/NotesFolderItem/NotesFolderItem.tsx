@@ -237,7 +237,7 @@ export const NotesFolderItem = ({
           (folder.notes && folder.notes.length > 0)) && (
           <>
             {isCreatingSubfolder && (
-              <div className="ml-4 mb-3 flex items-center bg-bg-hover rounded text-text-main">
+              <div className="ml-6 mb-3 flex items-center bg-bg-hover rounded text-text-main">
                 <input
                   ref={subfolderInputRef}
                   type="text"
