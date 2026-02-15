@@ -27,7 +27,7 @@ interface AgendaItemProps {
   };
 }
 
-const AgendaItem = ({
+const PlannerAgendaItem = ({
   item,
   onDragStartItem,
   onDragEndItem,
@@ -345,4 +345,4 @@ const AgendaItem = ({
   );
 };
 
-export default AgendaItem;
+export default PlannerAgendaItem;

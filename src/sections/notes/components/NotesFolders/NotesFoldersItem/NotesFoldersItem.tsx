@@ -3,30 +3,35 @@ import React, { useState, useRef, useEffect } from 'react';
 import type { NotesFolderResponseDTO } from '@api/notes';
 import { Dropdown, DropdownItem } from '@common/components/Dropdown';
 import { Icon } from '@common/components/Icon';
+import { NotesFoldersNote } from '@notes/components/NotesFolders/NotesFoldersNote/NotesFoldersNote';
 
-interface NotesFolderItemProps {
+interface FoldersItemProps {
   folder: NotesFolderResponseDTO;
   regularFolders: NotesFolderResponseDTO[];
-  onRename: (id: number, name: string) => Promise<void>;
   onCreateSubfolder: (name: string, parentId: number) => Promise<void>;
-  onCreateNote: (folderId: number) => Promise<void>;
-  onMoveToTrash: (id: number) => Promise<void>;
+  onRenameFolder: (id: number, name: string) => Promise<void>;
   onMoveFolder: (folderId: number, parentId: number | null) => Promise<void>;
+  onMoveFolderToTrash: (id: number) => Promise<void>;
+  onCreateNote: (folderId: number) => Promise<void>;
+  onRenameNote: (id: number, title: string) => Promise<void>;
   onMoveNote: (noteId: number, folderId: number | null) => Promise<void>;
+  onMoveNoteToTrash: (id: number) => Promise<void>;
   wrapperClass?: string;
 }
 
-export const NotesFolderItem = ({
+export const NotesFoldersItem = ({
   folder,
   regularFolders,
-  onRename,
+  onRenameFolder,
+  onRenameNote,
   onCreateSubfolder,
   onCreateNote,
-  onMoveToTrash,
+  onMoveFolderToTrash,
+  onMoveNoteToTrash,
   onMoveFolder,
   onMoveNote,
   wrapperClass = '',
-}: NotesFolderItemProps) => {
+}: FoldersItemProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
   const [isCreatingSubfolder, setIsCreatingSubfolder] = useState(false);
@@ -54,7 +59,7 @@ export const NotesFolderItem = ({
 
   const handleRenameSubmit = async () => {
     if (renamevalue && renamevalue !== folder.name) {
-      await onRename(folder.id, renamevalue);
+      await onRenameFolder(folder.id, renamevalue);
     } else {
       setRenamevalue(folder.name);
     }
@@ -88,8 +93,9 @@ export const NotesFolderItem = ({
     }
   };
 
-  const handleTrash = () => {
-    void onMoveToTrash(folder.id);
+  const handleTrash = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    void onMoveFolderToTrash(folder.id);
   };
 
   const onDragStartFolder = (e: React.DragEvent) => {
@@ -206,11 +212,17 @@ export const NotesFolderItem = ({
           buttonClassName="p-2 opacity-0 group-hover:opacity-100 transition-opacity"
           dropdownClassName="w-40"
         >
-          <DropdownItem onClick={() => setIsEditing(true)}>
+          <DropdownItem
+            onClick={(e) => {
+              e.stopPropagation();
+              setIsEditing(true);
+            }}
+          >
             <Icon name="edit" size={14} className="h-4 w-4 mr-2" /> Rename
           </DropdownItem>
           <DropdownItem
-            onClick={() => {
+            onClick={(e) => {
+              e.stopPropagation();
               setIsCreatingSubfolder(true);
               setIsExpanded(true);
             }}
@@ -218,7 +230,8 @@ export const NotesFolderItem = ({
             <Icon name="folderPlus" size={14} className="h-4 w-4 mr-2" fill="currentColor" /> Add subfolder
           </DropdownItem>
           <DropdownItem
-            onClick={() => {
+            onClick={(e) => {
+              e.stopPropagation();
               void onCreateNote(folder.id);
               setIsExpanded(true);
             }}
@@ -252,14 +265,16 @@ export const NotesFolderItem = ({
             )}
             {folder.subfolders &&
               folder.subfolders.map((subfolder) => (
-                <NotesFolderItem
+                <NotesFoldersItem
                   key={subfolder.id}
                   folder={subfolder}
                   regularFolders={regularFolders}
-                  onRename={onRename}
+                  onRenameFolder={onRenameFolder}
+                  onRenameNote={onRenameNote}
                   onCreateSubfolder={onCreateSubfolder}
                   onCreateNote={onCreateNote}
-                  onMoveToTrash={onMoveToTrash}
+                  onMoveFolderToTrash={onMoveFolderToTrash}
+                  onMoveNoteToTrash={onMoveNoteToTrash}
                   onMoveFolder={onMoveFolder}
                   onMoveNote={onMoveNote}
                   wrapperClass="ml-6"
@@ -267,18 +282,13 @@ export const NotesFolderItem = ({
               ))}
             {folder.notes &&
               folder.notes.map((note) => (
-                <div
+                <NotesFoldersNote
                   key={note.id}
-                  draggable
-                  onDragStart={(e) => {
-                    e.dataTransfer.setData('dragType', 'note');
-                    e.dataTransfer.setData('dragId', note.id.toString());
-                  }}
-                  className="ml-6 mb-3 flex items-center p-2 hover:bg-bg-hover rounded text-text-main cursor-pointer"
-                >
-                  <Icon name="note" size={16} fill="currentColor" className="mr-2 text-text-main opacity-70" />
-                  <span className="truncate">{note.title || 'Untitled Note'}</span>
-                </div>
+                  note={note}
+                  onRename={onRenameNote}
+                  onMoveToTrash={onMoveNoteToTrash}
+                  className="ml-6"
+                />
               ))}
         </>
       )}

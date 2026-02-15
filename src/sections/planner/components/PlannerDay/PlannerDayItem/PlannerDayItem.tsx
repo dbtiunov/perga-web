@@ -4,7 +4,7 @@ import type { PlannerItemStateDTO, PlannerDayItemDTO } from '@api/planner';
 import { Dropdown, DropdownItem } from '@common/components/Dropdown';
 import { Icon } from '@common/components/Icon';
 import { getNextDay, getNextMonth, getNextWeek } from '@common/utils/date_utils';
-import Calendar from '@planner/components/Calendar/Calendar';
+import PlannerCalendar from '@planner/components/PlannerCalendar/PlannerCalendar';
 import { ITEM_TEXT_MAX_LENGTH } from '@planner/const';
 
 interface DayItemProps {
@@ -20,7 +20,7 @@ interface DayItemProps {
   onSnoozeItem?: (itemId: number, date: Date) => void;
 }
 
-const DayItem = ({
+const PlannerDayItem = ({
   item,
   onDragStartItem,
   onDragEndItem,
@@ -197,7 +197,7 @@ const DayItem = ({
             className="ml-2"
             dropdownClassName="w-64"
           >
-            <Calendar
+            <PlannerCalendar
               selectedDate={new Date()}
               onDateChange={handleCopyItem}
               title="Copy to"
@@ -211,7 +211,7 @@ const DayItem = ({
             className="ml-2"
             dropdownClassName="w-64"
           >
-            <Calendar
+            <PlannerCalendar
               selectedDate={new Date()}
               onDateChange={handleSnoozeItem}
               title="Snooze to"
@@ -246,4 +246,4 @@ const DayItem = ({
   );
 };
 
-export default DayItem;
+export default PlannerDayItem;

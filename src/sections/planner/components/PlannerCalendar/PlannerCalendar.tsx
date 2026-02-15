@@ -16,7 +16,7 @@ interface CalendarProps {
   }>;
 }
 
-const Calendar: React.FC<CalendarProps> = ({
+const PlannerCalendar: React.FC<CalendarProps> = ({
   selectedDate,
   onDateChange,
   title,
@@ -157,4 +157,4 @@ const Calendar: React.FC<CalendarProps> = ({
   );
 };
 
-export default Calendar;
+export default PlannerCalendar;

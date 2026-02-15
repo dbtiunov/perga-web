@@ -3,7 +3,7 @@ import { getNextDay } from '@common/utils/date_utils';
 import { StorageKeys } from '@common/utils/storage_keys';
 import PlannerAgendas from '@planner/components/PlannerAgendas/PlannerAgendas';
 import PlannerDay from '@planner/components/PlannerDay/PlannerDay';
-import DateSelector from '@planner/components/DateSelector/DateSelector';
+import PlannerDateSelector from '@planner/components/PlannerDateSelector/PlannerDateSelector';
 import { usePlannerAgendas } from '@planner/hooks/usePlannerAgendas';
 import { usePlannerDays } from '@planner/hooks/usePlannerDays';
 import { useSelectedDate } from '@planner/hooks/useSelectedDate';
@@ -53,7 +53,7 @@ const Planner = () => {
       maxLeftWidthPercent={MAX_LEFT_PANE_WIDTH_PERCENT}
       leftPane={
         <>
-          <DateSelector selectedDate={selectedDate} onDateChange={setSelectedDate} />
+          <PlannerDateSelector selectedDate={selectedDate} onDateChange={setSelectedDate} />
 
           <PlannerDay
             date={selectedDate}

@@ -3,9 +3,9 @@ import React, { useState } from 'react';
 import type { NotesFolderResponseDTO } from '@api/notes';
 import { Dropdown, DropdownItem } from '@common/components/Dropdown';
 import { Icon } from '@common/components/Icon';
-import { TrashFolderItem } from './TrashFolderItem/TrashFolderItem';
+import { NotesFoldersTrashItem } from '@notes/components/NotesFolders/NotesFoldersTrash/NotesFoldersTrashItem/NotesFoldersTrashItem';
 
-interface TrashFolderProps {
+interface TrashProps {
   folder: NotesFolderResponseDTO;
   onEmptyTrash: () => Promise<void>;
   onMoveFolderToTrash: (id: number) => Promise<void>;
@@ -14,7 +14,7 @@ interface TrashFolderProps {
   onMoveNote: (noteId: number, folderId: number | null) => Promise<void>;
 }
 
-export const TrashFolder: React.FC<TrashFolderProps> = ({
+export const NotesFoldersTrash: React.FC<TrashProps> = ({
   folder,
   onEmptyTrash,
   onMoveFolderToTrash,
@@ -78,7 +78,7 @@ export const TrashFolder: React.FC<TrashFolderProps> = ({
           <>
             {folder.subfolders &&
               folder.subfolders.map((subfolder) => (
-                <TrashFolderItem
+                <NotesFoldersTrashItem
                   key={subfolder.id}
                   folder={subfolder}
                   onMoveFolder={onMoveFolder}

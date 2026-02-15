@@ -102,17 +102,26 @@ export const useNotes = () => {
     }
   }, [fetchFolders]);
 
+  const handleRenameNote = useCallback(async (noteId: number, title: string) => {
+    try {
+      await updateNote(noteId, { title });
+      await fetchFolders();
+    } catch (error) {
+      console.error('Error renaming note:', error);
+    }
+  }, [fetchFolders]);
+
   return {
     rootFolder,
     trashFolder,
-    fetchFolders,
-    handleRenameFolder,
     handleCreateFolder,
+    handleRenameFolder,
+    handleMoveFolder,
     handleMoveFolderToTrash,
     handleCreateNote,
+    handleRenameNote,
+    handleMoveNote,
     handleMoveNoteToTrash,
     handleEmptyTrash,
-    handleMoveFolder,
-    handleMoveNote,
   };
 };

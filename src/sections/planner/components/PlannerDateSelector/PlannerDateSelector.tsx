@@ -9,7 +9,7 @@ import {
   getPrevDay,
   isSameDay,
 } from '@common/utils/date_utils';
-import Calendar from '@planner/components/Calendar/Calendar';
+import PlannerCalendar from '@planner/components/PlannerCalendar/PlannerCalendar';
 import { DATE_SELECTOR_DAYS_COUNT } from '@planner/const';
 
 interface DateSelectorProps {
@@ -17,7 +17,7 @@ interface DateSelectorProps {
   onDateChange: (date: Date) => void;
 }
 
-const DateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onDateChange }) => {
+const PlannerDateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onDateChange }) => {
   const datesList = useMemo(() => {
     const count = Math.max(1, DATE_SELECTOR_DAYS_COUNT);
     const half = Math.floor(count / 2);
@@ -88,7 +88,7 @@ const DateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onDateChange 
         buttonTitle="Open calendar"
         className="mt-2 mx-1"
       >
-        <Calendar
+        <PlannerCalendar
           selectedDate={selectedDate}
           onDateChange={handlePickDate}
           predefinedDates={[{ label: 'Today', date: new Date() }]}
@@ -107,4 +107,4 @@ const DateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onDateChange 
   );
 };
 
-export default DateSelector;
+export default PlannerDateSelector;

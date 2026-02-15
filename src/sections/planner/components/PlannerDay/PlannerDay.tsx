@@ -2,7 +2,7 @@ import React from 'react';
 
 import type { PlannerItemStateDTO, PlannerDayItemDTO } from '@api/planner';
 import { formatDateForDisplay } from '@common/utils/date_utils';
-import DayItem from '@planner/components/PlannerDay/DayItem/DayItem.tsx';
+import DayItem from '@planner/components/PlannerDay/PlannerDayItem/PlannerDayItem.tsx';
 
 interface PlannerDayProps {
   date: Date;

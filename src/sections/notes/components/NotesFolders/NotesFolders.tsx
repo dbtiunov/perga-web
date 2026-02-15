@@ -1,22 +1,24 @@
 import React, { useState, useRef, useEffect } from 'react';
 
 import { Icon } from '@common/components/Icon';
-import { NotesFolderItem } from '@notes/components/NotesFolders/NotesFolderItem/NotesFolderItem';
-import { TrashFolder } from '@notes/components/NotesFolders/TrashFolder/TrashFolder';
+import { NotesFoldersNote } from '@notes/components/NotesFolders/NotesFoldersNote/NotesFoldersNote';
+import { NotesFoldersItem } from '@notes/components/NotesFolders/NotesFoldersItem/NotesFoldersItem';
+import { NotesFoldersTrash } from '@notes/components/NotesFolders/NotesFoldersTrash/NotesFoldersTrash';
 import { useNotes } from '@notes/hooks/useNotes';
 
 export const NotesFolders: React.FC = () => {
   const {
     rootFolder,
     trashFolder,
-    handleRenameFolder,
-    handleMoveFolderToTrash,
     handleCreateFolder,
+    handleRenameFolder,
+    handleMoveFolder,
+    handleMoveFolderToTrash,
     handleCreateNote,
+    handleRenameNote,
+    handleMoveNote,
     handleMoveNoteToTrash,
     handleEmptyTrash,
-    handleMoveFolder,
-    handleMoveNote,
   } = useNotes();
   const [isCreating, setIsCreating] = useState(false);
   const [newFolderName, setNewFolderName] = useState('');
@@ -120,36 +122,33 @@ export const NotesFolders: React.FC = () => {
             </div>
           )}
         {rootFolder?.subfolders.map((folder) => (
-          <NotesFolderItem
+          <NotesFoldersItem
             key={folder.id}
             folder={folder}
             regularFolders={rootFolder.subfolders}
-            onRename={handleRenameFolder}
+            onRenameFolder={handleRenameFolder}
+            onRenameNote={handleRenameNote}
             onCreateSubfolder={handleCreateFolder}
             onCreateNote={handleCreateNote}
-            onMoveToTrash={handleMoveFolderToTrash}
+            onMoveFolderToTrash={handleMoveFolderToTrash}
+            onMoveNoteToTrash={handleMoveNoteToTrash}
             onMoveFolder={handleMoveFolder}
             onMoveNote={handleMoveNote}
           />
         ))}
         {rootFolder?.notes.map((note) => (
-          <div
+          <NotesFoldersNote
             key={note.id}
-            draggable
-            onDragStart={(e) => {
-              e.dataTransfer.setData('dragType', 'note');
-              e.dataTransfer.setData('dragId', note.id.toString());
-            }}
-            className="ml-6 mb-3 flex items-center p-2 hover:bg-bg-hover rounded text-text-main cursor-pointer"
-          >
-            <Icon name="note" size="16" fill="currentColor" className="mr-2 opacity-70" />
-            <span className="truncate">{note.title || 'Untitled Note'}</span>
-          </div>
+            note={note}
+            onRename={handleRenameNote}
+            onMoveToTrash={handleMoveNoteToTrash}
+            className="ml-6"
+          />
         ))}
       </div>
 
       {trashFolder && (
-        <TrashFolder
+        <NotesFoldersTrash
           folder={trashFolder}
           onEmptyTrash={handleEmptyTrash}
           onMoveFolderToTrash={handleMoveFolderToTrash}

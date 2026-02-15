@@ -3,13 +3,13 @@ import React, { useState } from 'react';
 import type { NotesFolderResponseDTO } from '@api/notes';
 import { Icon } from '@common/components/Icon';
 
-interface TrashFolderItemProps {
+interface TrashItemProps {
   folder: NotesFolderResponseDTO;
   onMoveFolder: (folderId: number, parentId: number | null) => Promise<void>;
   onMoveNote: (noteId: number, folderId: number | null) => Promise<void>;
 }
 
-export const TrashFolderItem: React.FC<TrashFolderItemProps> = ({
+export const NotesFoldersTrashItem: React.FC<TrashItemProps> = ({
   folder,
   onMoveFolder,
   onMoveNote,
@@ -42,7 +42,7 @@ export const TrashFolderItem: React.FC<TrashFolderItemProps> = ({
         <>
           {folder.subfolders &&
             folder.subfolders.map((subfolder) => (
-              <TrashFolderItem
+              <NotesFoldersTrashItem
                 key={subfolder.id}
                 folder={subfolder}
                 onMoveFolder={onMoveFolder}

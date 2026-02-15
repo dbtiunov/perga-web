@@ -11,11 +11,11 @@ import { Dropdown, DropdownItem } from '@common/components/Dropdown';
 import { Icon } from '@common/components/Icon';
 import { formatDateMonthName } from '@common/utils/date_utils';
 import { useToast } from '@contexts/hooks/useToast';
-import AgendaItem from '@planner/components/PlannerAgendas/AgendaItem/AgendaItem';
+import AgendaItem from '@planner/components/PlannerAgendas/PlannerAgendaItem/PlannerAgendaItem';
 import { AGENDA_ACTION_LABELS } from '@planner/const';
 import { useCollapsedAgendas } from '@planner/hooks/useCollapsedAgendas';
 
-interface PlannerAgendasProps {
+interface AgendasProps {
   plannerAgendas: PlannerAgendaDTO[];
   plannerAgendaItems: Record<number, PlannerAgendaItemDTO[]>;
   dragAgendaItem: PlannerAgendaItemDTO | null;
@@ -41,7 +41,7 @@ interface PlannerAgendasProps {
   fetchAgendaItems: (agendaIds: number[]) => Promise<void> | void;
 }
 
-const PlannerAgendas: React.FC<PlannerAgendasProps> = ({
+const PlannerAgendas: React.FC<AgendasProps> = ({
   plannerAgendas,
   plannerAgendaItems,
   dragAgendaItem,
