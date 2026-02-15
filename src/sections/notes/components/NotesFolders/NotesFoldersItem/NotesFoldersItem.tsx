@@ -114,6 +114,8 @@ export const NotesFoldersItem = ({
 
   const onDrop = (e: React.DragEvent) => {
     e.preventDefault();
+    e.stopPropagation();
+
     setIsDragHover(false);
     const dragType = e.dataTransfer.getData('dragType');
     const dragId = parseInt(e.dataTransfer.getData('dragId'), 10);

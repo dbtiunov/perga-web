@@ -3,12 +3,10 @@ import { useState, useEffect, useCallback } from 'react';
 import type { NotesFolderResponseDTO } from '@api/notes';
 import {
   getFolders,
-  moveFolderToTrash,
-  moveNoteToTrash,
-  updateFolder,
-  updateNote,
   createFolder,
+  updateFolder,
   createNote,
+  updateNote,
   emptyTrash,
 } from '@api/notes';
 
@@ -31,13 +29,17 @@ export const useNotes = () => {
   }, [fetchFolders]);
 
   const handleMoveFolderToTrash = useCallback(async (folderId: number) => {
+    if (!trashFolder){
+      return;
+    }
+
     try {
-      await moveFolderToTrash(folderId);
+      await updateFolder(folderId, { parent_id: trashFolder.id });
       await fetchFolders();
     } catch (error) {
       console.error('Error moving folder to trash:', error);
     }
-  }, [fetchFolders]);
+  }, [fetchFolders, trashFolder]);
 
   const handleRenameFolder = useCallback(async (folderId: number, name: string) => {
     try {
@@ -67,13 +69,17 @@ export const useNotes = () => {
   }, [fetchFolders]);
 
   const handleMoveNoteToTrash = useCallback(async (noteId: number) => {
+    if (!trashFolder) {
+      return;
+    }
+
     try {
-      await moveNoteToTrash(noteId);
+      await updateNote(noteId, { folder_id: trashFolder.id });
       await fetchFolders();
     } catch (error) {
       console.error('Error moving note to trash:', error);
     }
-  }, [fetchFolders]);
+  }, [fetchFolders, trashFolder]);
 
   const handleEmptyTrash = useCallback(async () => {
     try {

@@ -36,6 +36,8 @@ export const NotesFoldersTrash: React.FC<TrashProps> = ({
 
   const onDrop = (e: React.DragEvent) => {
     e.preventDefault();
+    e.stopPropagation();
+
     setIsDragOver(false);
     const dragType = e.dataTransfer.getData('dragType');
     const dragId = parseInt(e.dataTransfer.getData('dragId'), 10);

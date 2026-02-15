@@ -18,9 +18,6 @@ export const createNote = (note: NoteCreateDTO) => axios.post<NoteDTO>(`${NOTES_
 export const updateNote = (noteId: number, changes: NoteUpdateDTO) =>
   axios.patch<NoteDTO>(`${NOTES_API_URL}/${noteId}/`, changes);
 
-export const moveNoteToTrash = (noteId: number) =>
-  axios.post<NoteDTO>(`${NOTES_API_URL}/${noteId}/move-to-trash/`);
-
 // Notes Folders API methods
 export const getFolders = () =>
   axios.get<NotesFoldersResponseSchemaDTO>(`${NOTES_API_URL}/folders/`);
@@ -30,9 +27,6 @@ export const createFolder = (folder: NotesFolderCreateDTO) =>
 
 export const updateFolder = (folderId: number, changes: NotesFolderUpdateDTO) =>
   axios.patch<NotesFolderDTO>(`${NOTES_API_URL}/folders/${folderId}/`, changes);
-
-export const moveFolderToTrash = (folderId: number) =>
-  axios.post<NotesFolderDTO>(`${NOTES_API_URL}/folders/${folderId}/move-to-trash/`);
 
 export const emptyTrash = () =>
   axios.post(`${NOTES_API_URL}/empty-trash/`);

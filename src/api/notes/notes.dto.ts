@@ -24,7 +24,7 @@ export interface NotesFolderDTO {
   index: number;
   name: string;
   parent_id: number | null;
-  folder_type: 'regular' | 'root' | 'trash' | 'archive';
+  folder_type: 'regular' | 'root' | 'trash';
 }
 
 export interface NotesFolderCreateDTO {
