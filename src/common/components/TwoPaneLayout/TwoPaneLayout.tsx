@@ -56,10 +56,7 @@ export const TwoPaneLayout: React.FC<TwoPaneLayoutProps> = ({
       return defaultLeftWidthPercent;
     }
 
-    return Math.min(
-      maxLeftWidthPercent,
-      Math.max(minLeftWidthPercent, savedWidthParsed),
-    );
+    return Math.min(maxLeftWidthPercent, Math.max(minLeftWidthPercent, savedWidthParsed));
   });
   const [isDragging, setIsDragging] = useState(false);
 
@@ -73,10 +70,7 @@ export const TwoPaneLayout: React.FC<TwoPaneLayoutProps> = ({
     const available = rect.width - RESIZE_HANDLE_WIDTH_PX;
     const xWithin = Math.min(Math.max(clientX - rect.left, 0), available);
     const percent = (xWithin / available) * 100;
-    const clamped = Math.min(
-      maxLeftWidthPercent,
-      Math.max(minLeftWidthPercent, percent),
-    );
+    const clamped = Math.min(maxLeftWidthPercent, Math.max(minLeftWidthPercent, percent));
     setLeftPaneWidthPercent(clamped);
   };
 
@@ -134,9 +128,7 @@ export const TwoPaneLayout: React.FC<TwoPaneLayoutProps> = ({
       </div>
 
       {/* Right pane */}
-      <div className="w-full md:flex-1 overflow-auto min-h-0">
-        {rightPane}
-      </div>
+      <div className="w-full md:flex-1 overflow-auto min-h-0">{rightPane}</div>
     </div>
   );
 };

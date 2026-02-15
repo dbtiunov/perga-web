@@ -123,7 +123,7 @@ export const NotesFoldersItem = ({
     if (dragType === 'folder' && dragId !== folder.id) {
       // Check if we are trying to move a folder into its own subfolder
       const isSubfolder = (parent: NotesFolderResponseDTO, childId: number): boolean => {
-        if (parent.id === childId){
+        if (parent.id === childId) {
           return true;
         }
         if (parent.subfolders) {
@@ -133,7 +133,10 @@ export const NotesFoldersItem = ({
         return false;
       };
 
-      const findFolderInList = (id: number, folders: NotesFolderResponseDTO[]): NotesFolderResponseDTO | null => {
+      const findFolderInList = (
+        id: number,
+        folders: NotesFolderResponseDTO[],
+      ): NotesFolderResponseDTO | null => {
         for (const folder of folders) {
           const found = findFolderById(id, folder);
           if (found) {
@@ -154,14 +157,17 @@ export const NotesFoldersItem = ({
     }
   };
 
-  const findFolderById = (id: number, currentFolder: NotesFolderResponseDTO): NotesFolderResponseDTO | null => {
-    if (currentFolder.id === id){
+  const findFolderById = (
+    id: number,
+    currentFolder: NotesFolderResponseDTO,
+  ): NotesFolderResponseDTO | null => {
+    if (currentFolder.id === id) {
       return currentFolder;
     }
     if (currentFolder.subfolders) {
       for (const sub of currentFolder.subfolders) {
         const found = findFolderById(id, sub);
-        if (found){
+        if (found) {
           return found;
         }
       }
@@ -170,9 +176,7 @@ export const NotesFoldersItem = ({
   };
 
   return (
-    <div
-      className={wrapperClass}
-    >
+    <div className={wrapperClass}>
       <div
         draggable
         onDragStart={onDragStartFolder}
@@ -193,17 +197,10 @@ export const NotesFoldersItem = ({
           />
         ) : (
           <div className="flex items-center flex-1 p-2" onClick={() => setIsExpanded(!isExpanded)}>
-            <div
-              className={`mr-2 transform transition-transform ${isExpanded ? 'rotate-90' : ''}`}
-            >
+            <div className={`mr-2 transform transition-transform ${isExpanded ? 'rotate-90' : ''}`}>
               <Icon name="rightChevron" size="24" className="h-4 w-4" />
             </div>
-            <Icon
-              name="folder"
-              size="14"
-              fill="currentColor"
-              className="mr-2"
-            />
+            <Icon name="folder" size="14" fill="currentColor" className="mr-2" />
             <span>{folder.name}</span>
           </div>
         )}
@@ -229,7 +226,8 @@ export const NotesFoldersItem = ({
               setIsExpanded(true);
             }}
           >
-            <Icon name="folderPlus" size={14} className="h-4 w-4 mr-2" fill="currentColor" /> Add subfolder
+            <Icon name="folderPlus" size={14} className="h-4 w-4 mr-2" fill="currentColor" /> Add
+            subfolder
           </DropdownItem>
           <DropdownItem
             onClick={(e) => {
@@ -238,7 +236,8 @@ export const NotesFoldersItem = ({
               setIsExpanded(true);
             }}
           >
-            <Icon name="notePlus" size={14} className="h-4 w-4 mr-2" fill="currentColor" /> Create note
+            <Icon name="notePlus" size={14} className="h-4 w-4 mr-2" fill="currentColor" /> Create
+            note
           </DropdownItem>
           <DropdownItem onClick={handleTrash}>
             <Icon name="trash" size={14} className="h-4 w-4 mr-2" /> Move to trash
@@ -292,8 +291,8 @@ export const NotesFoldersItem = ({
                   className="ml-6"
                 />
               ))}
-        </>
-      )}
+          </>
+        )}
     </div>
   );
 };

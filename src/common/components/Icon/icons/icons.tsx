@@ -16,10 +16,14 @@ export const icons = {
   ),
   note: (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-      <path fillRule="evenodd" clipRule="evenodd" d="M4 2a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2V4a2 2 0 00-2-2H4z"/>
-      <line x1="6" y1="6" x2="14" y2="6" stroke="black" strokeWidth="1" strokeLinecap="round"/>
-      <line x1="6" y1="9" x2="13" y2="9" stroke="black" strokeWidth="1" strokeLinecap="round"/>
-      <line x1="6" y1="12" x2="12" y2="12" stroke="black" strokeWidth="1" strokeLinecap="round"/>
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M4 2a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2V4a2 2 0 00-2-2H4z"
+      />
+      <line x1="6" y1="6" x2="14" y2="6" stroke="black" strokeWidth="1" strokeLinecap="round" />
+      <line x1="6" y1="9" x2="13" y2="9" stroke="black" strokeWidth="1" strokeLinecap="round" />
+      <line x1="6" y1="12" x2="12" y2="12" stroke="black" strokeWidth="1" strokeLinecap="round" />
     </svg>
   ),
   logout: (
@@ -215,56 +219,84 @@ export const icons = {
   ),
   plus: (
     <svg xmlns="http://www.w3.org/2000/svg" stroke="currentColor" viewBox="0 0 24 24" fill="none">
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth="2"
-        d="M12 4v16m8-8H4"
-      />
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4" />
     </svg>
   ),
   noteOutline: (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-        <path fillRule="evenodd" clipRule="evenodd" d="M4 2a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2V4a2 2 0 00-2-2H4zm0 2h12v12H4V4z"/>
-        <rect x="6" y="6" width="8" height="1" rx="0.5" />
-        <rect x="6" y="9" width="7" height="1" rx="0.5" />
-        <rect x="6" y="12" width="6" height="1" rx="0.5" />
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M4 2a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2V4a2 2 0 00-2-2H4zm0 2h12v12H4V4z"
+      />
+      <rect x="6" y="6" width="8" height="1" rx="0.5" />
+      <rect x="6" y="9" width="7" height="1" rx="0.5" />
+      <rect x="6" y="12" width="6" height="1" rx="0.5" />
     </svg>
   ),
   notePlus: (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-      <path fillRule="evenodd" clipRule="evenodd" d="M4 2a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2V4a2 2 0 00-2-2H4zm0 2h12v12H4V4z"/>
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M4 2a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2V4a2 2 0 00-2-2H4zm0 2h12v12H4V4z"
+      />
       <path d="M10 7v6m-3-3h6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
     </svg>
   ),
   folder: (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-      <path fillRule="evenodd" clipRule="evenodd"
-            d="M2 4a2 2 0 012-2h4l2 2h8a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V4z"/>
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M2 4a2 2 0 012-2h4l2 2h8a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V4z"
+      />
     </svg>
   ),
   folderOutline: (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-      <path fillRule="evenodd" clipRule="evenodd"
-            d="M2 4a2 2 0 012-2h4l2 2h8a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V4z"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round" />
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M2 4a2 2 0 012-2h4l2 2h8a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V4z"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
     </svg>
   ),
   folderPlus: (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-      <path fillRule="evenodd" clipRule="evenodd"
-            d="M2 4a2 2 0 012-2h4l2 2h8a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V4z"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round" />
-      <line x1="11" y1="8" x2="11" y2="14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-      <line x1="8" y1="11" x2="14" y2="11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M2 4a2 2 0 012-2h4l2 2h8a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V4z"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <line
+        x1="11"
+        y1="8"
+        x2="11"
+        y2="14"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
+      <line
+        x1="8"
+        y1="11"
+        x2="14"
+        y2="11"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
     </svg>
   ),
 };

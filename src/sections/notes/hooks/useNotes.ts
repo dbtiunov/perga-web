@@ -29,58 +29,73 @@ export const useNotes = () => {
     void fetchFolders();
   }, [fetchFolders]);
 
-  const handleMoveFolderToTrash = useCallback(async (folderId: number) => {
-    if (!trashFolder){
-      return;
-    }
+  const handleMoveFolderToTrash = useCallback(
+    async (folderId: number) => {
+      if (!trashFolder) {
+        return;
+      }
 
-    try {
-      await updateFolder(folderId, { parent_id: trashFolder.id });
-      await fetchFolders();
-    } catch (error) {
-      console.error('Error moving folder to trash:', error);
-    }
-  }, [fetchFolders, trashFolder]);
+      try {
+        await updateFolder(folderId, { parent_id: trashFolder.id });
+        await fetchFolders();
+      } catch (error) {
+        console.error('Error moving folder to trash:', error);
+      }
+    },
+    [fetchFolders, trashFolder],
+  );
 
-  const handleRenameFolder = useCallback(async (folderId: number, name: string) => {
-    try {
-      await updateFolder(folderId, { name });
-      await fetchFolders();
-    } catch (error) {
-      console.error('Error renaming folder:', error);
-    }
-  }, [fetchFolders]);
+  const handleRenameFolder = useCallback(
+    async (folderId: number, name: string) => {
+      try {
+        await updateFolder(folderId, { name });
+        await fetchFolders();
+      } catch (error) {
+        console.error('Error renaming folder:', error);
+      }
+    },
+    [fetchFolders],
+  );
 
-  const handleCreateFolder = useCallback(async (name: string, parentId: number | null = null) => {
-    try {
-      await createFolder({ name, parent_id: parentId });
-      await fetchFolders();
-    } catch (error) {
-      console.error('Error creating folder:', error);
-    }
-  }, [fetchFolders]);
+  const handleCreateFolder = useCallback(
+    async (name: string, parentId: number | null = null) => {
+      try {
+        await createFolder({ name, parent_id: parentId });
+        await fetchFolders();
+      } catch (error) {
+        console.error('Error creating folder:', error);
+      }
+    },
+    [fetchFolders],
+  );
 
-  const handleCreateNote = useCallback(async (folderId: number | null = null) => {
-    try {
-      await createNote({ body: '', folder_id: folderId });
-      await fetchFolders();
-    } catch (error) {
-      console.error('Error creating note:', error);
-    }
-  }, [fetchFolders]);
+  const handleCreateNote = useCallback(
+    async (folderId: number | null = null) => {
+      try {
+        await createNote({ body: '', folder_id: folderId });
+        await fetchFolders();
+      } catch (error) {
+        console.error('Error creating note:', error);
+      }
+    },
+    [fetchFolders],
+  );
 
-  const handleMoveNoteToTrash = useCallback(async (noteId: number) => {
-    if (!trashFolder) {
-      return;
-    }
+  const handleMoveNoteToTrash = useCallback(
+    async (noteId: number) => {
+      if (!trashFolder) {
+        return;
+      }
 
-    try {
-      await updateNote(noteId, { folder_id: trashFolder.id });
-      await fetchFolders();
-    } catch (error) {
-      console.error('Error moving note to trash:', error);
-    }
-  }, [fetchFolders, trashFolder]);
+      try {
+        await updateNote(noteId, { folder_id: trashFolder.id });
+        await fetchFolders();
+      } catch (error) {
+        console.error('Error moving note to trash:', error);
+      }
+    },
+    [fetchFolders, trashFolder],
+  );
 
   const handleEmptyTrash = useCallback(async () => {
     try {
@@ -91,32 +106,41 @@ export const useNotes = () => {
     }
   }, [fetchFolders]);
 
-  const handleMoveFolder = useCallback(async (folderId: number, parentId: number | null) => {
-    try {
-      await updateFolder(folderId, { parent_id: parentId });
-      await fetchFolders();
-    } catch (error) {
-      console.error('Error moving folder:', error);
-    }
-  }, [fetchFolders]);
+  const handleMoveFolder = useCallback(
+    async (folderId: number, parentId: number | null) => {
+      try {
+        await updateFolder(folderId, { parent_id: parentId });
+        await fetchFolders();
+      } catch (error) {
+        console.error('Error moving folder:', error);
+      }
+    },
+    [fetchFolders],
+  );
 
-  const handleMoveNote = useCallback(async (noteId: number, folderId: number | null) => {
-    try {
-      await updateNote(noteId, { folder_id: folderId });
-      await fetchFolders();
-    } catch (error) {
-      console.error('Error moving note:', error);
-    }
-  }, [fetchFolders]);
+  const handleMoveNote = useCallback(
+    async (noteId: number, folderId: number | null) => {
+      try {
+        await updateNote(noteId, { folder_id: folderId });
+        await fetchFolders();
+      } catch (error) {
+        console.error('Error moving note:', error);
+      }
+    },
+    [fetchFolders],
+  );
 
-  const handleRenameNote = useCallback(async (noteId: number, title: string) => {
-    try {
-      await updateNote(noteId, { title });
-      await fetchFolders();
-    } catch (error) {
-      console.error('Error renaming note:', error);
-    }
-  }, [fetchFolders]);
+  const handleRenameNote = useCallback(
+    async (noteId: number, title: string) => {
+      try {
+        await updateNote(noteId, { title });
+        await fetchFolders();
+      } catch (error) {
+        console.error('Error renaming note:', error);
+      }
+    },
+    [fetchFolders],
+  );
 
   // Refresh listener
   useEffect(() => {

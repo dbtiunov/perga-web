@@ -226,16 +226,10 @@ const PlannerDayItem = ({
               className="ml-2"
               dropdownClassName="w-36"
             >
-              <DropdownItem
-                onClick={onDropActionClick}
-                title='Drop item'
-              >
+              <DropdownItem onClick={onDropActionClick} title="Drop item">
                 <Icon name="drop" size={48} className="h-4 w-4 mr-2" /> Drop item
               </DropdownItem>
-              <DropdownItem
-                onClick={onDeleteActionClick}
-                title='Delete item'
-              >
+              <DropdownItem onClick={onDeleteActionClick} title="Delete item">
                 <Icon name="trash" size={48} className="h-4 w-4 mr-2" /> Delete item
               </DropdownItem>
             </Dropdown>

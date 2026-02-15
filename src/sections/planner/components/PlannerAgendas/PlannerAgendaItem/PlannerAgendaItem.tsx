@@ -255,16 +255,12 @@ const PlannerAgendaItem = ({
             <div className="border-t border-gray-200" />
             <div>
               {copyAgendasMap?.currentMonth.id !== item.agenda_id && (
-                <DropdownItem
-                  onClick={() => handleCopyToAgenda(copyAgendasMap?.currentMonth.id)}
-                >
+                <DropdownItem onClick={() => handleCopyToAgenda(copyAgendasMap?.currentMonth.id)}>
                   Current month ({copyAgendasMap?.currentMonth.name})
                 </DropdownItem>
               )}
               {copyAgendasMap?.nextMonth.id !== item.agenda_id && (
-                <DropdownItem
-                  onClick={() => handleCopyToAgenda(copyAgendasMap?.nextMonth.id)}
-                >
+                <DropdownItem onClick={() => handleCopyToAgenda(copyAgendasMap?.nextMonth.id)}>
                   Next month ({copyAgendasMap?.nextMonth.name})
                 </DropdownItem>
               )}
@@ -290,34 +286,30 @@ const PlannerAgendaItem = ({
             dropdownClassName="w-56 mt-8"
           >
             <div className="px-4 py-3 text-xs uppercase text-text-main">Move to</div>
-              <div>
-                {copyAgendasMap?.currentMonth.id !== item.agenda_id && (
-                  <DropdownItem
-                    onClick={() => handleMoveToAgenda(copyAgendasMap?.currentMonth.id)}
-                  >
-                    Current month ({copyAgendasMap?.currentMonth.name})
-                  </DropdownItem>
-                )}
-                {copyAgendasMap?.nextMonth.id !== item.agenda_id && (
-                  <DropdownItem
-                    onClick={() => handleMoveToAgenda(copyAgendasMap?.nextMonth.id)}
-                  >
-                    Next month ({copyAgendasMap?.nextMonth.name})
-                  </DropdownItem>
-                )}
-              </div>
-              {copyCustomAgendas && copyCustomAgendas?.length > 0 && (
-                <div>
-                  {copyCustomAgendas.map((customAgenda) => (
-                    <DropdownItem
-                      key={customAgenda.id}
-                      onClick={() => handleMoveToAgenda(customAgenda.id)}
-                    >
-                      {customAgenda.name}
-                    </DropdownItem>
-                  ))}
-                </div>
+            <div>
+              {copyAgendasMap?.currentMonth.id !== item.agenda_id && (
+                <DropdownItem onClick={() => handleMoveToAgenda(copyAgendasMap?.currentMonth.id)}>
+                  Current month ({copyAgendasMap?.currentMonth.name})
+                </DropdownItem>
               )}
+              {copyAgendasMap?.nextMonth.id !== item.agenda_id && (
+                <DropdownItem onClick={() => handleMoveToAgenda(copyAgendasMap?.nextMonth.id)}>
+                  Next month ({copyAgendasMap?.nextMonth.name})
+                </DropdownItem>
+              )}
+            </div>
+            {copyCustomAgendas && copyCustomAgendas?.length > 0 && (
+              <div>
+                {copyCustomAgendas.map((customAgenda) => (
+                  <DropdownItem
+                    key={customAgenda.id}
+                    onClick={() => handleMoveToAgenda(customAgenda.id)}
+                  >
+                    {customAgenda.name}
+                  </DropdownItem>
+                ))}
+              </div>
+            )}
           </Dropdown>
 
           <Dropdown
@@ -326,16 +318,10 @@ const PlannerAgendaItem = ({
             className="inline-flex ml-2"
             dropdownClassName="w-40 mt-8"
           >
-            <DropdownItem
-              onClick={onDropActionClick}
-              title='Drop item'
-            >
+            <DropdownItem onClick={onDropActionClick} title="Drop item">
               <Icon name="drop" size={14} className="h-4 w-4 mr-2" /> Drop item
             </DropdownItem>
-            <DropdownItem
-              onClick={onDeleteActionClick}
-              title='Delete item'
-            >
+            <DropdownItem onClick={onDeleteActionClick} title="Delete item">
               <Icon name="trash" size={14} className="h-4 w-4 mr-2" /> Delete item
             </DropdownItem>
           </Dropdown>

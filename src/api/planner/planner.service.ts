@@ -2,9 +2,16 @@ import axios from 'axios';
 
 import { getConfig } from '@/config';
 import type {
-  PlannerDayItemDTO, PlannerDayItemCreateDTO, PlannerDayItemUpdateDTO,
-  PlannerAgendaDTO, PlannerAgendaCreateDTO, PlannerAgendaUpdateDTO, PlannerAgendaActionDTO,
-  PlannerAgendaItemDTO, PlannerAgendaItemCreateDTO, PlannerAgendaItemUpdateDTO,
+  PlannerDayItemDTO,
+  PlannerDayItemCreateDTO,
+  PlannerDayItemUpdateDTO,
+  PlannerAgendaDTO,
+  PlannerAgendaCreateDTO,
+  PlannerAgendaUpdateDTO,
+  PlannerAgendaActionDTO,
+  PlannerAgendaItemDTO,
+  PlannerAgendaItemCreateDTO,
+  PlannerAgendaItemUpdateDTO,
 } from '@api/planner/planner.dto';
 
 // API URLs
@@ -98,7 +105,11 @@ export const reorderPlannerAgendaItems = (agendaId: number, orderedItemIds: numb
   });
 
 export const copyPlannerAgendaItem = (itemId: number, agendaId: number) =>
-  axios.post<PlannerAgendaItemDTO>(`${AGENDAS_API_URL}items/${itemId}/copy/`, { agenda_id: agendaId });
+  axios.post<PlannerAgendaItemDTO>(`${AGENDAS_API_URL}items/${itemId}/copy/`, {
+    agenda_id: agendaId,
+  });
 
 export const movePlannerAgendaItem = (itemId: number, agendaId: number) =>
-  axios.post<PlannerAgendaItemDTO>(`${AGENDAS_API_URL}items/${itemId}/move/`, { agenda_id: agendaId });
+  axios.post<PlannerAgendaItemDTO>(`${AGENDAS_API_URL}items/${itemId}/move/`, {
+    agenda_id: agendaId,
+  });

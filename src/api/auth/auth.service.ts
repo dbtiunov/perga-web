@@ -5,7 +5,13 @@ import Storage from '@common/utils/storage';
 import { StorageKeys } from '@common/utils/storage_keys';
 
 import type {
-  UserDTO, UserUpdateDTO, UserSignupDTO, UserSigninDTO, TokenDTO, UpdatePasswordDTO, RefreshTokenDTO
+  UserDTO,
+  UserUpdateDTO,
+  UserSignupDTO,
+  UserSigninDTO,
+  TokenDTO,
+  UpdatePasswordDTO,
+  RefreshTokenDTO,
 } from './auth.dto';
 
 const { API_BASE_URL } = getConfig();
@@ -28,7 +34,6 @@ export const updateUser = (userData: UserUpdateDTO) =>
 
 export const updatePassword = (data: UpdatePasswordDTO) =>
   axios.put<void>(`${AUTH_API_URL}/user/password/`, data);
-
 
 // Token methods
 export const storeToken = (token: TokenDTO) => {

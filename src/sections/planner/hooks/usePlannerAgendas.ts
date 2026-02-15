@@ -17,9 +17,9 @@ import { useToast } from '@contexts/hooks/useToast';
 
 export const usePlannerAgendas = (selectedDate: Date) => {
   const [plannerAgendas, setPlannerAgendas] = useState<PlannerAgendaDTO[]>([]);
-  const [plannerAgendaItems, setPlannerAgendaItems] = useState<Record<number, PlannerAgendaItemDTO[]>>(
-    {},
-  );
+  const [plannerAgendaItems, setPlannerAgendaItems] = useState<
+    Record<number, PlannerAgendaItemDTO[]>
+  >({});
 
   const [dragAgendaItem, setDragAgendaItem] = useState<PlannerAgendaItemDTO | null>(null);
 
@@ -258,10 +258,13 @@ export const usePlannerAgendas = (selectedDate: Date) => {
 
   const monthlyAgendas = plannerAgendas.filter((agenda) => agenda.agenda_type === 'monthly');
   const currentMonthAgenda =
-    monthlyAgendas.find((agenda) => agenda.name.toLowerCase().includes(currentMonthName.toLowerCase())) ||
-    monthlyAgendas[0];
+    monthlyAgendas.find((agenda) =>
+      agenda.name.toLowerCase().includes(currentMonthName.toLowerCase()),
+    ) || monthlyAgendas[0];
   const nextMonthAgenda =
-    monthlyAgendas.find((agenda) => agenda.name.toLowerCase().includes(nextMonthName.toLowerCase())) ||
+    monthlyAgendas.find((agenda) =>
+      agenda.name.toLowerCase().includes(nextMonthName.toLowerCase()),
+    ) ||
     monthlyAgendas[1] ||
     monthlyAgendas[0];
 

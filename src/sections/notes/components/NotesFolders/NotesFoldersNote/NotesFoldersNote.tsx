@@ -89,7 +89,12 @@ export const NotesFoldersNote = ({
         <DropdownItem onClick={handleRenameClick}>
           <Icon name="edit" size={14} className="h-4 w-4 mr-2" /> Rename
         </DropdownItem>
-        <DropdownItem onClick={(e) => { e.stopPropagation(); void onMoveToTrash(note.id); }}>
+        <DropdownItem
+          onClick={(e) => {
+            e.stopPropagation();
+            void onMoveToTrash(note.id);
+          }}
+        >
           <Icon name="trash" size={14} className="h-4 w-4 mr-2" /> Move to trash
         </DropdownItem>
       </Dropdown>

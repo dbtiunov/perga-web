@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import type { UserUpdateDTO, UpdatePasswordDTO, WeekStartDayDTO } from "@api/auth";
+import type { UserUpdateDTO, UpdatePasswordDTO, WeekStartDayDTO } from '@api/auth';
 import { updateUser, updatePassword } from '@api/auth';
 import { REFRESH_EVENT } from '@common/events';
 import { useAuth } from '@contexts/hooks/useAuth';

@@ -14,7 +14,7 @@ interface IconProps {
 export const Icon: React.FC<IconProps> = ({ name, size = 24, fill = 'none', className = '' }) => {
   const icon = icons[name];
 
-  if (!icon){
+  if (!icon) {
     return null;
   }
 

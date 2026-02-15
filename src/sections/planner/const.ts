@@ -1,4 +1,4 @@
-import type {PlannerAgendaActionDTO} from '@api/planner';
+import type { PlannerAgendaActionDTO } from '@api/planner';
 
 export const MONTH_NAMES: string[] = [
   'January',

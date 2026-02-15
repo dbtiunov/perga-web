@@ -2,11 +2,14 @@ import axios from 'axios';
 
 import { getConfig } from '@/config';
 import type {
-  NoteDTO, NoteCreateDTO, NoteUpdateDTO,
-  NotesFolderDTO, NotesFolderCreateDTO, NotesFolderUpdateDTO,
-  NotesFoldersResponseSchemaDTO
+  NoteDTO,
+  NoteCreateDTO,
+  NoteUpdateDTO,
+  NotesFolderDTO,
+  NotesFolderCreateDTO,
+  NotesFolderUpdateDTO,
+  NotesFoldersResponseSchemaDTO,
 } from './notes.dto';
-
 
 // API URLs
 const { API_BASE_URL } = getConfig();
@@ -28,5 +31,4 @@ export const createFolder = (folder: NotesFolderCreateDTO) =>
 export const updateFolder = (folderId: number, changes: NotesFolderUpdateDTO) =>
   axios.patch<NotesFolderDTO>(`${NOTES_API_URL}/folders/${folderId}/`, changes);
 
-export const emptyTrash = () =>
-  axios.post(`${NOTES_API_URL}/empty-trash/`);
+export const emptyTrash = () => axios.post(`${NOTES_API_URL}/empty-trash/`);

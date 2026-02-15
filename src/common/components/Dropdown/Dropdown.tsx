@@ -41,7 +41,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
   };
 
   const close = () => {
-    setIsOpen(false)
+    setIsOpen(false);
   };
 
   return (
@@ -62,9 +62,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
         <div
           className={`absolute ${align === 'right' ? 'right-0' : 'left-0'} bg-bg-main border border-border-main rounded shadow-lg z-10 ${dropdownClassName}`}
         >
-          <DropdownContext.Provider value={{ close }}>
-            {children}
-          </DropdownContext.Provider>
+          <DropdownContext.Provider value={{ close }}>{children}</DropdownContext.Provider>
         </div>
       )}
     </div>
