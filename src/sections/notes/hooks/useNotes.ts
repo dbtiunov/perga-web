@@ -9,6 +9,7 @@ import {
   updateNote,
   emptyTrash,
 } from '@api/notes';
+import { REFRESH_EVENT } from '@common/events';
 
 export const useNotes = () => {
   const [rootFolder, setRootFolder] = useState<NotesFolderResponseDTO | null>(null);
@@ -115,6 +116,17 @@ export const useNotes = () => {
     } catch (error) {
       console.error('Error renaming note:', error);
     }
+  }, [fetchFolders]);
+
+  // Refresh listener
+  useEffect(() => {
+    const handler = () => {
+      void fetchFolders();
+    };
+    window.addEventListener(REFRESH_EVENT, handler);
+    return () => {
+      window.removeEventListener(REFRESH_EVENT, handler);
+    };
   }, [fetchFolders]);
 
   return {

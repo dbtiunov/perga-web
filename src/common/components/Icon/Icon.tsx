@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { icons } from './icons/icons.tsx';
+import { icons } from './icons/icons';
 
 type IconName = keyof typeof icons;
 
