@@ -1,5 +1,6 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import { ToastContext, ToastContextValue, ToastMessage } from './ToastContext.types';
+
+import { ToastContext, ToastContextType, ToastMessage } from '@common/contexts/toast/ToastContext.types.ts';
 
 const ToastItem: React.FC<{ message: ToastMessage; onClose: (id: number) => void }> = ({
   message,
@@ -39,7 +40,7 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     setMessages((prev) => prev.filter((message) => message.id !== id));
   }, []);
 
-  const showToast: ToastContextValue['showToast'] = useCallback(
+  const showToast: ToastContextType['showToast'] = useCallback(
     (text, type = 'info', durationMs = 4000) => {
       // Generate a reasonably unique id
       const id = Date.now() + Math.random();
@@ -48,7 +49,7 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     [],
   );
 
-  const showError: ToastContextValue['showError'] = useCallback(
+  const showError: ToastContextType['showError'] = useCallback(
     (text, durationMs = 4000) => {
       showToast(text, 'error', durationMs);
     },

@@ -4,7 +4,7 @@ import { Icon } from '@common/components/Icon';
 import { NotesFoldersNote } from '@notes/components/NotesFolders/NotesFoldersNote/NotesFoldersNote';
 import { NotesFoldersItem } from '@notes/components/NotesFolders/NotesFoldersItem/NotesFoldersItem';
 import { NotesFoldersTrash } from '@notes/components/NotesFolders/NotesFoldersTrash/NotesFoldersTrash';
-import { useNotes } from '@notes/hooks/useNotes';
+import { useNotes } from '@notes/context';
 
 export const NotesFolders: React.FC = () => {
   const {
@@ -19,6 +19,8 @@ export const NotesFolders: React.FC = () => {
     handleMoveNote,
     handleMoveNoteToTrash,
     handleEmptyTrash,
+    selectedNoteId,
+    setSelectedNoteId,
   } = useNotes();
   const [isCreating, setIsCreating] = useState(false);
   const [newFolderName, setNewFolderName] = useState('');
@@ -71,12 +73,7 @@ export const NotesFolders: React.FC = () => {
   };
 
   return (
-    <div
-      className={`space-y-4 px-4 py-5 h-full ${isDragHover ? 'bg-bg-hover ring-2 ring-blue-500 rounded' : ''}`}
-      onDragOver={onDragOver}
-      onDragLeave={onDragLeave}
-      onDrop={onDrop}
-    >
+    <div className='px-4 py-5 h-full flex flex-col'>
       <div className="flex items-center space-x-2 mb-4">
         <button
           onClick={() => handleCreateNote(rootFolder?.id)}
@@ -132,6 +129,8 @@ export const NotesFolders: React.FC = () => {
             onCreateNote={handleCreateNote}
             onMoveFolderToTrash={handleMoveFolderToTrash}
             onMoveNoteToTrash={handleMoveNoteToTrash}
+            onSelectNote={setSelectedNoteId}
+            selectedNoteId={selectedNoteId}
             onMoveFolder={handleMoveFolder}
             onMoveNote={handleMoveNote}
           />
@@ -142,7 +141,8 @@ export const NotesFolders: React.FC = () => {
             note={note}
             onRename={handleRenameNote}
             onMoveToTrash={handleMoveNoteToTrash}
-            className="ml-6"
+            onSelect={setSelectedNoteId}
+            isSelected={note.id === selectedNoteId}
           />
         ))}
       </div>
@@ -153,10 +153,20 @@ export const NotesFolders: React.FC = () => {
           onEmptyTrash={handleEmptyTrash}
           onMoveFolderToTrash={handleMoveFolderToTrash}
           onMoveNoteToTrash={handleMoveNoteToTrash}
+          onSelectNote={setSelectedNoteId}
+          selectedNoteId={selectedNoteId}
           onMoveFolder={handleMoveFolder}
           onMoveNote={handleMoveNote}
         />
       )}
+
+      <div
+        className={`h-full ${isDragHover ? 'bg-bg-hover ring-2 ring-blue-500 rounded' : ''}`}
+        onDragOver={onDragOver}
+        onDragLeave={onDragLeave}
+        onDrop={onDrop}
+      >
+      </div>
     </div>
   );
 };

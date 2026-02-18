@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { useToast } from '@contexts/hooks/useToast';
+import { useToast } from '@common/contexts/toast/useToast.ts';
 
 import type { PlannerItemStateDTO, PlannerDayItemDTO } from '@api/planner';
 import {

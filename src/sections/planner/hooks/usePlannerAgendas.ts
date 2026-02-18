@@ -13,7 +13,7 @@ import {
 } from '@api/planner';
 import { REFRESH_EVENT } from '@common/events';
 import { formatDateForAPI, formatDateMonthName } from '@common/utils/date_utils';
-import { useToast } from '@contexts/hooks/useToast';
+import { useToast } from '@common/contexts/toast/useToast.ts';
 
 export const usePlannerAgendas = (selectedDate: Date) => {
   const [plannerAgendas, setPlannerAgendas] = useState<PlannerAgendaDTO[]>([]);

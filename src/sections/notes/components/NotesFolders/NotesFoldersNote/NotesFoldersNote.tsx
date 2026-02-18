@@ -8,6 +8,8 @@ interface FoldersNoteProps {
   note: NoteDTO;
   onRename: (id: number, title: string) => Promise<void>;
   onMoveToTrash: (id: number) => Promise<void>;
+  onSelect: (id: number) => void;
+  isSelected?: boolean;
   className?: string;
 }
 
@@ -15,6 +17,8 @@ export const NotesFoldersNote = ({
   note,
   onRename,
   onMoveToTrash,
+  onSelect,
+  isSelected = false,
   className = '',
 }: FoldersNoteProps) => {
   const [isEditing, setIsEditing] = useState(false);
@@ -61,7 +65,8 @@ export const NotesFoldersNote = ({
     <div
       draggable
       onDragStart={onDragStart}
-      className={`mb-1 flex items-center justify-between hover:bg-bg-hover rounded text-text-main cursor-pointer group ${className}`}
+      onClick={() => onSelect(note.id)}
+      className={`mb-1 flex items-center justify-between hover:bg-bg-hover rounded text-text-main cursor-pointer group ${isSelected ? 'bg-bg-hover' : ''} ${className}`}
     >
       {isEditing ? (
         <input

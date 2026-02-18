@@ -9,9 +9,9 @@ export interface ToastMessage {
   duration?: number;
 }
 
-export interface ToastContextValue {
+export interface ToastContextType {
   showToast: (text: string, type?: ToastType, durationMs?: number) => void;
   showError: (text: string, durationMs?: number) => void;
 }
 
-export const ToastContext = createContext<ToastContextValue | undefined>(undefined);
+export const ToastContext = createContext<ToastContextType | undefined>(undefined);

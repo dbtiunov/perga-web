@@ -16,6 +16,8 @@ interface FoldersItemProps {
   onRenameNote: (id: number, title: string) => Promise<void>;
   onMoveNote: (noteId: number, folderId: number | null) => Promise<void>;
   onMoveNoteToTrash: (id: number) => Promise<void>;
+  onSelectNote: (id: number) => void;
+  selectedNoteId: number | null;
   wrapperClass?: string;
 }
 
@@ -28,6 +30,8 @@ export const NotesFoldersItem = ({
   onCreateNote,
   onMoveFolderToTrash,
   onMoveNoteToTrash,
+  onSelectNote,
+  selectedNoteId,
   onMoveFolder,
   onMoveNote,
   wrapperClass = '',
@@ -276,6 +280,8 @@ export const NotesFoldersItem = ({
                   onCreateNote={onCreateNote}
                   onMoveFolderToTrash={onMoveFolderToTrash}
                   onMoveNoteToTrash={onMoveNoteToTrash}
+                  onSelectNote={onSelectNote}
+                  selectedNoteId={selectedNoteId}
                   onMoveFolder={onMoveFolder}
                   onMoveNote={onMoveNote}
                   wrapperClass="ml-6"
@@ -288,6 +294,8 @@ export const NotesFoldersItem = ({
                   note={note}
                   onRename={onRenameNote}
                   onMoveToTrash={onMoveNoteToTrash}
+                  onSelect={onSelectNote}
+                  isSelected={note.id === selectedNoteId}
                   className="ml-6"
                 />
               ))}

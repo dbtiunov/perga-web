@@ -7,12 +7,16 @@ interface TrashItemProps {
   folder: NotesFolderResponseDTO;
   onMoveFolder: (folderId: number, parentId: number | null) => Promise<void>;
   onMoveNote: (noteId: number, folderId: number | null) => Promise<void>;
+  onSelectNote: (id: number) => void;
+  selectedNoteId: number | null;
 }
 
 export const NotesFoldersTrashItem: React.FC<TrashItemProps> = ({
   folder,
   onMoveFolder,
   onMoveNote,
+  onSelectNote,
+  selectedNoteId,
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -45,6 +49,8 @@ export const NotesFoldersTrashItem: React.FC<TrashItemProps> = ({
                 folder={subfolder}
                 onMoveFolder={onMoveFolder}
                 onMoveNote={onMoveNote}
+                onSelectNote={onSelectNote}
+                selectedNoteId={selectedNoteId}
               />
             ))}
           {folder.notes &&
@@ -56,7 +62,8 @@ export const NotesFoldersTrashItem: React.FC<TrashItemProps> = ({
                   e.dataTransfer.setData('dragType', 'note');
                   e.dataTransfer.setData('dragId', note.id.toString());
                 }}
-                className="ml-8 mb-3 flex items-center p-2 hover:bg-bg-hover rounded text-text-main cursor-pointer"
+                onClick={() => onSelectNote(note.id)}
+                className={`ml-8 mb-3 flex items-center p-2 hover:bg-bg-hover rounded text-text-main cursor-pointer ${note.id === selectedNoteId ? 'bg-bg-hover' : ''}`}
               >
                 <Icon name="note" size="16" fill="currentColor" className="mr-2 opacity-70" />
                 <span className="truncate">{note.title || 'Untitled Note'}</span>

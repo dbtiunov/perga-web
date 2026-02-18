@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 
-import type { NotesFolderResponseDTO } from '@api/notes';
+import type { NotesFolderResponseDTO, NoteDTO } from '@api/notes';
 import {
   getFolders,
   createFolder,
@@ -11,9 +11,10 @@ import {
 } from '@api/notes';
 import { REFRESH_EVENT } from '@common/events';
 
-export const useNotes = () => {
+export const useNotesState = () => {
   const [rootFolder, setRootFolder] = useState<NotesFolderResponseDTO | null>(null);
   const [trashFolder, setTrashFolder] = useState<NotesFolderResponseDTO | null>(null);
+  const [selectedNoteId, setSelectedNoteId] = useState<number | null>(null);
 
   const fetchFolders = useCallback(async () => {
     try {
@@ -142,6 +143,43 @@ export const useNotes = () => {
     [fetchFolders],
   );
 
+  const findNoteById = useCallback(
+    (folder: NotesFolderResponseDTO, id: number): NoteDTO | null => {
+      const note = folder.notes.find((n) => n.id === id);
+      if (note){
+        return note;
+      }
+
+      for (const subfolder of folder.subfolders) {
+        const found = findNoteById(subfolder, id);
+        if (found){
+          return found;
+        }
+      }
+
+      return null;
+    },
+    [],
+  );
+
+  const selectedNote =
+    selectedNoteId
+      ? (rootFolder && findNoteById(rootFolder, selectedNoteId)) ||
+        (trashFolder && findNoteById(trashFolder, selectedNoteId))
+      : null;
+
+  const handleUpdateNote = useCallback(
+    async (noteId: number, title: string | null, body: string) => {
+      try {
+        await updateNote(noteId, { title, body });
+        await fetchFolders();
+      } catch (error) {
+        console.error('Error updating note:', error);
+      }
+    },
+    [fetchFolders],
+  );
+
   // Refresh listener
   useEffect(() => {
     const handler = () => {
@@ -162,8 +200,12 @@ export const useNotes = () => {
     handleMoveFolderToTrash,
     handleCreateNote,
     handleRenameNote,
+    handleUpdateNote,
     handleMoveNote,
     handleMoveNoteToTrash,
     handleEmptyTrash,
+    setSelectedNoteId,
+    selectedNote,
+    selectedNoteId,
   };
 };

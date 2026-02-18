@@ -17,7 +17,7 @@ import {
   getUser,
   updatePassword,
 } from '@api/auth';
-import { AuthContext } from './AuthContext.types';
+import { AuthContext } from './AuthContext.types.ts';
 
 interface AuthProviderProps {
   children: ReactNode;

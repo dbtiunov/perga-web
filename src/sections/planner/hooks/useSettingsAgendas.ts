@@ -9,7 +9,7 @@ import {
   reorderPlannerAgendas,
 } from '@api/planner';
 import { REFRESH_EVENT } from '@common/events';
-import { useToast } from '@contexts/hooks/useToast';
+import { useToast } from '@common/contexts/toast/useToast.ts';
 
 export const useSettingsAgendas = () => {
   const [settingsAgendas, setSettingsAgendas] = useState<PlannerAgendaDTO[]>([]);

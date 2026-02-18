@@ -24,7 +24,6 @@
       "@api/*": ["src/api/*"],
       "@assets/*": ["src/assets/*"],
       "@common/*": ["src/common/*"],
-      "@contexts/*": ["src/contexts/*"],
 
       "@sections/*": ["src/sections/*"],
       "@auth/*": ["src/sections/auth/*"],

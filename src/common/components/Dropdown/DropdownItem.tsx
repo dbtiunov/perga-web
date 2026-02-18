@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { useDropdown } from './DropdownContext';
+import { useDropdown } from './useDropdown';
 
 interface DropdownItemProps {
   onClick: (e: React.MouseEvent) => void;

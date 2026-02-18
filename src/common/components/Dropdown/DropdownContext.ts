@@ -1,11 +1,7 @@
-import { createContext, useContext } from 'react';
+import { createContext } from 'react';
 
-interface DropdownContextProps {
+interface DropdownContextType {
   close: () => void;
 }
 
-export const DropdownContext = createContext<DropdownContextProps | undefined>(undefined);
-
-export const useDropdown = () => {
-  return useContext(DropdownContext);
-};
+export const DropdownContext = createContext<DropdownContextType | undefined>(undefined);
