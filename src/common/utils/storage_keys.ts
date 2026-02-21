@@ -15,4 +15,6 @@ export enum StorageKeys {
 
   // Notes
   NotesLeftPaneWidth = 'notes:leftPaneWidth',
+  NotesExpandedFolders = 'notes:expandedFolders',
+  NotesSelectedNoteId = 'notes:selectedNoteId',
 }

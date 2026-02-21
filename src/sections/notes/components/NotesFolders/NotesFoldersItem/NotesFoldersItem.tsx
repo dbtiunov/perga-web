@@ -3,6 +3,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import type { NotesFolderResponseDTO } from '@api/notes';
 import { Dropdown, DropdownItem } from '@common/components/Dropdown';
 import { Icon } from '@common/components/Icon';
+import { StorageKeys } from '@common/utils/storage_keys';
 import { NotesFoldersNote } from '@notes/components/NotesFolders/NotesFoldersNote/NotesFoldersNote';
 
 interface FoldersItemProps {
@@ -37,7 +38,30 @@ export const NotesFoldersItem = ({
   wrapperClass = '',
 }: FoldersItemProps) => {
   const [isEditing, setIsEditing] = useState(false);
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(() => {
+    const saved = localStorage.getItem(StorageKeys.NotesExpandedFolders);
+    if (saved) {
+      const expandedFolders = JSON.parse(saved) as number[];
+      return expandedFolders.includes(folder.id);
+    }
+    return false;
+  });
+
+  useEffect(() => {
+    const saved = localStorage.getItem(StorageKeys.NotesExpandedFolders);
+    let expandedFolders: number[] = saved ? (JSON.parse(saved) as number[]) : [];
+
+    if (isExpanded) {
+      if (!expandedFolders.includes(folder.id)) {
+        expandedFolders.push(folder.id);
+      }
+    } else {
+      expandedFolders = expandedFolders.filter((expandedFolderId) => expandedFolderId !== folder.id);
+    }
+
+    localStorage.setItem(StorageKeys.NotesExpandedFolders, JSON.stringify(expandedFolders));
+  }, [isExpanded, folder.id]);
+
   const [isCreatingSubfolder, setIsCreatingSubfolder] = useState(false);
   const [isDragHover, setIsDragHover] = useState(false);
   const [renamevalue, setRenamevalue] = useState(folder.name);

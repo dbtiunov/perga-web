@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
+import { StorageKeys } from '@common/utils/storage_keys';
 import type { NotesFolderResponseDTO } from '@api/notes';
 import { Dropdown, DropdownItem } from '@common/components/Dropdown';
 import { Icon } from '@common/components/Icon';
@@ -26,7 +27,30 @@ export const NotesFoldersTrash: React.FC<TrashProps> = ({
   onSelectNote,
   selectedNoteId,
 }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(() => {
+    const saved = localStorage.getItem(StorageKeys.NotesExpandedFolders);
+    if (saved) {
+      const expandedFolders = JSON.parse(saved) as number[];
+      return expandedFolders.includes(folder.id);
+    }
+    return false;
+  });
+
+  useEffect(() => {
+    const saved = localStorage.getItem(StorageKeys.NotesExpandedFolders);
+    let expandedFolders: number[] = saved ? (JSON.parse(saved) as number[]) : [];
+
+    if (isExpanded) {
+      if (!expandedFolders.includes(folder.id)) {
+        expandedFolders.push(folder.id);
+      }
+    } else {
+      expandedFolders = expandedFolders.filter((expandedFolderId) => expandedFolderId !== folder.id);
+    }
+
+    localStorage.setItem(StorageKeys.NotesExpandedFolders, JSON.stringify(expandedFolders));
+  }, [isExpanded, folder.id]);
+
   const [isDragOver, setIsDragOver] = useState(false);
 
   const onDragOver = (e: React.DragEvent) => {

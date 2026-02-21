@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { StorageKeys } from '@common/utils/storage_keys';
 
 import type { NotesFolderResponseDTO, NoteDTO } from '@api/notes';
 import {
@@ -15,8 +16,19 @@ import { REFRESH_EVENT } from '@common/events';
 export const useNotesState = () => {
   const [rootFolder, setRootFolder] = useState<NotesFolderResponseDTO | null>(null);
   const [trashFolder, setTrashFolder] = useState<NotesFolderResponseDTO | null>(null);
-  const [selectedNoteId, setSelectedNoteId] = useState<number | null>(null);
+  const [selectedNoteId, setSelectedNoteId] = useState<number | null>(() => {
+    const saved = localStorage.getItem(StorageKeys.NotesSelectedNoteId);
+    return saved ? parseInt(saved, 10) : null;
+  });
   const [fetchedNote, setFetchedNote] = useState<NoteDTO | null>(null);
+
+  useEffect(() => {
+    if (selectedNoteId) {
+      localStorage.setItem(StorageKeys.NotesSelectedNoteId, selectedNoteId.toString());
+    } else {
+      localStorage.removeItem(StorageKeys.NotesSelectedNoteId);
+    }
+  }, [selectedNoteId]);
 
   const fetchFolders = useCallback(async () => {
     try {
