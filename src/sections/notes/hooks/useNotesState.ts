@@ -5,6 +5,7 @@ import {
   getFolders,
   createFolder,
   updateFolder,
+  getNote,
   createNote,
   updateNote,
   emptyTrash,
@@ -15,6 +16,7 @@ export const useNotesState = () => {
   const [rootFolder, setRootFolder] = useState<NotesFolderResponseDTO | null>(null);
   const [trashFolder, setTrashFolder] = useState<NotesFolderResponseDTO | null>(null);
   const [selectedNoteId, setSelectedNoteId] = useState<number | null>(null);
+  const [fetchedNote, setFetchedNote] = useState<NoteDTO | null>(null);
 
   const fetchFolders = useCallback(async () => {
     try {
@@ -29,6 +31,23 @@ export const useNotesState = () => {
   useEffect(() => {
     void fetchFolders();
   }, [fetchFolders]);
+
+  const fetchNoteContent = useCallback(async (noteId: number) => {
+    try {
+      const response = await getNote(noteId);
+      setFetchedNote(response.data);
+    } catch (error) {
+      console.error('Error fetching note content:', error);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (selectedNoteId) {
+      void fetchNoteContent(selectedNoteId);
+    } else {
+      setFetchedNote(null);
+    }
+  }, [selectedNoteId, fetchNoteContent]);
 
   const handleMoveFolderToTrash = useCallback(
     async (folderId: number) => {
@@ -163,21 +182,26 @@ export const useNotesState = () => {
   );
 
   const selectedNote =
-    selectedNoteId
-      ? (rootFolder && findNoteById(rootFolder, selectedNoteId)) ||
-        (trashFolder && findNoteById(trashFolder, selectedNoteId))
-      : null;
+    selectedNoteId === fetchedNote?.id
+      ? fetchedNote
+      : selectedNoteId
+        ? (rootFolder && findNoteById(rootFolder, selectedNoteId)) ||
+          (trashFolder && findNoteById(trashFolder, selectedNoteId))
+        : null;
 
   const handleUpdateNote = useCallback(
     async (noteId: number, title: string | null, body: string) => {
       try {
-        await updateNote(noteId, { title, body });
+        const response = await updateNote(noteId, { title, body });
+        if (fetchedNote?.id === noteId) {
+          setFetchedNote(response.data);
+        }
         await fetchFolders();
       } catch (error) {
         console.error('Error updating note:', error);
       }
     },
-    [fetchFolders],
+    [fetchFolders, fetchedNote],
   );
 
   // Refresh listener
