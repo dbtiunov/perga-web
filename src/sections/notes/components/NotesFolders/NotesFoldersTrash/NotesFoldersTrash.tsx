@@ -85,9 +85,9 @@ export const NotesFoldersTrash: React.FC<TrashProps> = ({
       className={`${isDragOver ? 'bg-bg-hover ring-2 ring-red-500 rounded' : ''}`}
     >
       <div className="mb-3 cursor-pointer flex items-center justify-between hover:bg-bg-hover rounded text-text-main group">
-        <div className="flex items-center flex-1 p-2" onClick={() => setIsExpanded(!isExpanded)}>
-          <Icon name="trash" size="16" className="mr-2" />
-          <span>{folder.name}</span>
+        <div className="flex items-center flex-1 p-2 max-w-4/5" onClick={() => setIsExpanded(!isExpanded)}>
+          <Icon name="trash" size="16" className="mr-2 shrink-0" />
+          <span className="truncate">{folder.name}</span>
         </div>
 
         <Dropdown
@@ -129,7 +129,7 @@ export const NotesFoldersTrash: React.FC<TrashProps> = ({
                   onClick={() => onSelectNote(note.id)}
                   className={`ml-4 mb-3 flex items-center p-2 hover:bg-bg-hover rounded text-text-main cursor-pointer ${note.id === selectedNoteId ? 'bg-bg-hover' : ''}`}
                 >
-                  <Icon name="note" size="16" fill="currentColor" className="mr-2 opacity-70" />
+                  <Icon name="note" size="16" fill="currentColor" className="mr-2 opacity-70 shrink-0" />
                   <span className="truncate">{note.title || 'Untitled Note'}</span>
                 </div>
               ))}

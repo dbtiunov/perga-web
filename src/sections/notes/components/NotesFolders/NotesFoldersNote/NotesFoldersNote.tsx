@@ -79,8 +79,8 @@ export const NotesFoldersNote = ({
           className="flex-1 bg-transparent border-none focus:outline-none focus:ring-0 p-2"
         />
       ) : (
-        <div className="flex items-center flex-1 p-2">
-          <Icon name="note" size="16" fill="currentColor" className="mr-2 opacity-70" />
+        <div className="flex items-center flex-1 p-2 max-w-4/5">
+          <Icon name="note" size="16" fill="currentColor" className="mr-2 opacity-70 shrink-0" />
           <span className="truncate">{note.title || 'Untitled Note'}</span>
         </div>
       )}

@@ -224,12 +224,12 @@ export const NotesFoldersItem = ({
             className="flex-1 bg-transparent border-none focus:outline-none focus:ring-0 p-2"
           />
         ) : (
-          <div className="flex items-center flex-1 p-2" onClick={() => setIsExpanded(!isExpanded)}>
-            <div className={`mr-2 transform transition-transform ${isExpanded ? 'rotate-90' : ''}`}>
+          <div className="flex items-center flex-1 p-2 max-w-4/5" onClick={() => setIsExpanded(!isExpanded)}>
+            <div className={`mr-2 transform transition-transform shrink-0 ${isExpanded ? 'rotate-90' : ''}`}>
               <Icon name="rightChevron" size="24" className="h-4 w-4" />
             </div>
-            <Icon name="folder" size="14" fill="currentColor" className="mr-2" />
-            <span>{folder.name}</span>
+            <Icon name="folder" size="14" fill="currentColor" className="mr-2 shrink-0" />
+            <span className="truncate">{folder.name}</span>
           </div>
         )}
 

@@ -5,17 +5,22 @@ import Placeholder from '@tiptap/extension-placeholder';
 import Underline from '@tiptap/extension-underline';
 
 import type { NoteDTO } from '@api/notes';
-import { NotesEditorMenuBar } from './NotesEditorMenuBar/NotesEditorMenuBar.tsx';
-import './notes_editor.css';
+import { NotesEditorMenuBar } from '@notes/components/NotesEditor/NotesEditorMenuBar/NotesEditorMenuBar.tsx';
+import { useNotesDebounceUpdate } from '@notes/components/NotesEditor/useNotesDebounceUpdate';
+import '@notes/components/NotesEditor/notes_editor.css';
 
 interface NotesEditorProps {
   note: NoteDTO | null;
-  onUpdate: (id: number, title: string | null, body: string) => Promise<void>;
+  onUpdate: (id: number, title: string | undefined, body: string | undefined) => Promise<void>;
 }
 
 export const NotesEditor: React.FC<NotesEditorProps> = ({ note, onUpdate }) => {
   const [title, setTitle] = useState(note?.title || '');
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const lastSyncedNoteIdRef = useRef<number | undefined>(undefined);
+  const { debounceUpdate, hasPendingUpdate, clearDebounceTimer  } = useNotesDebounceUpdate({
+    note,
+    onUpdate,
+  });
 
   const editor = useEditor({
     extensions: [
@@ -26,8 +31,8 @@ export const NotesEditor: React.FC<NotesEditorProps> = ({ note, onUpdate }) => {
       Underline,
     ],
     content: note?.body || '',
-    onUpdate: ({ editor }) => {
-      handleBodyChange(editor.getHTML());
+    onUpdate: () => {
+      handleBodyChange();
     },
     editorProps: {
       attributes: {
@@ -37,38 +42,37 @@ export const NotesEditor: React.FC<NotesEditorProps> = ({ note, onUpdate }) => {
     },
   });
 
+  // extract note values for using in dependencies
+  const editorHTML = editor?.getHTML();
+  const noteId = note?.id;
+  const noteTitle = note?.title;
+  const noteBody = note?.body;
+
+  // sync external changes to editor
   useEffect(() => {
-    setTitle(note?.title || '');
-    if (editor && note?.body !== editor.getHTML()) {
-      editor.commands.setContent(note?.body || '');
+    // update values if user switched note or there is no pending update
+    if (lastSyncedNoteIdRef.current !== noteId || !hasPendingUpdate) {
+      setTitle(noteTitle || '');
+
+      //
+      const normalizedNoteBody = noteBody || '';
+      const normalizedEditorHTML = editorHTML || '';
+      if (editor && normalizedNoteBody !== normalizedEditorHTML) {
+        editor.commands.setContent(normalizedNoteBody);
+        lastSyncedNoteIdRef.current = noteId;
+      }
     }
 
-    return () => {
-      if (timerRef.current) {
-        clearTimeout(timerRef.current);
-      }
-    };
-  }, [note?.id, note?.title, note?.body, editor]);
+  }, [noteId, noteTitle, noteBody, editor, editorHTML, hasPendingUpdate, clearDebounceTimer]);
 
   const handleTitleChange = (newTitle: string) => {
     setTitle(newTitle);
-    debounceUpdate(newTitle, editor?.getHTML() || '');
+    debounceUpdate(newTitle, undefined);
   };
 
-  const handleBodyChange = (newBody: string) => {
-    debounceUpdate(title, newBody);
-  };
-
-  const debounceUpdate = (newTitle: string, newBody: string) => {
-    if (timerRef.current) {
-      clearTimeout(timerRef.current);
-    }
-
-    if (note) {
-      timerRef.current = setTimeout(() => {
-        void onUpdate(note.id, newTitle || null, newBody);
-      }, 1000);
-    }
+  const handleBodyChange = () => {
+    const newBody = editor?.getHTML() || '';
+    debounceUpdate(undefined, newBody);
   };
 
   if (!note) {

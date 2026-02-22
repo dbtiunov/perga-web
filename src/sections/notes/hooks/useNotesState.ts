@@ -202,7 +202,7 @@ export const useNotesState = () => {
         : null;
 
   const handleUpdateNote = useCallback(
-    async (noteId: number, title: string | null, body: string) => {
+    async (noteId: number, title: string | undefined, body: string | undefined) => {
       try {
         const response = await updateNote(noteId, { title, body });
         if (fetchedNote?.id === noteId) {
