@@ -11,11 +11,11 @@ interface FoldersItemProps {
   regularFolders: NotesFolderResponseDTO[];
   onCreateSubfolder: (name: string, parentId: number) => Promise<void>;
   onRenameFolder: (id: number, name: string) => Promise<void>;
-  onMoveFolder: (folderId: number, parentId: number | null) => Promise<void>;
+  onMoveFolder: (folderId: number, parentId: number) => Promise<void>;
   onMoveFolderToTrash: (id: number) => Promise<void>;
   onCreateNote: (folderId: number) => Promise<void>;
   onRenameNote: (id: number, title: string) => Promise<void>;
-  onMoveNote: (noteId: number, folderId: number | null) => Promise<void>;
+  onMoveNote: (noteId: number, folderId: number) => Promise<void>;
   onMoveNoteToTrash: (id: number) => Promise<void>;
   onSelectNote: (id: number) => void;
   selectedNoteId: number | null;
@@ -264,8 +264,7 @@ export const NotesFoldersItem = ({
               setIsExpanded(true);
             }}
           >
-            <Icon name="notePlus" size={14} className="h-4 w-4 mr-2" fill="currentColor" /> Create
-            note
+            <Icon name="notePlus" size={14} className="h-4 w-4 mr-2" fill="currentColor" /> Create note
           </DropdownItem>
           <DropdownItem onClick={handleTrash}>
             <Icon name="trash" size={14} className="h-4 w-4 mr-2" /> Move to trash

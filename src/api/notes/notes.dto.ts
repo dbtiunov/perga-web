@@ -1,27 +1,27 @@
 export interface NoteDTO {
   id: number;
-  index: number;
-  title: string | null;
+  folder_id: number;
+  title: string;
   body: string;
-  folder_id: number | null;
+  updated_dt: string;
 }
 
+export type NoteMetaDTO = Omit<NoteDTO, 'body'>
+
 export interface NoteCreateDTO {
-  title?: string | null;
-  body: string;
-  folder_id?: number | null;
+  folder_id: number;
+  title?: string;
+  body?: string;
 }
 
 export interface NoteUpdateDTO {
-  title?: string | null;
-  body?: string | null;
-  index?: number | null;
-  folder_id?: number | null;
+  folder_id?: number;
+  title?: string;
+  body?: string;
 }
 
 export interface NotesFolderDTO {
   id: number;
-  index: number;
   name: string;
   parent_id: number | null;
   folder_type: 'regular' | 'root' | 'trash';
@@ -29,22 +29,20 @@ export interface NotesFolderDTO {
 
 export interface NotesFolderCreateDTO {
   name: string;
-  parent_id?: number | null;
+  parent_id?: number;
 }
 
 export interface NotesFolderUpdateDTO {
-  name?: string | null;
-  index?: number | null;
-  parent_id?: number | null;
+  name?: string;
+  parent_id?: number;
 }
 
 export interface NotesFolderResponseDTO {
   id: number;
-  parent_id: number;
+  parent_id: number | null; // null - in case of root or trash folders
   folder_type: string;
   name: string;
-  index: number;
-  notes: NoteDTO[];
+  notes: NoteMetaDTO[];
   subfolders: NotesFolderResponseDTO[];
 }
 

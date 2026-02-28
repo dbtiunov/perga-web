@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 
-import { StorageKeys } from '@common/utils/storage_keys';
 import type { NotesFolderResponseDTO } from '@api/notes';
 import { Dropdown, DropdownItem } from '@common/components/Dropdown';
 import { Icon } from '@common/components/Icon';
+import { StorageKeys } from '@common/utils/storage_keys';
 import { NotesFoldersTrashItem } from '@notes/components/NotesFolders/NotesFoldersTrash/NotesFoldersTrashItem/NotesFoldersTrashItem';
 
 interface TrashProps {
@@ -11,8 +11,8 @@ interface TrashProps {
   onEmptyTrash: () => Promise<void>;
   onMoveFolderToTrash: (id: number) => Promise<void>;
   onMoveNoteToTrash: (id: number) => Promise<void>;
-  onMoveFolder: (folderId: number, parentId: number | null) => Promise<void>;
-  onMoveNote: (noteId: number, folderId: number | null) => Promise<void>;
+  onMoveFolder: (folderId: number, parentId: number) => Promise<void>;
+  onMoveNote: (noteId: number, folderId: number) => Promise<void>;
   onSelectNote: (id: number) => void;
   selectedNoteId: number | null;
 }

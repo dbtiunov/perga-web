@@ -6,8 +6,8 @@ import { Icon } from '@common/components/Icon';
 
 interface TrashItemProps {
   folder: NotesFolderResponseDTO;
-  onMoveFolder: (folderId: number, parentId: number | null) => Promise<void>;
-  onMoveNote: (noteId: number, folderId: number | null) => Promise<void>;
+  onMoveFolder: (folderId: number, parentId: number) => Promise<void>;
+  onMoveNote: (noteId: number, folderId: number) => Promise<void>;
   onSelectNote: (id: number) => void;
   selectedNoteId: number | null;
 }

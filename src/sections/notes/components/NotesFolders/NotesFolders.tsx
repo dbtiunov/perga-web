@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 
 import { Icon } from '@common/components/Icon';
-import { NotesFoldersNote } from '@notes/components/NotesFolders/NotesFoldersNote/NotesFoldersNote';
 import { NotesFoldersItem } from '@notes/components/NotesFolders/NotesFoldersItem/NotesFoldersItem';
+import { NotesFoldersNote } from '@notes/components/NotesFolders/NotesFoldersNote/NotesFoldersNote';
 import { NotesFoldersTrash } from '@notes/components/NotesFolders/NotesFoldersTrash/NotesFoldersTrash';
 import { useNotes } from '@notes/context';
 
@@ -34,6 +34,11 @@ export const NotesFolders: React.FC = () => {
   }, [isCreating]);
 
   const handleCreateSubmit = async () => {
+    if (!rootFolder) {
+      console.error("Can't create new folder: root folder not found");
+      return;
+    }
+
     if (newFolderName.trim()) {
       await handleCreateFolder(newFolderName.trim(), rootFolder?.id);
     }
@@ -62,13 +67,18 @@ export const NotesFolders: React.FC = () => {
   const onDrop = (e: React.DragEvent) => {
     e.preventDefault();
     setIsDragHover(false);
+
+    if (!rootFolder) {
+      console.error("Can't drag to root folder: root folder not found.");
+      return;
+    }
+
     const dragType = e.dataTransfer.getData('dragType');
     const dragId = parseInt(e.dataTransfer.getData('dragId'), 10);
-
     if (dragType === 'folder') {
-      void handleMoveFolder(dragId, rootFolder ? rootFolder.id : null);
+      void handleMoveFolder(dragId, rootFolder.id);
     } else if (dragType === 'note') {
-      void handleMoveNote(dragId, rootFolder ? rootFolder.id : null);
+      void handleMoveNote(dragId, rootFolder.id);
     }
   };
 
@@ -76,7 +86,7 @@ export const NotesFolders: React.FC = () => {
     <div className='px-4 py-5 h-full flex flex-col'>
       <div className="flex items-center space-x-2 mb-4">
         <button
-          onClick={() => handleCreateNote(rootFolder?.id)}
+          onClick={() => rootFolder && handleCreateNote(rootFolder.id)}
           className="flex-1 flex items-center justify-center p-2 text-sm text-text-main hover:bg-bg-hover rounded border border-border-main transition-colors"
           title="Add Note"
           aria-label="Add Note"

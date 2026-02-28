@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { StorageKeys } from '@common/utils/storage_keys';
 
-import type { NotesFolderResponseDTO, NoteDTO } from '@api/notes';
+import type { NotesFolderResponseDTO, NoteDTO, NoteMetaDTO } from '@api/notes';
 import {
   getFolders,
   createFolder,
@@ -90,7 +90,7 @@ export const useNotesState = () => {
   );
 
   const handleCreateFolder = useCallback(
-    async (name: string, parentId: number | null = null) => {
+    async (name: string, parentId: number) => {
       try {
         await createFolder({ name, parent_id: parentId });
         await fetchFolders();
@@ -102,7 +102,7 @@ export const useNotesState = () => {
   );
 
   const handleCreateNote = useCallback(
-    async (folderId: number | null = null) => {
+    async (folderId: number) => {
       try {
         await createNote({ body: '', folder_id: folderId });
         await fetchFolders();
@@ -139,7 +139,7 @@ export const useNotesState = () => {
   }, [fetchFolders]);
 
   const handleMoveFolder = useCallback(
-    async (folderId: number, parentId: number | null) => {
+    async (folderId: number, parentId: number) => {
       try {
         await updateFolder(folderId, { parent_id: parentId });
         await fetchFolders();
@@ -151,7 +151,7 @@ export const useNotesState = () => {
   );
 
   const handleMoveNote = useCallback(
-    async (noteId: number, folderId: number | null) => {
+    async (noteId: number, folderId: number) => {
       try {
         await updateNote(noteId, { folder_id: folderId });
         await fetchFolders();
@@ -175,7 +175,7 @@ export const useNotesState = () => {
   );
 
   const findNoteById = useCallback(
-    (folder: NotesFolderResponseDTO, id: number): NoteDTO | null => {
+    (folder: NotesFolderResponseDTO, id: number): NoteMetaDTO | null => {
       const note = folder.notes.find((n) => n.id === id);
       if (note){
         return note;
@@ -196,10 +196,7 @@ export const useNotesState = () => {
   const selectedNote =
     selectedNoteId === fetchedNote?.id
       ? fetchedNote
-      : selectedNoteId
-        ? (rootFolder && findNoteById(rootFolder, selectedNoteId)) ||
-          (trashFolder && findNoteById(trashFolder, selectedNoteId))
-        : null;
+      : null;
 
   const handleUpdateNote = useCallback(
     async (noteId: number, title: string | undefined, body: string | undefined) => {

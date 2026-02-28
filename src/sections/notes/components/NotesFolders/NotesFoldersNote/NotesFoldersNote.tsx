@@ -1,11 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
 
-import type { NoteDTO } from '@api/notes';
+import type { NoteMetaDTO } from '@api/notes';
 import { Dropdown, DropdownItem } from '@common/components/Dropdown';
 import { Icon } from '@common/components/Icon';
 
 interface FoldersNoteProps {
-  note: NoteDTO;
+  note: NoteMetaDTO;
   onRename: (id: number, title: string) => Promise<void>;
   onMoveToTrash: (id: number) => Promise<void>;
   onSelect: (id: number) => void;
