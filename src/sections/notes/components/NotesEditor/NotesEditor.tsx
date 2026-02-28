@@ -54,7 +54,6 @@ export const NotesEditor: React.FC<NotesEditorProps> = ({ note, onUpdate }) => {
     if (lastSyncedNoteIdRef.current !== noteId || !hasPendingUpdate) {
       setTitle(noteTitle || '');
 
-      //
       const normalizedNoteBody = noteBody || '';
       const normalizedEditorHTML = editorHTML || '';
       if (editor && normalizedNoteBody !== normalizedEditorHTML) {
@@ -71,7 +70,11 @@ export const NotesEditor: React.FC<NotesEditorProps> = ({ note, onUpdate }) => {
   };
 
   const handleBodyChange = () => {
-    const newBody = editor?.getHTML() || '';
+    if (!editor) {
+      return;
+    }
+
+    const newBody = editor.getHTML();
     debounceUpdate(undefined, newBody);
   };
 

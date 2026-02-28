@@ -211,7 +211,7 @@ export const NotesFoldersItem = ({
         onDragOver={onDragOver}
         onDragLeave={onDragLeave}
         onDrop={onDrop}
-        className={`mb-3 cursor-pointer flex items-center justify-between hover:bg-bg-hover rounded text-text-main group ${isDragHover ? 'bg-bg-hover ring-2 ring-blue-500' : ''}`}
+        className={`mb-1 cursor-pointer flex items-center justify-between hover:bg-bg-hover rounded text-text-main group ${isDragHover ? 'bg-bg-hover ring-2 ring-blue-500' : ''}`}
       >
         {isEditing ? (
           <input

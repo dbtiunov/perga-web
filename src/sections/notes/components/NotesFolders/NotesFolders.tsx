@@ -124,7 +124,7 @@ export const NotesFolders: React.FC = () => {
           rootFolder &&
           rootFolder.subfolders.length === 0 &&
           rootFolder.notes.length === 0 && (
-            <div className="">
+            <div className="mb-4">
               <p className="text-sm text-text-main/60">No notes here yet</p>
             </div>
           )}

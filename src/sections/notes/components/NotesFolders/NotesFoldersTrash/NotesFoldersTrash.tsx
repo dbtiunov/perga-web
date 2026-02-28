@@ -84,7 +84,7 @@ export const NotesFoldersTrash: React.FC<TrashProps> = ({
       onDrop={onDrop}
       className={`${isDragOver ? 'bg-bg-hover ring-2 ring-red-500 rounded' : ''}`}
     >
-      <div className="mb-3 cursor-pointer flex items-center justify-between hover:bg-bg-hover rounded text-text-main group">
+      <div className="mb-1 cursor-pointer flex items-center justify-between hover:bg-bg-hover rounded text-text-main group">
         <div className="flex items-center flex-1 p-2 max-w-4/5" onClick={() => setIsExpanded(!isExpanded)}>
           <Icon name="trash" size="16" className="mr-2 shrink-0" />
           <span className="truncate">{folder.name}</span>

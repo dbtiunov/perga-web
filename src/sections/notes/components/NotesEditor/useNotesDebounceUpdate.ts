@@ -11,8 +11,8 @@ export const useNotesDebounceUpdate = ({ note, onUpdate }: UseNotesDebounceUpdat
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const lastValuesRef = useRef({
     noteId: note?.id,
-    title: note?.title || '',
-    body: note?.body || '',
+    title: note?.title,
+    body: note?.body,
   });
 
   const noteId = note?.id;
@@ -25,13 +25,13 @@ export const useNotesDebounceUpdate = ({ note, onUpdate }: UseNotesDebounceUpdat
       // reset ref values if selected note changed
       lastValuesRef.current = {
         noteId: noteId,
-        title: noteTitle || '',
-        body: noteBody || '',
+        title: noteTitle,
+        body: noteBody,
       };
     } else if (!timerRef.current) {
       // sync with props if there is no pending update
-      lastValuesRef.current.title = noteTitle || '';
-      lastValuesRef.current.body = noteBody || '';
+      lastValuesRef.current.title = noteTitle;
+      lastValuesRef.current.body = noteBody;
     }
   }, [noteId, noteTitle, noteBody]);
 
@@ -42,10 +42,11 @@ export const useNotesDebounceUpdate = ({ note, onUpdate }: UseNotesDebounceUpdat
 
     if (newTitle !== undefined && newTitle !== lastValuesRef.current.title) {
       lastValuesRef.current.title = newTitle;
+      lastValuesRef.current.body = undefined;
       changed = true;
-    }
-    if (newBody !== undefined && newBody !== lastValuesRef.current.body) {
+    } else if (newBody !== undefined && newBody !== lastValuesRef.current.body) {
       lastValuesRef.current.body = newBody;
+      lastValuesRef.current.title = undefined;
       changed = true;
     }
 
@@ -63,7 +64,7 @@ export const useNotesDebounceUpdate = ({ note, onUpdate }: UseNotesDebounceUpdat
 
         // Ensure we are still editing the same note
         if (currentNoteId === note.id) {
-          void onUpdate(note.id, currentTitle !== undefined ? currentTitle : undefined, currentBody !== undefined ? currentBody : undefined);
+          void onUpdate(note.id, currentTitle, currentBody);
         }
         timerRef.current = null;
       }, 1000);
@@ -84,7 +85,7 @@ export const useNotesDebounceUpdate = ({ note, onUpdate }: UseNotesDebounceUpdat
 
         // Ensure we are still editing the same note
         if (currentNoteId === note.id) {
-          void onUpdate(note.id, currentTitle !== undefined ? currentTitle : undefined, currentBody !== undefined ? currentBody : undefined);
+          void onUpdate(note.id, currentTitle, currentBody);
         }
         timerRef.current = null;
       }
