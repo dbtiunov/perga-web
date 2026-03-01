@@ -3,6 +3,8 @@ import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Placeholder from '@tiptap/extension-placeholder';
 import Underline from '@tiptap/extension-underline';
+import { TaskItem, TaskList } from '@tiptap/extension-list'
+import HorizontalRule from '@tiptap/extension-horizontal-rule';
 
 import type { NoteDTO } from '@api/notes';
 import { NotesEditorMenuBar } from '@notes/components/NotesEditor/NotesEditorMenuBar/NotesEditorMenuBar.tsx';
@@ -29,6 +31,11 @@ export const NotesEditor: React.FC<NotesEditorProps> = ({ note, onUpdate }) => {
         placeholder: 'Start writing...',
       }),
       Underline,
+      TaskList,
+      TaskItem.configure({
+        nested: true,
+      }),
+      HorizontalRule,
     ],
     content: note?.body || '',
     onUpdate: () => {

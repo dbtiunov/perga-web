@@ -26,6 +26,12 @@ export const NotesEditorMenuBar: React.FC<MenuBarProps> = ({ editor }) => {
       isActive: editor.isActive('italic'),
     },
     {
+      icon: 'underline' as keyof typeof editorIcons,
+      title: 'Underline',
+      action: () => editor.chain().focus().toggleUnderline().run(),
+      isActive: editor.isActive('underline'),
+    },
+    {
       icon: 'strike' as keyof typeof editorIcons,
       title: 'Strike',
       action: () => editor.chain().focus().toggleStrike().run(),
@@ -56,6 +62,12 @@ export const NotesEditorMenuBar: React.FC<MenuBarProps> = ({ editor }) => {
       isActive: editor.isActive('orderedList'),
     },
     {
+      icon: 'todoList' as keyof typeof editorIcons,
+      title: 'Todo List',
+      action: () => editor.chain().focus().toggleTaskList().run(),
+      isActive: editor.isActive('taskList'),
+    },
+    {
       icon: 'blockquote' as keyof typeof editorIcons,
       title: 'Blockquote',
       action: () => editor.chain().focus().toggleBlockquote().run(),
@@ -66,6 +78,12 @@ export const NotesEditorMenuBar: React.FC<MenuBarProps> = ({ editor }) => {
       title: 'Code Block',
       action: () => editor.chain().focus().toggleCodeBlock().run(),
       isActive: editor.isActive('codeBlock'),
+    },
+    {
+      icon: 'horizontalRule' as keyof typeof editorIcons,
+      title: 'Horizontal Line',
+      action: () => editor.chain().focus().setHorizontalRule().run(),
+      isActive: false,
     },
     {
       icon: 'undo' as keyof typeof editorIcons,
@@ -79,12 +97,6 @@ export const NotesEditorMenuBar: React.FC<MenuBarProps> = ({ editor }) => {
       action: () => editor.chain().focus().redo().run(),
       isActive: false,
     },
-    {
-      icon: 'underline' as keyof typeof editorIcons,
-      title: 'Underline',
-      action: () => editor.chain().focus().toggleUnderline().run(),
-      isActive: editor.isActive('underline'),
-    },
   ];
 
   return (
@@ -97,6 +109,7 @@ export const NotesEditorMenuBar: React.FC<MenuBarProps> = ({ editor }) => {
           className={`p-1.5 rounded hover:bg-bg-hover transition-colors ${
             btn.isActive ? 'bg-bg-hover text-text-main' : 'text-text-muted'
           }`}
+          tabIndex={-1}
         >
           {React.cloneElement(editorIcons[btn.icon], {
             size: 18,

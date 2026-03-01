@@ -1,6 +1,7 @@
 import {
   Bold,
   Italic,
+  Underline,
   Strikethrough,
   Heading1,
   Heading2,
@@ -10,7 +11,8 @@ import {
   Code,
   Undo,
   Redo,
-  Underline,
+  ListTodo,
+  Minus,
 } from 'lucide-react';
 
 export const editorIcons = {
@@ -21,8 +23,10 @@ export const editorIcons = {
   h2: <Heading2 />,
   bulletList: <List />,
   orderedList: <ListOrdered />,
+  todoList: <ListTodo />,
   blockquote: <Quote />,
   codeBlock: <Code />,
+  horizontalRule: <Minus />,
   undo: <Undo />,
   redo: <Redo />,
   underline: <Underline />,
