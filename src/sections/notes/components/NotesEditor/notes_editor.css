@@ -69,3 +69,9 @@
   border-radius: 0.5rem;
   overflow-x: auto;
 }
+
+.tiptap a {
+  cursor: pointer;
+  color: var(--text-link);
+  text-decoration: underline;
+}

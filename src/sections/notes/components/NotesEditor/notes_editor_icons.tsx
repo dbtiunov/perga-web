@@ -13,6 +13,7 @@ import {
   Redo,
   ListTodo,
   Minus,
+  Link,
 } from 'lucide-react';
 
 export const editorIcons = {
@@ -30,4 +31,5 @@ export const editorIcons = {
   undo: <Undo />,
   redo: <Redo />,
   underline: <Underline />,
+  link: <Link />,
 };

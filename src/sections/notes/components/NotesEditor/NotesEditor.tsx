@@ -3,6 +3,7 @@ import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Placeholder from '@tiptap/extension-placeholder';
 import Underline from '@tiptap/extension-underline';
+import Link from '@tiptap/extension-link';
 import { TaskItem, TaskList } from '@tiptap/extension-list'
 import HorizontalRule from '@tiptap/extension-horizontal-rule';
 
@@ -31,6 +32,11 @@ export const NotesEditor: React.FC<NotesEditorProps> = ({ note, onUpdate }) => {
         placeholder: 'Start writing...',
       }),
       Underline,
+      Link.configure({
+        openOnClick: false,
+        autolink: true,
+        defaultProtocol: 'https',
+      }),
       TaskList,
       TaskItem.configure({
         nested: true,

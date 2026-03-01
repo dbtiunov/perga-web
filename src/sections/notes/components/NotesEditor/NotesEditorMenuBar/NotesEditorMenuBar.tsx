@@ -12,6 +12,25 @@ export const NotesEditorMenuBar: React.FC<MenuBarProps> = ({ editor }) => {
     return null;
   }
 
+  const setLink = () => {
+    const previousUrl = editor.getAttributes('link').href;
+    const url = window.prompt('URL', previousUrl);
+
+    // cancelled
+    if (url === null) {
+      return;
+    }
+
+    // empty
+    if (url === '') {
+      editor.chain().focus().extendMarkRange('link').unsetLink().run();
+      return;
+    }
+
+    // update link
+    editor.chain().focus().extendMarkRange('link').setLink({ href: url }).run();
+  };
+
   const buttons = [
     {
       icon: 'bold' as keyof typeof editorIcons,
@@ -36,6 +55,12 @@ export const NotesEditorMenuBar: React.FC<MenuBarProps> = ({ editor }) => {
       title: 'Strike',
       action: () => editor.chain().focus().toggleStrike().run(),
       isActive: editor.isActive('strike'),
+    },
+    {
+      icon: 'link' as keyof typeof editorIcons,
+      title: 'Link',
+      action: setLink,
+      isActive: editor.isActive('link'),
     },
     {
       icon: 'h1' as keyof typeof editorIcons,
