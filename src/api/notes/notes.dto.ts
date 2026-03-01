@@ -6,7 +6,7 @@ export interface NoteDTO {
   updated_dt: string;
 }
 
-export type NoteMetaDTO = Omit<NoteDTO, 'body'>
+export type NoteMetaDTO = Omit<NoteDTO, 'body'>;
 
 export interface NoteCreateDTO {
   folder_id: number;

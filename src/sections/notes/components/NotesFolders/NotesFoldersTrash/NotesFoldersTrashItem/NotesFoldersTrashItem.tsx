@@ -37,7 +37,9 @@ export const NotesFoldersTrashItem: React.FC<TrashItemProps> = ({
         expandedFolders.push(folder.id);
       }
     } else {
-      expandedFolders = expandedFolders.filter((expandedFolderId) => expandedFolderId !== folder.id);
+      expandedFolders = expandedFolders.filter(
+        (expandedFolderId) => expandedFolderId !== folder.id,
+      );
     }
 
     localStorage.setItem(StorageKeys.NotesExpandedFolders, JSON.stringify(expandedFolders));
@@ -56,7 +58,9 @@ export const NotesFoldersTrashItem: React.FC<TrashItemProps> = ({
         className={`mb-3 cursor-pointer flex items-center p-2 hover:bg-bg-hover rounded text-text-main group`}
         onClick={() => setIsExpanded(!isExpanded)}
       >
-        <div className={`mr-2 transform transition-transform shrink-0 ${isExpanded ? 'rotate-90' : ''}`}>
+        <div
+          className={`mr-2 transform transition-transform shrink-0 ${isExpanded ? 'rotate-90' : ''}`}
+        >
           <Icon name="rightChevron" size="24" className="h-4 w-4" />
         </div>
         <Icon name="folder" size="14" fill="currentColor" className="mr-2 opacity-70 shrink-0" />
@@ -88,7 +92,12 @@ export const NotesFoldersTrashItem: React.FC<TrashItemProps> = ({
                 onClick={() => onSelectNote(note.id)}
                 className={`ml-8 mb-3 flex items-center p-2 hover:bg-bg-hover rounded text-text-main cursor-pointer ${note.id === selectedNoteId ? 'bg-bg-hover' : ''}`}
               >
-                <Icon name="note" size="16" fill="currentColor" className="mr-2 opacity-70 shrink-0" />
+                <Icon
+                  name="note"
+                  size="16"
+                  fill="currentColor"
+                  className="mr-2 opacity-70 shrink-0"
+                />
                 <span className="truncate">{note.title || 'Untitled Note'}</span>
               </div>
             ))}

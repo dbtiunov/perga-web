@@ -83,7 +83,7 @@ export const NotesFolders: React.FC = () => {
   };
 
   return (
-    <div className='px-4 py-5 h-full flex flex-col'>
+    <div className="px-4 py-5 h-full flex flex-col">
       <div className="flex items-center space-x-2 mb-4">
         <button
           onClick={() => rootFolder && handleCreateNote(rootFolder.id)}
@@ -175,8 +175,7 @@ export const NotesFolders: React.FC = () => {
         onDragOver={onDragOver}
         onDragLeave={onDragLeave}
         onDrop={onDrop}
-      >
-      </div>
+      ></div>
     </div>
   );
 };

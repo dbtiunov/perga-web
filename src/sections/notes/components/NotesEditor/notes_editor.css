@@ -15,18 +15,18 @@
   padding-left: 1rem;
 }
 
-.tiptap ul[data-type=taskList] {
+.tiptap ul[data-type='taskList'] {
   list-style: none;
   padding-left: 0;
 }
-.tiptap ul[data-type=taskList] li {
+.tiptap ul[data-type='taskList'] li {
   align-items: center;
   display: flex;
 }
-.tiptap ul[data-type=taskList] li label {
+.tiptap ul[data-type='taskList'] li label {
   cursor: pointer;
 }
-.tiptap ul[data-type=taskList] li div {
+.tiptap ul[data-type='taskList'] li div {
   margin-bottom: 5px;
   margin-left: 10px;
 }

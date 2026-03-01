@@ -177,13 +177,13 @@ export const useNotesState = () => {
   const findNoteById = useCallback(
     (folder: NotesFolderResponseDTO, id: number): NoteMetaDTO | null => {
       const note = folder.notes.find((n) => n.id === id);
-      if (note){
+      if (note) {
         return note;
       }
 
       for (const subfolder of folder.subfolders) {
         const found = findNoteById(subfolder, id);
-        if (found){
+        if (found) {
           return found;
         }
       }
@@ -193,10 +193,7 @@ export const useNotesState = () => {
     [],
   );
 
-  const selectedNote =
-    selectedNoteId === fetchedNote?.id
-      ? fetchedNote
-      : null;
+  const selectedNote = selectedNoteId === fetchedNote?.id ? fetchedNote : null;
 
   const handleUpdateNote = useCallback(
     async (noteId: number, title: string | undefined, body: string | undefined) => {

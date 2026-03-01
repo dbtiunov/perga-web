@@ -4,7 +4,7 @@ import StarterKit from '@tiptap/starter-kit';
 import Placeholder from '@tiptap/extension-placeholder';
 import Underline from '@tiptap/extension-underline';
 import Link from '@tiptap/extension-link';
-import { TaskItem, TaskList } from '@tiptap/extension-list'
+import { TaskItem, TaskList } from '@tiptap/extension-list';
 import HorizontalRule from '@tiptap/extension-horizontal-rule';
 
 import type { NoteDTO } from '@api/notes';
@@ -20,7 +20,7 @@ interface NotesEditorProps {
 export const NotesEditor: React.FC<NotesEditorProps> = ({ note, onUpdate }) => {
   const [title, setTitle] = useState(note?.title || '');
   const lastSyncedNoteIdRef = useRef<number | undefined>(undefined);
-  const { debounceUpdate, hasPendingUpdate, clearDebounceTimer  } = useNotesDebounceUpdate({
+  const { debounceUpdate, hasPendingUpdate, clearDebounceTimer } = useNotesDebounceUpdate({
     note,
     onUpdate,
   });
@@ -74,7 +74,6 @@ export const NotesEditor: React.FC<NotesEditorProps> = ({ note, onUpdate }) => {
         lastSyncedNoteIdRef.current = noteId;
       }
     }
-
   }, [noteId, noteTitle, noteBody, editor, editorHTML, hasPendingUpdate, clearDebounceTimer]);
 
   const handleTitleChange = (newTitle: string) => {
