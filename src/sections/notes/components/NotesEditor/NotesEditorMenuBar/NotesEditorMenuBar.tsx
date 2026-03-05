@@ -75,6 +75,18 @@ export const NotesEditorMenuBar: React.FC<MenuBarProps> = ({ editor }) => {
       isActive: editor.isActive('heading', { level: 2 }),
     },
     {
+      icon: 'h3' as keyof typeof editorIcons,
+      title: 'Heading 3',
+      action: () => editor.chain().focus().toggleHeading({ level: 3 }).run(),
+      isActive: editor.isActive('heading', { level: 3 }),
+    },
+    {
+      icon: 'h4' as keyof typeof editorIcons,
+      title: 'Heading 4',
+      action: () => editor.chain().focus().toggleHeading({ level: 4 }).run(),
+      isActive: editor.isActive('heading', { level: 4 }),
+    },
+    {
       icon: 'bulletList' as keyof typeof editorIcons,
       title: 'Bullet List',
       action: () => editor.chain().focus().toggleBulletList().run(),

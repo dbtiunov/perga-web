@@ -70,11 +70,12 @@ export const NotesEditor: React.FC<NotesEditorProps> = ({ note, onUpdate }) => {
   useEffect(() => {
     // update values if user switched note or there is no pending update
     if (lastSyncedNoteIdRef.current !== noteId || !hasPendingUpdate) {
-      setTitle(noteTitle || '');
-
       // normalize vars that can be various types for comparing
+      const normalizedNoteTitle = noteTitle || '';
       const normalizedNoteBody = noteBody || '';
       const normalizedEditorMarkdown = editorMarkdown || '';
+
+      setTitle(normalizedNoteTitle);
       if (editor && normalizedNoteBody !== normalizedEditorMarkdown) {
         editor.commands.setContent(normalizedNoteBody);
         lastSyncedNoteIdRef.current = noteId;
