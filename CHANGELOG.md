@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.1.0] - 2026-03-01
+
+### Added
+
+- Notes section and API
+- Dropdown, TwoPaneLayout components
+
+### Changed
+
+- Refactored API structure
+- Refactored contexts
+
 ## [1.0.5] - 2026-01-11
 
 ### Fixed
