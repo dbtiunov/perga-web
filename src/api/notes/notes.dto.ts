@@ -1,0 +1,52 @@
+export interface NoteDTO {
+  id: number;
+  folder_id: number;
+  title: string;
+  body: string;
+  updated_dt: string;
+}
+
+export type NoteMetaDTO = Omit<NoteDTO, 'body'>;
+
+export interface NoteCreateDTO {
+  folder_id: number;
+  title?: string;
+  body?: string;
+}
+
+export interface NoteUpdateDTO {
+  folder_id?: number;
+  title?: string;
+  body?: string;
+}
+
+export interface NotesFolderDTO {
+  id: number;
+  name: string;
+  parent_id: number | null;
+  folder_type: 'regular' | 'root' | 'trash';
+}
+
+export interface NotesFolderCreateDTO {
+  name: string;
+  parent_id?: number;
+}
+
+export interface NotesFolderUpdateDTO {
+  name?: string;
+  parent_id?: number;
+}
+
+export interface NotesFolderResponseDTO {
+  id: number;
+  parent_id: number | null; // null - in case of root or trash folders
+  folder_type: string;
+  name: string;
+  notes: NoteMetaDTO[];
+  subfolders: NotesFolderResponseDTO[];
+}
+
+export interface NotesFoldersResponseSchemaDTO {
+  root_folder: NotesFolderResponseDTO;
+  trash_folder: NotesFolderResponseDTO;
+}

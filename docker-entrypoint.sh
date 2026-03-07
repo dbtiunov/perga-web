@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # Defaults (can be overridden by environment)
-: "${API_BASE_URL:=http://localhost:8000}"
+: "${API_BASE_URL:=http://localhost:8080}"
 : "${IS_SIGNUP_DISABLED:=false}"
 
 # Ensure boolean strings like true/True/1 and false/False/0

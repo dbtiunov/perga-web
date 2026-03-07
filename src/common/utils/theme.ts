@@ -1,5 +1,5 @@
 import Storage from '@common/utils/storage';
-import { StorageKeys } from '@common/utils/storage_keys.ts';
+import { StorageKeys } from '@common/utils/storage_keys';
 
 export function applyThemeClass(isDark: boolean): void {
   if (typeof document === 'undefined') {

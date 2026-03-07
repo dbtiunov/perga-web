@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { Outlet } from 'react-router-dom';
 
-import Sidebar from '@sections/Sidebar';
+import { ToastProvider } from '@common/contexts/toast';
 import MobileHeader from '@sections/MobileHeader';
-import { ToastProvider } from '@contexts/ToastContext';
+import Sidebar from '@sections/Sidebar';
 
 const Layout = () => {
   const [isSidebarVisible, setIsSidebarVisible] = useState(false);

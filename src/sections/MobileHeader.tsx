@@ -1,5 +1,6 @@
 import { useLocation } from 'react-router-dom';
-import { Icon } from '@common/Icon';
+
+import { Icon } from '@common/components/Icon';
 
 interface MobileHeaderProps {
   toggleSidebar: () => void;

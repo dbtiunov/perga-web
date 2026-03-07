@@ -9,6 +9,7 @@ body {
   padding: 0;
   width: 100%;
   height: 100%;
+  background-color: var(--bg-main);
 }
 
 body {
@@ -49,6 +50,7 @@ button {
   /* Text */
   --text-main: oklch(44.6% 0.03 256.802); /* gray-600 */
   --text-muted: oklch(70.7% 0.022 261.325); /* gray-400 */
+  --text-link: oklch(54.6% 0.245 262.881); /* blue-600 */
 
   --text-sidebar: oklch(87.2% 0.01 258.338); /* gray-300 */
   --text-sidebar-hover: oklch(96.7% 0.003 264.542); /* gray-100 */
@@ -74,6 +76,7 @@ button {
 
   --text-main: oklch(96.7% 0.003 264.542); /* gray-100 */
   --text-muted: oklch(70.7% 0.022 261.325); /* gray-400 */
+  --text-link: oklch(70.7% 0.165 254.624); /* blue-400 */
 
   --border-settings-sidebar: oklch(27.8% 0.033 256.848); /* gray-800 */
 }
@@ -92,6 +95,7 @@ button {
 
   --color-text-main: var(--text-main);
   --color-text-muted: var(--text-muted);
+  --color-link: var(--text-link);
   --color-text-sidebar: var(--text-sidebar);
   --color-text-sidebar-hover: var(--text-sidebar-hover);
   --color-text-settings-sidebar-active: var(--text-settings-sidebar-active);

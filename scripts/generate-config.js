@@ -1,25 +1,25 @@
-import fs from "fs";
-import path from "path";
-import dotenv from "dotenv";
+import fs from 'fs';
+import path from 'path';
+import dotenv from 'dotenv';
 
 dotenv.config();
 
-const templatePath = path.resolve("config.json.template");
-const outputPath = path.resolve("public/config.json");
+const templatePath = path.resolve('config.json.template');
+const outputPath = path.resolve('public/config.json');
 
 // Safe defaults for build-time. Runtime can override via docker-entrypoint.
 const DEFAULTS = {
-  API_BASE_URL: "http://localhost:8080/api/v1",
-  IS_SIGNUP_DISABLED: "false",
+  API_BASE_URL: 'http://localhost:8080/api/v1',
+  IS_SIGNUP_DISABLED: 'false',
 };
 
 function normalizeBooleanString(value) {
-  if (value === null){
+  if (value === null) {
     return null;
   }
 
   const cleaned_value = String(value).trim().toLowerCase();
-  if (!["true", "True", "1", "false", "False", "0"].includes(cleaned_value)) {
+  if (!['true', 'True', '1', 'false', 'False', '0'].includes(cleaned_value)) {
     return null;
   }
 
@@ -27,15 +27,15 @@ function normalizeBooleanString(value) {
 }
 
 // Read template and insert vars from env or defaults
-let template = fs.readFileSync(templatePath, "utf-8");
+let template = fs.readFileSync(templatePath, 'utf-8');
 template = template.replace(/\$\{(\w+)}/g, (_, key) => {
   let value = process.env[key];
 
-  if (["IS_SIGNUP_DISABLED"].includes(key)) {
+  if (['IS_SIGNUP_DISABLED'].includes(key)) {
     value = normalizeBooleanString(value);
   }
 
-  if (value === undefined || value === null || value === "") {
+  if (value === undefined || value === null || value === '') {
     value = DEFAULTS[key];
   }
 
@@ -46,4 +46,4 @@ template = template.replace(/\$\{(\w+)}/g, (_, key) => {
 fs.mkdirSync(path.dirname(outputPath), { recursive: true });
 fs.writeFileSync(outputPath, template);
 
-console.log("File /public/config.json generated from template");
+console.log('File /public/config.json generated from template');

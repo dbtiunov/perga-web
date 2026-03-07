@@ -2,11 +2,11 @@ import type React from 'react';
 import { useEffect, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
-import { useAuth } from '@contexts/hooks/useAuth.ts';
-import { Icon } from '@common/Icon';
+import { Icon } from '@common/components/Icon';
+import { useAuth } from '@common/contexts/auth/useAuth.ts';
 import { triggerRefresh } from '@common/events';
 import Storage from '@common/utils/storage';
-import { StorageKeys } from '@common/utils/storage_keys.ts';
+import { StorageKeys } from '@common/utils/storage_keys';
 import { applyThemeClass } from '@common/utils/theme';
 
 const Sidebar = () => {
@@ -48,6 +48,11 @@ const Sidebar = () => {
       path: '/planner/',
       label: 'Planner',
       icon: <Icon name="planner" size="20" fill="white" className="h-8 w-8" />,
+    },
+    {
+      path: '/notes/',
+      label: 'Notes',
+      icon: <Icon name="note" size="20" fill="white" className="h-8 w-8" />,
     },
   ];
 

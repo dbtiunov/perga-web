@@ -1,14 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import {
-  updateUser,
-  type UserUpdate,
-  updatePassword,
-  type UpdatePasswordRequest,
-  type WeekStartDay,
-} from '@api/auth.ts';
-import { REFRESH_EVENT } from '@common/events.ts';
-import { useAuth } from '@contexts/hooks/useAuth.ts';
-import { useToast } from '@contexts/hooks/useToast.ts';
+
+import type { UserUpdateDTO, UpdatePasswordDTO, WeekStartDayDTO } from '@api/auth';
+import { updateUser, updatePassword } from '@api/auth';
+import { REFRESH_EVENT } from '@common/events';
+import { useAuth } from '@common/contexts/auth/useAuth.ts';
+import { useToast } from '@common/contexts/toast/useToast.ts';
 
 const SettingsProfile: React.FC = () => {
   const { user, fetchUser } = useAuth();
@@ -16,7 +12,7 @@ const SettingsProfile: React.FC = () => {
 
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
-  const [weekStartDay, setWeekStartDay] = useState<WeekStartDay>('monday');
+  const [weekStartDay, setWeekStartDay] = useState<WeekStartDayDTO>('monday');
   const [isUpdatingSettings, setIsUpdatingSettings] = useState(false);
   const [hasChanges, setHasChanges] = useState(false);
 
@@ -67,7 +63,7 @@ const SettingsProfile: React.FC = () => {
     try {
       setIsUpdatingSettings(true);
 
-      const settingsData: UserUpdate = {
+      const settingsData: UserUpdateDTO = {
         username: username !== user?.username ? username : undefined,
         email: email !== user?.email ? email : undefined,
         week_start_day: weekStartDay !== user?.week_start_day ? weekStartDay : undefined,
@@ -100,7 +96,7 @@ const SettingsProfile: React.FC = () => {
         return;
       }
 
-      const payload: UpdatePasswordRequest = {
+      const payload: UpdatePasswordDTO = {
         current_password: currentPassword,
         new_password: newPassword,
       };

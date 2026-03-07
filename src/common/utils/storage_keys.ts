@@ -9,7 +9,12 @@ export enum StorageKeys {
   IsDarkThemeEnabled = 'ui:isDarkThemeEnabled',
 
   // Planner
-  SelectedDate = 'planner:selectedDate',
-  CollapsedAgendas = 'planner:collapsedAgendas',
-  LeftPaneWidth = 'planner:leftPaneWidth',
+  PlannerSelectedDate = 'planner:selectedDate',
+  PlannerCollapsedAgendas = 'planner:collapsedAgendas',
+  PlannerLeftPaneWidth = 'planner:leftPaneWidth',
+
+  // Notes
+  NotesLeftPaneWidth = 'notes:leftPaneWidth',
+  NotesExpandedFolders = 'notes:expandedFolders',
+  NotesSelectedNoteId = 'notes:selectedNoteId',
 }

@@ -1,25 +1,32 @@
 import React, { useEffect } from 'react';
 
-import { PlannerAgenda, PlannerAgendaItem } from '@api/planner_agendas';
-import { PlannerItemState } from '@/api/planner_base.ts';
-import { Icon } from '@common/Icon.tsx';
-import AgendaItem from '@planner/components/PlannerAgendas/AgendaItem/AgendaItem.tsx';
-import { useCollapsedAgendas } from '@planner/hooks/useCollapsedAgendas.ts';
-import AgendaActionsDropdown from '@planner/components/PlannerAgendas/AgendaActionsDropdown';
-import {formatDateMonthName} from "@common/utils/date_utils.ts";
+import type {
+  PlannerItemStateDTO,
+  PlannerAgendaDTO,
+  PlannerAgendaItemDTO,
+  PlannerAgendaActionDTO,
+} from '@api/planner';
+import { actionPlannerAgenda } from '@api/planner';
+import { Dropdown, DropdownItem } from '@common/components/Dropdown';
+import { Icon } from '@common/components/Icon';
+import { formatDateMonthName } from '@common/utils/date_utils';
+import { useToast } from '@common/contexts/toast/useToast.ts';
+import AgendaItem from '@planner/components/PlannerAgendas/PlannerAgendaItem/PlannerAgendaItem';
+import { AGENDA_ACTION_LABELS } from '@planner/const';
+import { useCollapsedAgendas } from '@planner/hooks/useCollapsedAgendas';
 
-interface PlannerAgendasProps {
-  plannerAgendas: PlannerAgenda[];
-  plannerAgendaItems: Record<number, PlannerAgendaItem[]>;
-  dragAgendaItem: PlannerAgendaItem | null;
-  onDragStartAgendaItem: (item: PlannerAgendaItem) => void;
+interface AgendasProps {
+  plannerAgendas: PlannerAgendaDTO[];
+  plannerAgendaItems: Record<number, PlannerAgendaItemDTO[]>;
+  dragAgendaItem: PlannerAgendaItemDTO | null;
+  onDragStartAgendaItem: (item: PlannerAgendaItemDTO) => void;
   onDragEndAgendaItem: () => void;
-  onReorderAgendaItems: (agendaId: number, items: PlannerAgendaItem[]) => void;
+  onReorderAgendaItems: (agendaId: number, items: PlannerAgendaItemDTO[]) => void;
   onAddAgendaItem: (agendaId: number, text: string) => void;
   onUpdateAgendaItem: (
     itemId: number,
     agendaId: number,
-    changes: { text?: string; state?: PlannerItemState },
+    changes: { text?: string; state?: PlannerItemStateDTO },
   ) => void;
   onDeleteAgendaItem: (itemId: number, agendaId: number) => void;
   onCopyAgendaItem: (itemId: number, toAgendaId: number) => void;
@@ -27,14 +34,14 @@ interface PlannerAgendasProps {
   onCopyAgendaItemToDay?: (date: Date, text: string) => void;
   selectedDate: Date;
   copyAgendasMap: {
-    currentMonth: PlannerAgenda;
-    nextMonth: PlannerAgenda;
-    customAgendas: PlannerAgenda[];
+    currentMonth: PlannerAgendaDTO;
+    nextMonth: PlannerAgendaDTO;
+    customAgendas: PlannerAgendaDTO[];
   };
   fetchAgendaItems: (agendaIds: number[]) => Promise<void> | void;
 }
 
-const PlannerAgendas: React.FC<PlannerAgendasProps> = ({
+const PlannerAgendas: React.FC<AgendasProps> = ({
   plannerAgendas,
   plannerAgendaItems,
   dragAgendaItem,
@@ -80,8 +87,20 @@ const PlannerAgendas: React.FC<PlannerAgendasProps> = ({
 
   const selectedMonthName = formatDateMonthName(selectedDate);
 
+  const { showError } = useToast();
+
+  const handleAction = async (agenda: PlannerAgendaDTO, action: PlannerAgendaActionDTO) => {
+    try {
+      await actionPlannerAgenda(agenda.id, action);
+      await fetchAgendaItems([agenda.id]);
+    } catch (e) {
+      console.error('Agenda action failed', e);
+      showError('Failed to perform action');
+    }
+  };
+
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 px-8 py-5">
       {plannerAgendas
         .filter((agenda) => agenda.agenda_type === 'custom' || agenda.name === selectedMonthName)
         .map((agenda) => (
@@ -102,9 +121,23 @@ const PlannerAgendas: React.FC<PlannerAgendasProps> = ({
                 <h3>{agenda.name}</h3>
               </button>
 
-              <div className="p-2 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
-                <AgendaActionsDropdown agenda={agenda} fetchAgendaItems={fetchAgendaItems} />
-              </div>
+              <Dropdown
+                buttonIcon={<Icon name="dots" size={20} className="h-6 w-6" />}
+                buttonTitle="Agenda actions"
+                buttonClassName="p-2 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity"
+                className="inline-flex"
+                dropdownClassName="w-56 mt-8"
+              >
+                {(Object.keys(AGENDA_ACTION_LABELS) as PlannerAgendaActionDTO[]).map((action) => (
+                  <DropdownItem
+                    key={action}
+                    onClick={() => handleAction(agenda, action)}
+                    className="py-3"
+                  >
+                    {AGENDA_ACTION_LABELS[action]}
+                  </DropdownItem>
+                ))}
+              </Dropdown>
             </div>
 
             {!collapsedAgendas[agenda.id] && (

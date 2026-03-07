@@ -1,0 +1,110 @@
+import React, { useMemo } from 'react';
+
+import { Dropdown } from '@common/components/Dropdown';
+import { Icon } from '@common/components/Icon';
+import {
+  formatDateForDisplay,
+  formatDateWeekDayShort,
+  getNextDay,
+  getPrevDay,
+  isSameDay,
+} from '@common/utils/date_utils';
+import PlannerCalendar from '@planner/components/PlannerCalendar/PlannerCalendar';
+import { DATE_SELECTOR_DAYS_COUNT } from '@planner/const';
+
+interface DateSelectorProps {
+  selectedDate: Date;
+  onDateChange: (date: Date) => void;
+}
+
+const PlannerDateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onDateChange }) => {
+  const datesList = useMemo(() => {
+    const count = Math.max(1, DATE_SELECTOR_DAYS_COUNT);
+    const half = Math.floor(count / 2);
+    const dates: Date[] = [];
+
+    // Start from selectedDate - half, move forward
+    const start = new Date(selectedDate);
+    start.setDate(start.getDate() - half);
+    for (let i = 0; i < count; i++) {
+      const date = new Date(start);
+      date.setDate(start.getDate() + i);
+      dates.push(date);
+    }
+    return dates;
+  }, [selectedDate]);
+
+  const handlePickDate = (date: Date) => {
+    onDateChange(date);
+  };
+
+  return (
+    <div className="p-5 flex items-center gap-3 text-text-main justify-center">
+      {/* Left arrow */}
+      <button
+        onClick={() => onDateChange(getPrevDay(selectedDate))}
+        className="mt-1"
+        aria-label="Previous day"
+        title="Previous day"
+      >
+        <div className="transform rotate-180">
+          <Icon name="rightChevron" size={20} />
+        </div>
+      </button>
+
+      {/* Dates */}
+      <div className="flex items-center justify-center gap-2">
+        {datesList.map((date) => {
+          const isSelected = isSameDay(date, selectedDate);
+          const dayLabel = formatDateWeekDayShort(date);
+          const dateLabel = date.getDate();
+
+          return (
+            <button
+              key={date.toLocaleDateString()}
+              onClick={() => !isSameDay(date, selectedDate) && onDateChange(date)}
+              className={`flex flex-col items-center justify-center h-12 w-10
+                   ${isSelected ? 'text-text-main' : 'text-text-muted'}`}
+              aria-current={isSelected ? 'date' : undefined}
+              title={formatDateForDisplay(date)}
+            >
+              <span className={`text-2xs md:text-xs ${isSelected ? 'font-semibold' : ''}`}>
+                {dayLabel}
+              </span>
+              <div className="flex items-center gap-1">
+                <span
+                  className={`text-base md:text-lg leading-none ${isSelected ? 'font-semibold' : ''}`}
+                >
+                  {dateLabel}
+                </span>
+              </div>
+            </button>
+          );
+        })}
+      </div>
+
+      <Dropdown
+        buttonIcon={<Icon name="planner" size={20} fill="currentColor" />}
+        buttonTitle="Open calendar"
+        className="mt-2 mx-1"
+      >
+        <PlannerCalendar
+          selectedDate={selectedDate}
+          onDateChange={handlePickDate}
+          predefinedDates={[{ label: 'Today', date: new Date() }]}
+        />
+      </Dropdown>
+
+      <button
+        onClick={() => onDateChange(getNextDay(selectedDate))}
+        className="mt-1"
+        aria-label="Next day"
+        title="Next day"
+      >
+        <Icon name="rightChevron" size={20} />
+      </button>
+    </div>
+  );
+};
+
+export default PlannerDateSelector;

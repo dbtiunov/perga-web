@@ -1,0 +1,77 @@
+.tiptap p.is-editor-empty:first-child::before {
+  color: var(--text-muted);
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+
+.tiptap {
+  outline: none;
+}
+
+.tiptap ul {
+  list-style-type: disc;
+  padding-left: 1rem;
+}
+
+.tiptap ul[data-type='taskList'] {
+  list-style: none;
+  padding-left: 0;
+}
+.tiptap ul[data-type='taskList'] li {
+  align-items: center;
+  display: flex;
+}
+.tiptap ul[data-type='taskList'] li label {
+  cursor: pointer;
+}
+.tiptap ul[data-type='taskList'] li div {
+  margin-bottom: 5px;
+  margin-left: 10px;
+}
+
+.tiptap ol {
+  list-style-type: decimal;
+  padding-left: 1rem;
+}
+
+.tiptap h1 {
+  font-size: 1.875rem;
+  font-weight: 700;
+}
+
+.tiptap h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.tiptap h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.tiptap blockquote {
+  border-left: 4px solid var(--border-main);
+  padding-left: 1rem;
+  font-style: italic;
+}
+
+.tiptap code {
+  background-color: var(--bg-hover);
+  padding: 0.2rem 0.4rem;
+  border-radius: 0.25rem;
+}
+
+.tiptap pre {
+  background-color: var(--bg-hover);
+  padding: 1rem;
+  border-radius: 0.5rem;
+  overflow-x: auto;
+}
+
+.tiptap a {
+  cursor: pointer;
+  color: var(--text-link);
+  text-decoration: underline;
+}

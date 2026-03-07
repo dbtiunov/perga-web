@@ -10,7 +10,7 @@ let config: Config | null = null;
  */
 export async function initConfig(): Promise<Config> {
   try {
-    const response = await fetch('/config.json', { cache: "no-store" });
+    const response = await fetch('/config.json', { cache: 'no-store' });
     if (!response.ok) {
       throw new Error(`Failed to load config: ${response.status}`);
     }
@@ -25,8 +25,8 @@ export async function initConfig(): Promise<Config> {
 
     // use default config
     config = {
-      API_BASE_URL: 'http://localhost:8000',
-      IS_SIGNUP_DISABLED: false
+      API_BASE_URL: 'http://localhost:8080/api/v1',
+      IS_SIGNUP_DISABLED: false,
     };
   }
 

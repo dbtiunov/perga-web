@@ -1,21 +1,21 @@
 import React from 'react';
 
-import { PlannerItemState, PlannerDayItem } from '@/api';
+import type { PlannerItemStateDTO, PlannerDayItemDTO } from '@api/planner';
 import { formatDateForDisplay } from '@common/utils/date_utils';
-import DayItem from '@planner/components/PlannerDay/DayItem/DayItem.tsx';
+import DayItem from '@planner/components/PlannerDay/PlannerDayItem/PlannerDayItem';
 
 interface PlannerDayProps {
   date: Date;
-  dayItems: PlannerDayItem[];
-  dragDayItem: PlannerDayItem | null;
-  onDragStartDayItem: (item: PlannerDayItem) => void;
+  dayItems: PlannerDayItemDTO[];
+  dragDayItem: PlannerDayItemDTO | null;
+  onDragStartDayItem: (item: PlannerDayItemDTO) => void;
   onDragEndDayItem: () => void;
-  getItemsForDate: (date: Date) => PlannerDayItem[];
-  onReorderDayItems: (items: PlannerDayItem[]) => void;
+  getItemsForDate: (date: Date) => PlannerDayItemDTO[];
+  onReorderDayItems: (items: PlannerDayItemDTO[]) => void;
   onAddDayItem: (date: Date, itemText: string) => void;
   onUpdateDayItem: (
     itemId: number,
-    changes: { text?: string; day?: string; state?: PlannerItemState },
+    changes: { text?: string; day?: string; state?: PlannerItemStateDTO },
   ) => void;
   onDeleteDayItem: (itemId: number) => void;
   onCopyDayItem: (itemId: number, date: Date) => void;
@@ -36,7 +36,7 @@ const PlannerDay: React.FC<PlannerDayProps> = ({
   onCopyDayItem,
   onSnoozeDayItem,
 }) => {
-  const emptyDayItem: PlannerDayItem = {
+  const emptyDayItem: PlannerDayItemDTO = {
     id: -1,
     day: date.toISOString().split('T')[0],
     text: '',
@@ -57,7 +57,7 @@ const PlannerDay: React.FC<PlannerDayProps> = ({
       </div>
 
       <div className="space-y-0">
-        {getItemsForDate(date).map((item: PlannerDayItem, index: number) => (
+        {getItemsForDate(date).map((item: PlannerDayItemDTO, index: number) => (
           <div
             key={item.id}
             onDragOver={(e) => {
