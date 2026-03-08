@@ -6,7 +6,7 @@ import { REFRESH_EVENT } from '@common/events';
 import { useAuth } from '@common/contexts/auth/useAuth.ts';
 import { useToast } from '@common/contexts/toast/useToast.ts';
 
-const SettingsProfile: React.FC = () => {
+export const SettingsProfile: React.FC = () => {
   const { user, fetchUser } = useAuth();
   const { showToast, showError } = useToast();
 
@@ -255,5 +255,3 @@ const SettingsProfile: React.FC = () => {
     </div>
   );
 };
-
-export default SettingsProfile;

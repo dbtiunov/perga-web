@@ -9,7 +9,7 @@ interface ErrorResponse {
   [key: string]: unknown;
 }
 
-const Signup: React.FC = () => {
+export const Signup: React.FC = () => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -156,5 +156,3 @@ const Signup: React.FC = () => {
     </div>
   );
 };
-
-export default Signup;

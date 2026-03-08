@@ -5,7 +5,7 @@ import { Icon } from '@common/components/Icon';
 import { useSettingsAgendas } from '@planner/hooks/useSettingsAgendas';
 import AgendaLine from '@settings/components/SettingsPlanner/AgendaLine/AgendaLine';
 
-const SettingsPlanner: React.FC = () => {
+export const SettingsPlanner: React.FC = () => {
   const {
     settingsAgendas,
     handleCreateAgenda,
@@ -167,5 +167,3 @@ const SettingsPlanner: React.FC = () => {
     </div>
   );
 };
-
-export default SettingsPlanner;

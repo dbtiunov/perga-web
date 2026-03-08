@@ -2,16 +2,12 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 
 import { getConfig } from '@/config';
 import { setupAxiosInterceptors } from '@api/auth';
-import ProtectedRoute from '@auth/ProtectedRoute';
-import Signin from '@auth/Signin';
-import Signup from '@auth/Signup';
+import { ProtectedRoute, Signin, Signup } from '@auth/index';
 import { AuthProvider } from '@common/contexts/auth';
 import Notes from '@notes/Notes';
 import Planner from '@planner/Planner';
-import Layout from '@sections/Layout';
-import Settings from '@settings/Settings';
-import SettingsPlanner from '@settings/components/SettingsPlanner/SettingsPlanner';
-import SettingsProfile from '@settings/components/SettingsProfile/SettingsProfile';
+import { Layout } from '@sections/Layout';
+import { Settings, SettingsProfile, SettingsPlanner, SettingsNotes } from '@settings/index';
 
 // Setup axios interceptors for token inclusion before mounting the App
 setupAxiosInterceptors();
@@ -40,6 +36,7 @@ function App() {
                 <Route index element={<Navigate to="/settings/profile/" replace />} />
                 <Route path="profile" element={<SettingsProfile />} />
                 <Route path="planner" element={<SettingsPlanner />} />
+                <Route path="notes" element={<SettingsNotes />} />
               </Route>
             </Route>
           </Route>

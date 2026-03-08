@@ -4,7 +4,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { getConfig } from '@/config';
 import { useAuth } from '@common/contexts/auth/useAuth.ts';
 
-const Signin: React.FC = () => {
+export const Signin: React.FC = () => {
   const { IS_SIGNUP_DISABLED } = getConfig();
 
   const [username, setUsername] = useState('');
@@ -109,5 +109,3 @@ const Signin: React.FC = () => {
     </div>
   );
 };
-
-export default Signin;
