@@ -9,6 +9,7 @@ import type {
   NotesFolderCreateDTO,
   NotesFolderUpdateDTO,
   NotesFoldersResponseSchemaDTO,
+  NotesExportRequestSchema,
 } from './notes.dto';
 
 // API URLs
@@ -34,3 +35,6 @@ export const updateFolder = (folderId: number, changes: NotesFolderUpdateDTO) =>
   axios.patch<NotesFolderDTO>(`${NOTES_API_URL}/folders/${folderId}/`, changes);
 
 export const emptyTrash = () => axios.post(`${NOTES_API_URL}/empty-trash/`);
+
+export const exportNotes = (params: NotesExportRequestSchema) =>
+  axios.get(`${NOTES_API_URL}/export/`, { params, responseType: 'blob' });

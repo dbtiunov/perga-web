@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { StorageKeys } from '@common/utils/storage_keys';
 
-import type { NotesFolderResponseDTO, NoteDTO } from '@api/notes';
+import type { NotesFolderResponseDTO, NoteDTO, NotesExportTypeDTO, NotesExportTargetDTO } from '@api/notes';
 import {
   getFolders,
   createFolder,
@@ -10,8 +10,10 @@ import {
   createNote,
   updateNote,
   emptyTrash,
+  exportNotes,
 } from '@api/notes';
 import { REFRESH_EVENT } from '@common/events';
+import { downloadFile } from '@common/utils/download_utils';
 
 export const useNotesState = () => {
   const [rootFolder, setRootFolder] = useState<NotesFolderResponseDTO | null>(null);
@@ -175,6 +177,37 @@ export const useNotesState = () => {
     [fetchFolders],
   );
 
+  const handleExportNotes = useCallback(
+    async (exportType: NotesExportTypeDTO, exportTarget: NotesExportTargetDTO, exportTargetId?: number | null) => {
+      try {
+        const response = await exportNotes({
+          export_type: exportType,
+          export_target: exportTarget,
+          export_target_id: exportTargetId,
+        });
+
+        const contentDisposition = response.headers['content-disposition'];
+        let filename = '';
+        if (contentDisposition) {
+          const filenameMatch = contentDisposition.match(/filename=(.+)/);
+          if (filenameMatch?.[1]) {
+            filename = filenameMatch[1].replace(/['"]/g, '');
+          }
+        }
+
+        if (!filename) {
+          // generate filename as a fallback
+          filename = `notes_export_${new Date().getTime()}.${exportType === 'markdown' ? 'md' : 'html'}`;
+        }
+
+        downloadFile(response.data, filename);
+      } catch (error) {
+        console.error('Error exporting notes:', error);
+      }
+    },
+    [],
+  );
+
   // initial fetch for folders
   useEffect(() => {
     void fetchFolders();
@@ -222,6 +255,7 @@ export const useNotesState = () => {
     handleMoveNote,
     handleMoveNoteToTrash,
     handleEmptyTrash,
+    handleExportNotes,
     setSelectedNoteId,
     selectedNote,
     selectedNoteId,

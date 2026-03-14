@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 
-import type { NoteMetaDTO } from '@api/notes';
+import type { NoteMetaDTO, NotesExportTypeDTO, NotesExportTargetDTO } from '@api/notes';
 import { Dropdown, DropdownItem } from '@common/components/Dropdown';
 import { Icon } from '@common/components/Icon';
 
@@ -8,6 +8,7 @@ interface FoldersNoteProps {
   note: NoteMetaDTO;
   onRename: (id: number, title: string) => Promise<void>;
   onMoveToTrash: (id: number) => Promise<void>;
+  onExport: (type: NotesExportTypeDTO, target: NotesExportTargetDTO, id: number) => Promise<void>;
   onSelect: (id: number) => void;
   isSelected?: boolean;
   className?: string;
@@ -17,6 +18,7 @@ export const NotesFoldersNote = ({
   note,
   onRename,
   onMoveToTrash,
+  onExport,
   onSelect,
   isSelected = false,
   className = '',
@@ -94,6 +96,24 @@ export const NotesFoldersNote = ({
         <DropdownItem onClick={handleRenameClick}>
           <Icon name="edit" size={14} className="h-4 w-4 mr-2" /> Rename
         </DropdownItem>
+        <>
+          <DropdownItem
+            onClick={(e) => {
+              e.stopPropagation();
+              void onExport('markdown', 'single_note', note.id);
+            }}
+          >
+            <Icon name="download" size={14} className="h-4 w-4 mr-2" /> Export Markdown
+          </DropdownItem>
+          <DropdownItem
+            onClick={(e) => {
+              e.stopPropagation();
+              void onExport('html', 'single_note', note.id);
+            }}
+          >
+            <Icon name="download" size={14} className="h-4 w-4 mr-2" /> Export HTML
+          </DropdownItem>
+        </>
         <DropdownItem
           onClick={(e) => {
             e.stopPropagation();

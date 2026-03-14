@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 
-import type { NotesFolderResponseDTO } from '@api/notes';
+import type { NotesFolderResponseDTO, NotesExportTypeDTO, NotesExportTargetDTO } from '@api/notes';
 import { Dropdown, DropdownItem } from '@common/components/Dropdown';
 import { Icon } from '@common/components/Icon';
 import { StorageKeys } from '@common/utils/storage_keys';
@@ -17,6 +17,7 @@ interface FoldersItemProps {
   onRenameNote: (id: number, title: string) => Promise<void>;
   onMoveNote: (noteId: number, folderId: number) => Promise<void>;
   onMoveNoteToTrash: (id: number) => Promise<void>;
+  onNotesExport: (type: NotesExportTypeDTO, target: NotesExportTargetDTO, id: number) => Promise<void>;
   onSelectNote: (id: number) => void;
   selectedNoteId: number | null;
   wrapperClass?: string;
@@ -31,6 +32,7 @@ export const NotesFoldersItem = ({
   onCreateNote,
   onMoveFolderToTrash,
   onMoveNoteToTrash,
+  onNotesExport,
   onSelectNote,
   selectedNoteId,
   onMoveFolder,
@@ -274,6 +276,24 @@ export const NotesFoldersItem = ({
             <Icon name="notePlus" size={14} className="h-4 w-4 mr-2" fill="currentColor" /> Create
             note
           </DropdownItem>
+          <>
+            <DropdownItem
+              onClick={(e) => {
+                e.stopPropagation();
+                void onNotesExport('markdown', 'folder_notes', folder.id);
+              }}
+            >
+              <Icon name="download" size={14} className="h-4 w-4 mr-2" /> Export Markdown
+            </DropdownItem>
+            <DropdownItem
+              onClick={(e) => {
+                e.stopPropagation();
+                void onNotesExport('html', 'folder_notes', folder.id);
+              }}
+            >
+              <Icon name="download" size={14} className="h-4 w-4 mr-2" /> Export HTML
+            </DropdownItem>
+          </>
           <DropdownItem onClick={handleTrash}>
             <Icon name="trash" size={14} className="h-4 w-4 mr-2" /> Move to trash
           </DropdownItem>
@@ -311,6 +331,7 @@ export const NotesFoldersItem = ({
                   onCreateNote={onCreateNote}
                   onMoveFolderToTrash={onMoveFolderToTrash}
                   onMoveNoteToTrash={onMoveNoteToTrash}
+                  onNotesExport={onNotesExport}
                   onSelectNote={onSelectNote}
                   selectedNoteId={selectedNoteId}
                   onMoveFolder={onMoveFolder}
@@ -325,6 +346,7 @@ export const NotesFoldersItem = ({
                   note={note}
                   onRename={onRenameNote}
                   onMoveToTrash={onMoveNoteToTrash}
+                  onExport={onNotesExport}
                   onSelect={onSelectNote}
                   isSelected={note.id === selectedNoteId}
                   className="ml-6"

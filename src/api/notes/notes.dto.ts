@@ -50,3 +50,12 @@ export interface NotesFoldersResponseSchemaDTO {
   root_folder: NotesFolderResponseDTO;
   trash_folder: NotesFolderResponseDTO;
 }
+
+export type NotesExportTypeDTO = 'markdown' | 'html';
+export type NotesExportTargetDTO = 'single_note' | 'folder_notes' | 'all_notes';
+
+export interface NotesExportRequestSchema {
+  export_type: NotesExportTypeDTO;
+  export_target: NotesExportTargetDTO;
+  export_target_id?: number | null;
+}
