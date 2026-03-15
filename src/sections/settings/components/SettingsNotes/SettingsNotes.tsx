@@ -1,13 +1,50 @@
-import React from 'react';
+import React, { useState } from 'react';
+
+import { useNotes } from '@notes/context';
+import { Icon } from '@common/components/Icon';
 
 export const SettingsNotes: React.FC = () => {
+  const { handleExportNotes } = useNotes();
+  const [isExporting, setIsExporting] = useState<boolean>(false);
+
+  const onExport = async (type: 'markdown' | 'html') => {
+    setIsExporting(true);
+    try {
+      await handleExportNotes(type, 'all_notes');
+    } finally {
+      setIsExporting(false);
+    }
+  };
 
   return (
     <div className="w-full md:max-w-2/5">
-      <fieldset className="border border-gray-400 rounded p-8">
+      <fieldset className="border border-border-main rounded p-8">
         <legend className="px-2 text-text-main">Export Notes</legend>
-
-
+        <div className="flex flex-col space-y-4">
+          <p className="text-sm text-text-main/60">
+            Export all your notes from all folders as a single archive.
+          </p>
+          <div className="flex space-x-2">
+            <button
+              onClick={() => onExport('markdown')}
+              disabled={isExporting}
+              className="flex items-center justify-center p-2 px-4 text-sm text-text-main hover:bg-bg-hover disabled:opacity-50 disabled:cursor-not-allowed rounded border border-border-main transition-colors"
+              title="Export as Markdown"
+            >
+              <Icon name="download" size={14} className="mr-2" fill="currentColor" />
+              <span>Markdown</span>
+            </button>
+            <button
+              onClick={() => onExport('html')}
+              disabled={isExporting}
+              className="flex items-center justify-center p-2 px-4 text-sm text-text-main hover:bg-bg-hover disabled:opacity-50 disabled:cursor-not-allowed rounded border border-border-main transition-colors"
+              title="Export as HTML"
+            >
+              <Icon name="download" size={14} className="mr-2" fill="currentColor" />
+              <span>HTML</span>
+            </button>
+          </div>
+        </div>
       </fieldset>
     </div>
   );
