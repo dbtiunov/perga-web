@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 
-import type { NotesFolderResponseDTO } from '@api/notes';
-import { Dropdown, DropdownItem } from '@common/components/Dropdown';
+import type { NotesFolderResponseDTO, NotesExportTypeDTO, NotesExportTargetDTO } from '@api/notes';
+import { Dropdown, DropdownItem, DropdownSubmenu } from '@common/components/Dropdown';
 import { Icon } from '@common/components/Icon';
 import { StorageKeys } from '@common/utils/storage_keys';
 import { NotesFoldersNote } from '@notes/components/NotesFolders/NotesFoldersNote/NotesFoldersNote';
@@ -17,6 +17,11 @@ interface FoldersItemProps {
   onRenameNote: (id: number, title: string) => Promise<void>;
   onMoveNote: (noteId: number, folderId: number) => Promise<void>;
   onMoveNoteToTrash: (id: number) => Promise<void>;
+  onNotesExport: (
+    type: NotesExportTypeDTO,
+    target: NotesExportTargetDTO,
+    id: number,
+  ) => Promise<void>;
   onSelectNote: (id: number) => void;
   selectedNoteId: number | null;
   wrapperClass?: string;
@@ -31,6 +36,7 @@ export const NotesFoldersItem = ({
   onCreateNote,
   onMoveFolderToTrash,
   onMoveNoteToTrash,
+  onNotesExport,
   onSelectNote,
   selectedNoteId,
   onMoveFolder,
@@ -274,8 +280,40 @@ export const NotesFoldersItem = ({
             <Icon name="notePlus" size={14} className="h-4 w-4 mr-2" fill="currentColor" /> Create
             note
           </DropdownItem>
+          <DropdownSubmenu
+            label={
+              <>
+                <Icon name="download" size={14} className="h-4 w-4 mr-2" /> Export
+              </>
+            }
+          >
+            <DropdownItem
+              onClick={(e) => {
+                e.stopPropagation();
+                void onNotesExport('markdown', 'folder_notes', folder.id);
+              }}
+            >
+              Markdown
+            </DropdownItem>
+            <DropdownItem
+              onClick={(e) => {
+                e.stopPropagation();
+                void onNotesExport('html', 'folder_notes', folder.id);
+              }}
+            >
+              HTML
+            </DropdownItem>
+            <DropdownItem
+              onClick={(e) => {
+                e.stopPropagation();
+                void onNotesExport('pdf', 'folder_notes', folder.id);
+              }}
+            >
+              PDF
+            </DropdownItem>
+          </DropdownSubmenu>
           <DropdownItem onClick={handleTrash}>
-            <Icon name="trash" size={14} className="h-4 w-4 mr-2" /> Move to trash
+            <Icon name="trash" size={14} className="h-4 w-4 mr-2" /> Move to Trash
           </DropdownItem>
         </Dropdown>
       </div>
@@ -311,6 +349,7 @@ export const NotesFoldersItem = ({
                   onCreateNote={onCreateNote}
                   onMoveFolderToTrash={onMoveFolderToTrash}
                   onMoveNoteToTrash={onMoveNoteToTrash}
+                  onNotesExport={onNotesExport}
                   onSelectNote={onSelectNote}
                   selectedNoteId={selectedNoteId}
                   onMoveFolder={onMoveFolder}
@@ -325,6 +364,7 @@ export const NotesFoldersItem = ({
                   note={note}
                   onRename={onRenameNote}
                   onMoveToTrash={onMoveNoteToTrash}
+                  onExport={onNotesExport}
                   onSelect={onSelectNote}
                   isSelected={note.id === selectedNoteId}
                   className="ml-6"

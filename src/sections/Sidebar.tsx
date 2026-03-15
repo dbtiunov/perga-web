@@ -9,7 +9,7 @@ import Storage from '@common/utils/storage';
 import { StorageKeys } from '@common/utils/storage_keys';
 import { applyThemeClass } from '@common/utils/theme';
 
-const Sidebar = () => {
+export const Sidebar = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { logout } = useAuth();
@@ -152,5 +152,3 @@ const Sidebar = () => {
     </div>
   );
 };
-
-export default Sidebar;

@@ -1,13 +1,14 @@
 import React, { useState, useRef, useEffect } from 'react';
 
-import type { NoteMetaDTO } from '@api/notes';
-import { Dropdown, DropdownItem } from '@common/components/Dropdown';
+import type { NoteMetaDTO, NotesExportTypeDTO, NotesExportTargetDTO } from '@api/notes';
+import { Dropdown, DropdownItem, DropdownSubmenu } from '@common/components/Dropdown';
 import { Icon } from '@common/components/Icon';
 
 interface FoldersNoteProps {
   note: NoteMetaDTO;
   onRename: (id: number, title: string) => Promise<void>;
   onMoveToTrash: (id: number) => Promise<void>;
+  onExport: (type: NotesExportTypeDTO, target: NotesExportTargetDTO, id: number) => Promise<void>;
   onSelect: (id: number) => void;
   isSelected?: boolean;
   className?: string;
@@ -17,6 +18,7 @@ export const NotesFoldersNote = ({
   note,
   onRename,
   onMoveToTrash,
+  onExport,
   onSelect,
   isSelected = false,
   className = '',
@@ -94,13 +96,48 @@ export const NotesFoldersNote = ({
         <DropdownItem onClick={handleRenameClick}>
           <Icon name="edit" size={14} className="h-4 w-4 mr-2" /> Rename
         </DropdownItem>
+        <DropdownSubmenu
+          label={
+            <>
+              <Icon name="download" size={14} className="h-4 w-4 mr-2" /> Export
+            </>
+          }
+        >
+          <DropdownItem
+            onClick={(e) => {
+              e.stopPropagation();
+              void onExport('markdown', 'single_note', note.id);
+            }}
+            className="pl-10"
+          >
+            Markdown
+          </DropdownItem>
+          <DropdownItem
+            onClick={(e) => {
+              e.stopPropagation();
+              void onExport('html', 'single_note', note.id);
+            }}
+            className="pl-10"
+          >
+            HTML
+          </DropdownItem>
+          <DropdownItem
+            onClick={(e) => {
+              e.stopPropagation();
+              void onExport('pdf', 'single_note', note.id);
+            }}
+            className="pl-10"
+          >
+            PDF
+          </DropdownItem>
+        </DropdownSubmenu>
         <DropdownItem
           onClick={(e) => {
             e.stopPropagation();
             void onMoveToTrash(note.id);
           }}
         >
-          <Icon name="trash" size={14} className="h-4 w-4 mr-2" /> Move to trash
+          <Icon name="trash" size={14} className="h-4 w-4 mr-2" /> Move to Trash
         </DropdownItem>
       </Dropdown>
     </div>

@@ -1,9 +1,10 @@
 import { NavLink, Outlet } from 'react-router-dom';
 
-const Settings = () => {
+export const Settings = () => {
   const sections = [
     { label: 'Profile', to: '/settings/profile/' },
     { label: 'Planner', to: '/settings/planner/' },
+    { label: 'Notes', to: '/settings/notes/' },
   ];
 
   return (
@@ -40,5 +41,3 @@ const Settings = () => {
     </div>
   );
 };
-
-export default Settings;

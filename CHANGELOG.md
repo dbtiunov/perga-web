@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.1.1] - 2026-03-15
+
+### Added
+
+- Ability to export notes as Markdown, HTML and PDF
+- DrodownSubmenu for export options
+- SettingsNotes page
+
 ## [1.1.0] - 2026-03-01
 
 ### Added

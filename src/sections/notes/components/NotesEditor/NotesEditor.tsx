@@ -6,7 +6,6 @@ import Underline from '@tiptap/extension-underline';
 import Link from '@tiptap/extension-link';
 import { TaskItem, TaskList } from '@tiptap/extension-list';
 import HorizontalRule from '@tiptap/extension-horizontal-rule';
-import type { MarkdownStorage } from 'tiptap-markdown';
 import { Markdown } from 'tiptap-markdown';
 
 import type { NoteDTO } from '@api/notes';
@@ -22,8 +21,8 @@ interface NotesEditorProps {
 export const NotesEditor: React.FC<NotesEditorProps> = ({ note, onUpdate }) => {
   const [title, setTitle] = useState(note?.title || '');
   const lastSyncedNoteIdRef = useRef<number | undefined>(undefined);
-  const { debounceUpdate, hasPendingUpdate, clearDebounceTimer } = useNotesDebounceUpdate({
-    note,
+  const { debounceUpdate, hasPendingUpdate } = useNotesDebounceUpdate({
+    selectedNote: note,
     onUpdate,
   });
 
@@ -59,9 +58,7 @@ export const NotesEditor: React.FC<NotesEditorProps> = ({ note, onUpdate }) => {
   });
 
   // extract note values for using in dependencies
-  const editorMarkdown = (
-    editor?.storage as unknown as { markdown?: MarkdownStorage }
-  )?.markdown?.getMarkdown();
+  const editorHTML = editor?.getHTML();
   const noteId = note?.id;
   const noteTitle = note?.title;
   const noteBody = note?.body;
@@ -73,15 +70,15 @@ export const NotesEditor: React.FC<NotesEditorProps> = ({ note, onUpdate }) => {
       // normalize vars that can be various types for comparing
       const normalizedNoteTitle = noteTitle || '';
       const normalizedNoteBody = noteBody || '';
-      const normalizedEditorMarkdown = editorMarkdown || '';
+      const normalizedEditorHTML = editorHTML || '';
 
       setTitle(normalizedNoteTitle);
-      if (editor && normalizedNoteBody !== normalizedEditorMarkdown) {
+      if (editor && normalizedNoteBody !== normalizedEditorHTML) {
         editor.commands.setContent(normalizedNoteBody);
         lastSyncedNoteIdRef.current = noteId;
       }
     }
-  }, [noteId, noteTitle, noteBody, editor, editorMarkdown, hasPendingUpdate, clearDebounceTimer]);
+  }, [noteId, noteTitle, noteBody, editor, editorHTML, hasPendingUpdate]);
 
   const handleTitleChange = (newTitle: string) => {
     setTitle(newTitle);
@@ -93,9 +90,7 @@ export const NotesEditor: React.FC<NotesEditorProps> = ({ note, onUpdate }) => {
       return;
     }
 
-    const newBody = (
-      editor.storage as unknown as { markdown: MarkdownStorage }
-    ).markdown.getMarkdown();
+    const newBody = editor.getHTML();
     debounceUpdate(undefined, newBody);
   };
 

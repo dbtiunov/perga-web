@@ -3,7 +3,7 @@ import { Navigate, Outlet, useLocation } from 'react-router-dom';
 
 import { useAuth } from '@common/contexts/auth/useAuth.ts';
 
-const ProtectedRoute: React.FC = () => {
+export const ProtectedRoute: React.FC = () => {
   const { isAuthenticated, isLoading } = useAuth();
   const location = useLocation();
 
@@ -24,5 +24,3 @@ const ProtectedRoute: React.FC = () => {
   // If authenticated, render the child routes
   return <Outlet />;
 };
-
-export default ProtectedRoute;

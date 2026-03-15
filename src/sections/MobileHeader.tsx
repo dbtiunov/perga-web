@@ -6,7 +6,7 @@ interface MobileHeaderProps {
   toggleSidebar: () => void;
 }
 
-const MobileHeader = ({ toggleSidebar }: MobileHeaderProps) => {
+export const MobileHeader = ({ toggleSidebar }: MobileHeaderProps) => {
   const location = useLocation();
 
   // Get the current section name based on the route
@@ -40,5 +40,3 @@ const MobileHeader = ({ toggleSidebar }: MobileHeaderProps) => {
     </header>
   );
 };
-
-export default MobileHeader;

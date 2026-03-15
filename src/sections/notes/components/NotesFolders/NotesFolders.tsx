@@ -19,6 +19,7 @@ export const NotesFolders: React.FC = () => {
     handleMoveNote,
     handleMoveNoteToTrash,
     handleEmptyTrash,
+    handleExportNotes,
     selectedNoteId,
     setSelectedNoteId,
   } = useNotes();
@@ -139,6 +140,7 @@ export const NotesFolders: React.FC = () => {
             onCreateNote={handleCreateNote}
             onMoveFolderToTrash={handleMoveFolderToTrash}
             onMoveNoteToTrash={handleMoveNoteToTrash}
+            onNotesExport={handleExportNotes}
             onSelectNote={setSelectedNoteId}
             selectedNoteId={selectedNoteId}
             onMoveFolder={handleMoveFolder}
@@ -151,6 +153,7 @@ export const NotesFolders: React.FC = () => {
             note={note}
             onRename={handleRenameNote}
             onMoveToTrash={handleMoveNoteToTrash}
+            onExport={handleExportNotes}
             onSelect={setSelectedNoteId}
             isSelected={note.id === selectedNoteId}
           />

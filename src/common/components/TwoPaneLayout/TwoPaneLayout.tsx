@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import Storage from '@common/utils/storage';
 import { StorageKeys } from '@common/utils/storage_keys';
@@ -60,19 +60,22 @@ export const TwoPaneLayout: React.FC<TwoPaneLayoutProps> = ({
   });
   const [isDragging, setIsDragging] = useState(false);
 
-  const handleMouseMove = (clientX: number) => {
-    const container = containerRef.current;
-    if (!container) {
-      return;
-    }
+  const handleMouseMove = useCallback(
+    (clientX: number) => {
+      const container = containerRef.current;
+      if (!container) {
+        return;
+      }
 
-    const rect = container.getBoundingClientRect();
-    const available = rect.width - RESIZE_HANDLE_WIDTH_PX;
-    const xWithin = Math.min(Math.max(clientX - rect.left, 0), available);
-    const percent = (xWithin / available) * 100;
-    const clamped = Math.min(maxLeftWidthPercent, Math.max(minLeftWidthPercent, percent));
-    setLeftPaneWidthPercent(clamped);
-  };
+      const rect = container.getBoundingClientRect();
+      const available = rect.width - RESIZE_HANDLE_WIDTH_PX;
+      const xWithin = Math.min(Math.max(clientX - rect.left, 0), available);
+      const percent = (xWithin / available) * 100;
+      const clamped = Math.min(maxLeftWidthPercent, Math.max(minLeftWidthPercent, percent));
+      setLeftPaneWidthPercent(clamped);
+    },
+    [maxLeftWidthPercent, minLeftWidthPercent],
+  );
 
   useEffect(() => {
     if (typeof window === 'undefined' || !isDragging) {

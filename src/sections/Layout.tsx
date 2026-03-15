@@ -2,10 +2,10 @@ import { useState } from 'react';
 import { Outlet } from 'react-router-dom';
 
 import { ToastProvider } from '@common/contexts/toast';
-import MobileHeader from '@sections/MobileHeader';
-import Sidebar from '@sections/Sidebar';
+import { MobileHeader } from '@sections/MobileHeader';
+import { Sidebar } from '@sections/Sidebar';
 
-const Layout = () => {
+export const Layout = () => {
   const [isSidebarVisible, setIsSidebarVisible] = useState(false);
 
   const toggleSidebar = () => {
@@ -29,5 +29,3 @@ const Layout = () => {
     </ToastProvider>
   );
 };
-
-export default Layout;
