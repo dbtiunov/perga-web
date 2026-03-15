@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 
 import type { NoteMetaDTO, NotesExportTypeDTO, NotesExportTargetDTO } from '@api/notes';
-import { Dropdown, DropdownItem } from '@common/components/Dropdown';
+import { Dropdown, DropdownItem, DropdownSubmenu } from '@common/components/Dropdown';
 import { Icon } from '@common/components/Icon';
 
 interface FoldersNoteProps {
@@ -96,39 +96,48 @@ export const NotesFoldersNote = ({
         <DropdownItem onClick={handleRenameClick}>
           <Icon name="edit" size={14} className="h-4 w-4 mr-2" /> Rename
         </DropdownItem>
-        <>
+        <DropdownSubmenu
+          label={
+            <>
+              <Icon name="download" size={14} className="h-4 w-4 mr-2" /> Export
+            </>
+          }
+        >
           <DropdownItem
             onClick={(e) => {
               e.stopPropagation();
               void onExport('markdown', 'single_note', note.id);
             }}
+            className="pl-10"
           >
-            <Icon name="download" size={14} className="h-4 w-4 mr-2" /> Export Markdown
+            Markdown
           </DropdownItem>
           <DropdownItem
             onClick={(e) => {
               e.stopPropagation();
               void onExport('html', 'single_note', note.id);
             }}
+            className="pl-10"
           >
-            <Icon name="download" size={14} className="h-4 w-4 mr-2" /> Export HTML
+            HTML
           </DropdownItem>
           <DropdownItem
             onClick={(e) => {
               e.stopPropagation();
               void onExport('pdf', 'single_note', note.id);
             }}
+            className="pl-10"
           >
-            <Icon name="download" size={14} className="h-4 w-4 mr-2" /> Export PDF
+            PDF
           </DropdownItem>
-        </>
+        </DropdownSubmenu>
         <DropdownItem
           onClick={(e) => {
             e.stopPropagation();
             void onMoveToTrash(note.id);
           }}
         >
-          <Icon name="trash" size={14} className="h-4 w-4 mr-2" /> Move to trash
+          <Icon name="trash" size={14} className="h-4 w-4 mr-2" /> Move to Trash
         </DropdownItem>
       </Dropdown>
     </div>
