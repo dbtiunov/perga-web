@@ -17,7 +17,7 @@ describe('useNotesDebounceUpdate', () => {
 
   it('should not send body when only title is updated', async () => {
     const { result } = renderHook(() =>
-      useNotesDebounceUpdate({ selectedNote: initialNote as any, onUpdate: mockOnUpdate })
+      useNotesDebounceUpdate({ selectedNote: initialNote as any, onUpdate: mockOnUpdate }),
     );
 
     act(() => {
@@ -33,7 +33,7 @@ describe('useNotesDebounceUpdate', () => {
 
   it('should not send title when only body is updated', async () => {
     const { result } = renderHook(() =>
-      useNotesDebounceUpdate({ selectedNote: initialNote as any, onUpdate: mockOnUpdate })
+      useNotesDebounceUpdate({ selectedNote: initialNote as any, onUpdate: mockOnUpdate }),
     );
 
     act(() => {
@@ -49,7 +49,7 @@ describe('useNotesDebounceUpdate', () => {
 
   it('should send both when both are updated within debounce period', async () => {
     const { result } = renderHook(() =>
-      useNotesDebounceUpdate({ selectedNote: initialNote as any, onUpdate: mockOnUpdate })
+      useNotesDebounceUpdate({ selectedNote: initialNote as any, onUpdate: mockOnUpdate }),
     );
 
     act(() => {
@@ -70,10 +70,11 @@ describe('useNotesDebounceUpdate', () => {
 
   it('should reset pending changes when switching notes', async () => {
     const { result, rerender } = renderHook(
-      ({ selectedNote }) => useNotesDebounceUpdate({ selectedNote: selectedNote as any, onUpdate: mockOnUpdate }),
+      ({ selectedNote }) =>
+        useNotesDebounceUpdate({ selectedNote: selectedNote as any, onUpdate: mockOnUpdate }),
       {
         initialProps: { selectedNote: initialNote },
-      }
+      },
     );
 
     act(() => {
@@ -95,7 +96,7 @@ describe('useNotesDebounceUpdate', () => {
 
   it('should send pending changes on unmount', async () => {
     const { result, unmount } = renderHook(() =>
-      useNotesDebounceUpdate({ selectedNote: initialNote as any, onUpdate: mockOnUpdate })
+      useNotesDebounceUpdate({ selectedNote: initialNote as any, onUpdate: mockOnUpdate }),
     );
 
     act(() => {

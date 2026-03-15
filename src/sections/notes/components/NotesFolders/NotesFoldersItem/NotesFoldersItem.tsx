@@ -17,7 +17,11 @@ interface FoldersItemProps {
   onRenameNote: (id: number, title: string) => Promise<void>;
   onMoveNote: (noteId: number, folderId: number) => Promise<void>;
   onMoveNoteToTrash: (id: number) => Promise<void>;
-  onNotesExport: (type: NotesExportTypeDTO, target: NotesExportTargetDTO, id: number) => Promise<void>;
+  onNotesExport: (
+    type: NotesExportTypeDTO,
+    target: NotesExportTargetDTO,
+    id: number,
+  ) => Promise<void>;
   onSelectNote: (id: number) => void;
   selectedNoteId: number | null;
   wrapperClass?: string;

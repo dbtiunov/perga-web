@@ -24,21 +24,15 @@ export const DropdownSubmenu: React.FC<DropdownSubmenuProps> = ({
           setIsOpen(!isOpen);
         }}
       >
-        <div className="flex items-center">
-          {label}
-        </div>
-        <Icon 
-          name="rightChevron" 
-          size={14} 
-          className={`h-4 w-4 ml-2 transform transition-transform ${isOpen ? 'rotate-90' : ''}`} 
+        <div className="flex items-center">{label}</div>
+        <Icon
+          name="rightChevron"
+          size={14}
+          className={`h-4 w-4 ml-2 transform transition-transform ${isOpen ? 'rotate-90' : ''}`}
         />
       </div>
 
-      {isOpen && (
-        <div className="bg-bg-main/50">
-          {children}
-        </div>
-      )}
+      {isOpen && <div className="bg-bg-main/50">{children}</div>}
     </div>
   );
 };

@@ -1,7 +1,12 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { StorageKeys } from '@common/utils/storage_keys';
 
-import type { NotesFolderResponseDTO, NoteDTO, NotesExportTypeDTO, NotesExportTargetDTO } from '@api/notes';
+import type {
+  NotesFolderResponseDTO,
+  NoteDTO,
+  NotesExportTypeDTO,
+  NotesExportTargetDTO,
+} from '@api/notes';
 import {
   getFolders,
   createFolder,
@@ -179,7 +184,11 @@ export const useNotesState = () => {
   );
 
   const handleExportNotes = useCallback(
-    async (exportType: NotesExportTypeDTO, exportTarget: NotesExportTargetDTO, exportTargetId?: number | null) => {
+    async (
+      exportType: NotesExportTypeDTO,
+      exportTarget: NotesExportTargetDTO,
+      exportTargetId?: number | null,
+    ) => {
       try {
         const response = await exportNotes({
           export_type: exportType,

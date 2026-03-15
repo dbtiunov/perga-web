@@ -58,7 +58,7 @@ export const NotesEditor: React.FC<NotesEditorProps> = ({ note, onUpdate }) => {
   });
 
   // extract note values for using in dependencies
-const editorHTML = editor?.getHTML();
+  const editorHTML = editor?.getHTML();
   const noteId = note?.id;
   const noteTitle = note?.title;
   const noteBody = note?.body;
