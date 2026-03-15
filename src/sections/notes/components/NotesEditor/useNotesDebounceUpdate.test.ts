@@ -4,11 +4,18 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
 
+import type { NoteDTO } from '@api/notes/notes.dto';
 import { useNotesDebounceUpdate } from './useNotesDebounceUpdate';
 
 describe('useNotesDebounceUpdate', () => {
   const mockOnUpdate = vi.fn().mockResolvedValue(undefined);
-  const initialNote = { id: 1, title: 'Initial Title', body: 'Initial Body' };
+  const initialNote: NoteDTO = {
+    id: 1,
+    folder_id: 1,
+    title: 'Initial Title',
+    body: 'Initial Body',
+    updated_dt: '2021-01-01',
+  };
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -17,7 +24,7 @@ describe('useNotesDebounceUpdate', () => {
 
   it('should not send body when only title is updated', async () => {
     const { result } = renderHook(() =>
-      useNotesDebounceUpdate({ selectedNote: initialNote as any, onUpdate: mockOnUpdate }),
+      useNotesDebounceUpdate({ selectedNote: initialNote, onUpdate: mockOnUpdate }),
     );
 
     act(() => {
@@ -33,7 +40,7 @@ describe('useNotesDebounceUpdate', () => {
 
   it('should not send title when only body is updated', async () => {
     const { result } = renderHook(() =>
-      useNotesDebounceUpdate({ selectedNote: initialNote as any, onUpdate: mockOnUpdate }),
+      useNotesDebounceUpdate({ selectedNote: initialNote, onUpdate: mockOnUpdate }),
     );
 
     act(() => {
@@ -49,7 +56,7 @@ describe('useNotesDebounceUpdate', () => {
 
   it('should send both when both are updated within debounce period', async () => {
     const { result } = renderHook(() =>
-      useNotesDebounceUpdate({ selectedNote: initialNote as any, onUpdate: mockOnUpdate }),
+      useNotesDebounceUpdate({ selectedNote: initialNote, onUpdate: mockOnUpdate }),
     );
 
     act(() => {
@@ -70,10 +77,9 @@ describe('useNotesDebounceUpdate', () => {
 
   it('should reset pending changes when switching notes', async () => {
     const { result, rerender } = renderHook(
-      ({ selectedNote }) =>
-        useNotesDebounceUpdate({ selectedNote: selectedNote as any, onUpdate: mockOnUpdate }),
+      ({ selectedNote }) => useNotesDebounceUpdate({ selectedNote, onUpdate: mockOnUpdate }),
       {
-        initialProps: { selectedNote: initialNote },
+        initialProps: { selectedNote: initialNote as NoteDTO | null },
       },
     );
 
@@ -82,7 +88,13 @@ describe('useNotesDebounceUpdate', () => {
     });
 
     // Switch note
-    const secondNote = { id: 2, title: 'Second Title', body: 'Second Body' };
+    const secondNote: NoteDTO = {
+      id: 2,
+      folder_id: 1,
+      title: 'Second Title',
+      body: 'Second Body',
+      updated_dt: '2021-01-01',
+    };
     rerender({ selectedNote: secondNote });
 
     act(() => {
@@ -96,7 +108,7 @@ describe('useNotesDebounceUpdate', () => {
 
   it('should send pending changes on unmount', async () => {
     const { result, unmount } = renderHook(() =>
-      useNotesDebounceUpdate({ selectedNote: initialNote as any, onUpdate: mockOnUpdate }),
+      useNotesDebounceUpdate({ selectedNote: initialNote, onUpdate: mockOnUpdate }),
     );
 
     act(() => {
