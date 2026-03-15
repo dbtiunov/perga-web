@@ -14,6 +14,7 @@ import {
 } from '@api/notes';
 import { REFRESH_EVENT } from '@common/events';
 import { downloadFile } from '@common/utils/download_utils';
+import { NOTES_DEFAULT_EXTENSION, NOTES_EXTENSION_MAP } from '@notes/const.ts';
 
 export const useNotesState = () => {
   const [rootFolder, setRootFolder] = useState<NotesFolderResponseDTO | null>(null);
@@ -197,7 +198,8 @@ export const useNotesState = () => {
 
         if (!filename) {
           // generate filename as a fallback
-          filename = `notes_export_${new Date().getTime()}.${exportType === 'markdown' ? 'md' : 'html'}`;
+          const extension = NOTES_EXTENSION_MAP[exportType] || NOTES_DEFAULT_EXTENSION;
+          filename = `notes_export_${new Date().getTime()}.${extension}`;
         }
 
         downloadFile(response.data, filename);

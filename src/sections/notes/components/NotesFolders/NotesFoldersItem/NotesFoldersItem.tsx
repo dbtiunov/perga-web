@@ -293,6 +293,14 @@ export const NotesFoldersItem = ({
             >
               <Icon name="download" size={14} className="h-4 w-4 mr-2" /> Export HTML
             </DropdownItem>
+            <DropdownItem
+              onClick={(e) => {
+                e.stopPropagation();
+                void onNotesExport('pdf', 'folder_notes', folder.id);
+              }}
+            >
+              <Icon name="download" size={14} className="h-4 w-4 mr-2" /> Export PDF
+            </DropdownItem>
           </>
           <DropdownItem onClick={handleTrash}>
             <Icon name="trash" size={14} className="h-4 w-4 mr-2" /> Move to trash

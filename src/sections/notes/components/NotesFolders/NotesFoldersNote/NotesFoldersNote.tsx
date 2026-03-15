@@ -113,6 +113,14 @@ export const NotesFoldersNote = ({
           >
             <Icon name="download" size={14} className="h-4 w-4 mr-2" /> Export HTML
           </DropdownItem>
+          <DropdownItem
+            onClick={(e) => {
+              e.stopPropagation();
+              void onExport('pdf', 'single_note', note.id);
+            }}
+          >
+            <Icon name="download" size={14} className="h-4 w-4 mr-2" /> Export PDF
+          </DropdownItem>
         </>
         <DropdownItem
           onClick={(e) => {

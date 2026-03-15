@@ -51,7 +51,7 @@ export interface NotesFoldersResponseSchemaDTO {
   trash_folder: NotesFolderResponseDTO;
 }
 
-export type NotesExportTypeDTO = 'markdown' | 'html';
+export type NotesExportTypeDTO = 'markdown' | 'html' | 'pdf';
 export type NotesExportTargetDTO = 'single_note' | 'folder_notes' | 'all_notes';
 
 export interface NotesExportRequestSchema {
