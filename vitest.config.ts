@@ -7,7 +7,12 @@ export default defineConfig({
     globals: true,
     server: {
       deps: {
-        inline: [/@tailwindcss\/vite/, /@asamuzakjp\/css-color/, /@csstools\/css-calc/],
+        inline: [
+          /@tailwindcss\/vite/,
+          /@asamuzakjp\/css-color/,
+          /@csstools\/css-calc/,
+          /@csstools\/css-color-parser/,
+        ],
       },
     },
   },

@@ -1,9 +1,16 @@
 import React, { useState, useRef, useEffect } from 'react';
 
-import type { NotesFolderResponseDTO, NotesExportTypeDTO, NotesExportTargetDTO } from '@api/notes';
+import type {
+  NotesFolderResponseDTO,
+  NotesExportTypeDTO,
+  NotesExportTargetDTO,
+  NotesImportResponseDTO,
+} from '@api/notes';
 import { Dropdown, DropdownItem, DropdownSubmenu } from '@common/components/Dropdown';
 import { Icon } from '@common/components/Icon';
+import { useToast } from '@common/contexts/toast/useToast';
 import { StorageKeys } from '@common/utils/storage_keys';
+import { pluralize } from '@common/utils/string_utils';
 import { NotesFoldersNote } from '@notes/components/NotesFolders/NotesFoldersNote/NotesFoldersNote';
 
 interface FoldersItemProps {
@@ -22,6 +29,7 @@ interface FoldersItemProps {
     target: NotesExportTargetDTO,
     id: number,
   ) => Promise<void>;
+  onNotesImport: (files: File[], folderId: number) => Promise<NotesImportResponseDTO>;
   onSelectNote: (id: number) => void;
   selectedNoteId: number | null;
   wrapperClass?: string;
@@ -37,12 +45,14 @@ export const NotesFoldersItem = ({
   onMoveFolderToTrash,
   onMoveNoteToTrash,
   onNotesExport,
+  onNotesImport,
   onSelectNote,
   selectedNoteId,
   onMoveFolder,
   onMoveNote,
   wrapperClass = '',
 }: FoldersItemProps) => {
+  const { showToast, showError } = useToast();
   const [isEditing, setIsEditing] = useState(false);
   const [isExpanded, setIsExpanded] = useState(() => {
     const saved = localStorage.getItem(StorageKeys.NotesExpandedFolders);
@@ -74,6 +84,7 @@ export const NotesFoldersItem = ({
   const [isDragHover, setIsDragHover] = useState(false);
   const [renamevalue, setRenamevalue] = useState(folder.name);
   const [newSubfolderName, setNewSubfolderName] = useState('');
+  const [isImporting, setIsImporting] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const subfolderInputRef = useRef<HTMLInputElement>(null);
 
@@ -109,6 +120,29 @@ export const NotesFoldersItem = ({
     }
     setNewSubfolderName('');
     setIsCreatingSubfolder(false);
+  };
+
+  const onImport = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (!files || files.length === 0) {
+      return;
+    }
+
+    setIsImporting(true);
+    try {
+      const response = await onNotesImport(Array.from(files), folder.id);
+      showToast(
+        `Successfully imported ${response.imported_count} ${pluralize(response.imported_count, 'note')}`,
+        'success',
+      );
+      setIsExpanded(true);
+    } catch (error) {
+      showError(`Failed to import notes: ${error}`);
+    } finally {
+      // reset state and input
+      setIsImporting(false);
+      event.target.value = '';
+    }
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -277,8 +311,21 @@ export const NotesFoldersItem = ({
               setIsExpanded(true);
             }}
           >
-            <Icon name="notePlus" size={14} className="h-4 w-4 mr-2" fill="currentColor" /> Create
-            note
+            <Icon name="notePlus" size={14} className="h-4 w-4 mr-2" fill="currentColor" /> Add note
+          </DropdownItem>
+          <DropdownItem className={isImporting ? 'opacity-50 cursor-not-allowed' : ''}>
+            <label className="flex items-center w-full cursor-pointer">
+              <Icon name="upload" size={14} className="h-4 w-4 mr-2" fill="currentColor" />
+              <span>{isImporting ? 'Importing...' : 'Import'}</span>
+              <input
+                type="file"
+                multiple
+                accept=".md,.markdown,.html,.htm,.txt,.pdf,.zip"
+                className="hidden"
+                onChange={onImport}
+                disabled={isImporting}
+              />
+            </label>
           </DropdownItem>
           <DropdownSubmenu
             label={
@@ -350,6 +397,7 @@ export const NotesFoldersItem = ({
                   onMoveFolderToTrash={onMoveFolderToTrash}
                   onMoveNoteToTrash={onMoveNoteToTrash}
                   onNotesExport={onNotesExport}
+                  onNotesImport={onNotesImport}
                   onSelectNote={onSelectNote}
                   selectedNoteId={selectedNoteId}
                   onMoveFolder={onMoveFolder}

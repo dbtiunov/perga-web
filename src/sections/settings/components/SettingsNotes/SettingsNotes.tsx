@@ -1,18 +1,48 @@
 import React, { useState } from 'react';
 
-import { useNotes } from '@notes/context';
+import type { NotesExportTypeDTO } from '@api/notes';
 import { Icon } from '@common/components/Icon';
+import { useToast } from '@common/contexts/toast/useToast';
+import { pluralize } from '@common/utils/string_utils';
+import { useNotes } from '@notes/context';
 
 export const SettingsNotes: React.FC = () => {
-  const { handleExportNotes } = useNotes();
+  const { handleExportNotes, handleImportNotes } = useNotes();
+  const { showToast, showError } = useToast();
   const [isExporting, setIsExporting] = useState<boolean>(false);
+  const [isImporting, setIsImporting] = useState<boolean>(false);
 
-  const onExport = async (type: 'markdown' | 'html' | 'pdf') => {
+  const onExport = async (type: NotesExportTypeDTO) => {
     setIsExporting(true);
     try {
       await handleExportNotes(type, 'all_notes');
     } finally {
       setIsExporting(false);
+    }
+  };
+
+  const onImport = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (!files || files.length === 0) {
+      return;
+    }
+
+    setIsImporting(true);
+    try {
+      const response = await handleImportNotes(Array.from(files));
+      showToast(
+        `Successfully imported ${response.imported_count} ${pluralize(
+          response.imported_count,
+          'note',
+        )}.`,
+        'success',
+      );
+    } catch (error) {
+      showError(`Failed to import notes: ${error}`);
+    } finally {
+      setIsImporting(false);
+      // Reset input
+      event.target.value = '';
     }
   };
 
@@ -52,6 +82,35 @@ export const SettingsNotes: React.FC = () => {
               <Icon name="download" size={14} className="mr-2" fill="currentColor" />
               <span>PDF</span>
             </button>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset className="border border-border-main rounded p-8 mt-8">
+        <legend className="px-2">Import Notes</legend>
+        <div className="flex flex-col space-y-4">
+          <p className="text-sm opacity-60">
+            Import Markdown, HTML or TXT notes. You can select multiple files at once or use zip
+            archive.
+          </p>
+          <div className="flex">
+            <label
+              className={`flex items-center justify-center p-2 px-4 text-sm hover:bg-bg-hover rounded border border-border-main transition-colors cursor-pointer ${
+                isImporting ? 'opacity-50 cursor-not-allowed' : ''
+              }`}
+              title="Import Notes"
+            >
+              <Icon name="upload" size={14} className="mr-2" fill="currentColor" />
+              <span>{isImporting ? 'Importing...' : 'Select Files'}</span>
+              <input
+                type="file"
+                multiple
+                accept=".md,.markdown,.html,.htm,.txt,.pdf,.zip"
+                className="hidden"
+                onChange={onImport}
+                disabled={isImporting}
+              />
+            </label>
           </div>
         </div>
       </fieldset>

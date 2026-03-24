@@ -10,6 +10,7 @@ import type {
   NotesFolderUpdateDTO,
   NotesFoldersResponseSchemaDTO,
   NotesExportRequestSchema,
+  NotesImportResponseDTO,
 } from './notes.dto';
 
 // API URLs
@@ -38,3 +39,12 @@ export const emptyTrash = () => axios.post(`${NOTES_API_URL}/empty-trash/`);
 
 export const exportNotes = (params: NotesExportRequestSchema) =>
   axios.get(`${NOTES_API_URL}/export/`, { params, responseType: 'blob' });
+
+export const importNotes = (files: File[], folderId?: number) => {
+  const formData = new FormData();
+  files.forEach((file) => formData.append('files', file));
+  return axios.post<NotesImportResponseDTO>(`${NOTES_API_URL}/import/`, formData, {
+    params: { folder_id: folderId },
+    headers: { 'Content-Type': 'multipart/form-data' },
+  });
+};

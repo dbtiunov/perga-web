@@ -59,3 +59,7 @@ export interface NotesExportRequestSchema {
   export_target: NotesExportTargetDTO;
   export_target_id?: number | null;
 }
+
+export interface NotesImportResponseDTO {
+  imported_count: number;
+}
