@@ -5,10 +5,10 @@ import Placeholder from '@tiptap/extension-placeholder';
 import Underline from '@tiptap/extension-underline';
 import Link from '@tiptap/extension-link';
 import { TaskItem, TaskList } from '@tiptap/extension-list';
-import HorizontalRule from '@tiptap/extension-horizontal-rule';
 import { Markdown } from 'tiptap-markdown';
 
 import type { NoteDTO } from '@api/notes';
+import { cleanEditorHTML } from '@common/utils/string_utils';
 import { NotesEditorMenuBar } from '@notes/components/NotesEditor/NotesEditorMenuBar/NotesEditorMenuBar.tsx';
 import { useNotesDebounceUpdate } from '@notes/components/NotesEditor/useNotesDebounceUpdate';
 import '@notes/components/NotesEditor/notes_editor.css';
@@ -42,7 +42,6 @@ export const NotesEditor: React.FC<NotesEditorProps> = ({ note, onUpdate }) => {
       TaskItem.configure({
         nested: true,
       }),
-      HorizontalRule,
       Markdown,
     ],
     content: note?.body || '',
@@ -90,7 +89,7 @@ export const NotesEditor: React.FC<NotesEditorProps> = ({ note, onUpdate }) => {
       return;
     }
 
-    const newBody = editor.getHTML();
+    const newBody = cleanEditorHTML(editor.getHTML());
     debounceUpdate(undefined, newBody);
   };
 

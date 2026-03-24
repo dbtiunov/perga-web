@@ -16,6 +16,7 @@ import {
   updateNote,
   emptyTrash,
   exportNotes,
+  importNotes,
 } from '@api/notes';
 import { REFRESH_EVENT } from '@common/events';
 import { downloadFile } from '@common/utils/download_utils';
@@ -196,7 +197,7 @@ export const useNotesState = () => {
           export_target_id: exportTargetId,
         });
 
-        const contentDisposition = response.headers['content-disposition'];
+        const contentDisposition = response.headers['content-disposition'] as string;
         let filename = '';
         if (contentDisposition) {
           const filenameMatch = contentDisposition.match(/filename=(.+)/);
@@ -211,12 +212,26 @@ export const useNotesState = () => {
           filename = `notes_export_${new Date().getTime()}.${extension}`;
         }
 
-        downloadFile(response.data, filename);
+        downloadFile(response.data as Blob, filename);
       } catch (error) {
         console.error('Error exporting notes:', error);
       }
     },
     [],
+  );
+
+  const handleImportNotes = useCallback(
+    async (files: File[], folderId?: number) => {
+      try {
+        const response = await importNotes(files, folderId);
+        await fetchFolders();
+        return response.data;
+      } catch (error) {
+        console.error('Error importing notes:', error);
+        throw error;
+      }
+    },
+    [fetchFolders],
   );
 
   // initial fetch for folders
@@ -267,6 +282,7 @@ export const useNotesState = () => {
     handleMoveNoteToTrash,
     handleEmptyTrash,
     handleExportNotes,
+    handleImportNotes,
     setSelectedNoteId,
     selectedNote,
     selectedNoteId,

@@ -3,7 +3,7 @@ import React from 'react';
 import { useDropdown } from './useDropdown';
 
 interface DropdownItemProps {
-  onClick: (e: React.MouseEvent) => void;
+  onClick?: (e: React.MouseEvent) => void;
   children: React.ReactNode;
   className?: string;
   title?: string;
@@ -25,7 +25,7 @@ export const DropdownItem: React.FC<DropdownItemProps> = ({
       className={`w-full text-left px-4 py-3 text-sm hover:bg-bg-hover flex items-center disabled:opacity-50 disabled:cursor-not-allowed ${className}`}
       onClick={(e) => {
         e.stopPropagation();
-        onClick(e);
+        onClick?.(e);
         dropdown?.close();
       }}
       title={title}
