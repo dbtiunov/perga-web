@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.1.2] - 2026-03-24
+
+### Added
+
+- Notes Import API
+- Notes Import in SettingsNotes
+- Notes Import in Notes Folders actions dropdown
+
 ## [1.1.1] - 2026-03-15
 
 ### Added
