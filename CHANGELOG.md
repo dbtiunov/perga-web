@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.3] - 2026-03-29
+
+### Added
+
+- PWA config
+- PWA icons
+
 ## [1.1.2] - 2026-03-24
 
 ### Added
