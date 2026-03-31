@@ -72,10 +72,10 @@ export const Signup: React.FC = () => {
           </div>
         )}
 
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          <div className="rounded shadow-sm -space-y-px">
+        <form className="mt-8 space-y-4" onSubmit={handleSubmit}>
+          <div className="space-y-4">
             <div>
-              <label htmlFor="username" className="sr-only">
+              <label htmlFor="username" className="block text-sm font-medium text-text-main mb-1">
                 Username
               </label>
               <input
@@ -83,31 +83,31 @@ export const Signup: React.FC = () => {
                 name="username"
                 type="text"
                 required
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-border-main
-                           placeholder-gray-500 text-text-main rounded-t-md focus:outline-none focus:z-10 sm:text-sm"
-                placeholder="Username"
+                className="appearance-none rounded relative block w-full px-3 py-2 border border-border-main
+                           placeholder-gray-500 text-text-main focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                placeholder="johndoe"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
               />
             </div>
             <div>
-              <label htmlFor="email" className="sr-only">
-                Email
+              <label htmlFor="email" className="block text-sm font-medium text-text-main mb-1">
+                Email address
               </label>
               <input
                 id="email"
                 name="email"
                 type="email"
                 required
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-border-main
-                           placeholder-gray-500 text-text-main focus:outline-none focus:z-10 sm:text-sm"
-                placeholder="Email address"
+                className="appearance-none rounded relative block w-full px-3 py-2 border border-border-main
+                           placeholder-gray-500 text-text-main focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                placeholder="john@example.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
             </div>
             <div>
-              <label htmlFor="password" className="sr-only">
+              <label htmlFor="password" className="block text-sm font-medium text-text-main mb-1">
                 Password
               </label>
               <input
@@ -115,15 +115,15 @@ export const Signup: React.FC = () => {
                 name="password"
                 type="password"
                 required
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-border-main
-                           placeholder-gray-500 text-text-main focus:outline-none focus:z-10 sm:text-sm"
-                placeholder="Password"
+                className="appearance-none rounded relative block w-full px-3 py-2 border border-border-main
+                           placeholder-gray-500 text-text-main focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
             <div>
-              <label htmlFor="confirmPassword" className="sr-only">
+              <label htmlFor="confirmPassword" className="block text-sm font-medium text-text-main mb-1">
                 Confirm Password
               </label>
               <input
@@ -131,9 +131,9 @@ export const Signup: React.FC = () => {
                 name="confirmPassword"
                 type="password"
                 required
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-border-main
-                           placeholder-gray-500 text-text-main rounded-b-md focus:outline-none focus:z-10 sm:text-sm"
-                placeholder="Confirm Password"
+                className="appearance-none rounded relative block w-full px-3 py-2 border border-border-main
+                           placeholder-gray-500 text-text-main focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                placeholder="••••••••"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
               />
