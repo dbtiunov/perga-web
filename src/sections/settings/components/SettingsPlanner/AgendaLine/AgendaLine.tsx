@@ -1,4 +1,4 @@
-import React, { KeyboardEvent, useRef, useState } from 'react';
+import React, { KeyboardEvent, useRef, useState, useEffect } from 'react';
 
 import type { PlannerAgendaDTO, PlannerAgendaUpdateDTO } from '@api/planner';
 import { Icon } from '@common/components/Icon';
@@ -27,6 +27,13 @@ const AgendaLine: React.FC<AgendaLineProps> = ({
   const [value, setValue] = useState(agenda.name);
   const inputRef = useRef<HTMLInputElement>(null);
 
+  // focus on input when clicking on item
+  useEffect(() => {
+    if (isEditing) {
+      inputRef.current?.focus({ preventScroll: true });
+    }
+  }, [isEditing]);
+
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       if (!isEmptyLine) {
@@ -51,7 +58,7 @@ const AgendaLine: React.FC<AgendaLineProps> = ({
 
   return (
     <div
-      className={`group flex items-center gap-2 min-h-[2.5rem] transition-colors duration-200 hover:bg-bg-hover
+      className={`group flex items-center gap-2 min-h-10 transition-colors duration-200 hover:bg-bg-hover
                   rounded ${isArchived ? 'text-text-muted' : ''}`}
       draggable={!isEmptyLine && !isArchived}
       onDragStart={!isEmptyLine && !isArchived ? () => onDragStart?.(agenda) : undefined}
@@ -80,7 +87,6 @@ const AgendaLine: React.FC<AgendaLineProps> = ({
           ref={inputRef}
           type="text"
           value={value}
-          autoFocus
           maxLength={AGENDA_NAME_MAX_LENGTH}
           onKeyDown={handleKeyDown}
           onChange={(e) => setValue(e.target.value)}
