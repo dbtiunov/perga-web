@@ -1,9 +1,9 @@
 import { TwoPaneLayout } from '@common/components/TwoPaneLayout';
-import { getNextDay } from '@common/utils/date_utils';
 import { StorageKeys } from '@common/utils/storage_keys';
 import PlannerAgendas from '@planner/components/PlannerAgendas/PlannerAgendas';
 import PlannerDay from '@planner/components/PlannerDay/PlannerDay';
 import PlannerDateSelector from '@planner/components/PlannerDateSelector/PlannerDateSelector';
+import { PLANNER_DAYS_COUNT } from '@planner/const.ts';
 import { usePlannerAgendas } from '@planner/hooks/usePlannerAgendas';
 import { usePlannerDays } from '@planner/hooks/usePlannerDays';
 import { useSelectedDate } from '@planner/hooks/useSelectedDate';
@@ -55,34 +55,28 @@ const Planner = () => {
         <>
           <PlannerDateSelector selectedDate={selectedDate} onDateChange={setSelectedDate} />
 
-          <PlannerDay
-            date={selectedDate}
-            dayItems={daysItems}
-            dragDayItem={dragDayItem}
-            onDragStartDayItem={handleDayItemDragStart}
-            onDragEndDayItem={handleDayItemDragEnd}
-            getItemsForDate={getItemsForDate}
-            onReorderDayItems={handleReorderDayItems}
-            onAddDayItem={handleAddDayItem}
-            onUpdateDayItem={handleUpdateDayItem}
-            onDeleteDayItem={handleDeleteDayItem}
-            onCopyDayItem={handleCopyDayItem}
-            onSnoozeDayItem={handleSnoozeDayItem}
-          />
-          <PlannerDay
-            date={getNextDay(selectedDate)}
-            dayItems={daysItems}
-            dragDayItem={dragDayItem}
-            onDragStartDayItem={handleDayItemDragStart}
-            onDragEndDayItem={handleDayItemDragEnd}
-            getItemsForDate={getItemsForDate}
-            onReorderDayItems={handleReorderDayItems}
-            onAddDayItem={handleAddDayItem}
-            onUpdateDayItem={handleUpdateDayItem}
-            onDeleteDayItem={handleDeleteDayItem}
-            onCopyDayItem={handleCopyDayItem}
-            onSnoozeDayItem={handleSnoozeDayItem}
-          />
+          {Array.from({ length: PLANNER_DAYS_COUNT }).map((_, index) => {
+            const plannerDate = new Date(selectedDate);
+            plannerDate.setDate(selectedDate.getDate() + index);
+
+            return (
+              <PlannerDay
+                key={plannerDate.toISOString()}
+                date={plannerDate}
+                dayItems={daysItems}
+                dragDayItem={dragDayItem}
+                onDragStartDayItem={handleDayItemDragStart}
+                onDragEndDayItem={handleDayItemDragEnd}
+                getItemsForDate={getItemsForDate}
+                onReorderDayItems={handleReorderDayItems}
+                onAddDayItem={handleAddDayItem}
+                onUpdateDayItem={handleUpdateDayItem}
+                onDeleteDayItem={handleDeleteDayItem}
+                onCopyDayItem={handleCopyDayItem}
+                onSnoozeDayItem={handleSnoozeDayItem}
+              />
+            );
+          })}
         </>
       }
       rightPane={
