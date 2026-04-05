@@ -14,6 +14,7 @@ export const SettingsProfile: React.FC = () => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [weekStartDay, setWeekStartDay] = useState<WeekStartDayDTO>('monday');
+  const [mergeWeekends, setMergeWeekends] = useState(false);
   const [isUpdatingSettings, setIsUpdatingSettings] = useState(false);
   const [hasChanges, setHasChanges] = useState(false);
 
@@ -29,6 +30,7 @@ export const SettingsProfile: React.FC = () => {
       setUsername(user.username);
       setEmail(user.email);
       setWeekStartDay(user.week_start_day);
+      setMergeWeekends(user.merge_weekends);
     }
   }, [user]);
 
@@ -36,11 +38,11 @@ export const SettingsProfile: React.FC = () => {
   useEffect(() => {
     if (user) {
       const hasFieldChanges =
-        username !== user.username || email !== user.email || weekStartDay !== user.week_start_day;
+        username !== user.username || email !== user.email || weekStartDay !== user.week_start_day || mergeWeekends !== user.merge_weekends;
 
       setHasChanges(hasFieldChanges);
     }
-  }, [user, username, email, weekStartDay]);
+  }, [user, username, email, weekStartDay, mergeWeekends]);
 
   // Check if password fields have values to enable password update
   useEffect(() => {
@@ -68,6 +70,7 @@ export const SettingsProfile: React.FC = () => {
         username: username !== user?.username ? username : undefined,
         email: email !== user?.email ? email : undefined,
         week_start_day: weekStartDay !== user?.week_start_day ? weekStartDay : undefined,
+        merge_weekends: mergeWeekends !== user?.merge_weekends ? mergeWeekends : undefined,
       };
 
       // Only proceed if there are changes to make
@@ -124,7 +127,7 @@ export const SettingsProfile: React.FC = () => {
   );
 
   return (
-    <div className="w-full md:max-w-2/5">
+    <div className="w-full md:max-w-1/3">
       <form onSubmit={handleProfileUpdate}>
         <fieldset className="border border-gray-400 rounded p-8">
           <legend className="px-2 text-text-main">Edit Profile</legend>
@@ -167,6 +170,20 @@ export const SettingsProfile: React.FC = () => {
                 options={weekStartDayOptions}
                 value={weekStartDay}
                 onChange={setWeekStartDay}
+              />
+            </div>
+
+            <div className="flex items-center justify-between mt-8 mb-6">
+              <label htmlFor="mergeWeekends" className="text-text-main text-sm font-medium">
+                Merge Weekends
+              </label>
+
+              <input
+                id="mergeWeekends"
+                type="checkbox"
+                checked={mergeWeekends}
+                onChange={(e) => setMergeWeekends(e.target.checked)}
+                className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
               />
             </div>
           </div>

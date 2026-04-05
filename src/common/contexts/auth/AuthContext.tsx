@@ -33,6 +33,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       username: response.data.username,
       email: response.data.email,
       week_start_day: response.data.week_start_day,
+      merge_weekends: response.data.merge_weekends,
     });
   }, []);
 

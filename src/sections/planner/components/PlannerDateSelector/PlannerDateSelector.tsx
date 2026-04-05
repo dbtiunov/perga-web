@@ -27,7 +27,7 @@ interface DateSelectorProps {
 
 const PlannerDateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onDateChange, viewMode }) => {
   const { user } = useAuth();
-  const weekStartDay = user?.week_start_day || 'sunday';
+  const weekStartDay = user?.week_start_day || 'monday';
 
   const datesList = useMemo(() => {
     const count = Math.max(1, DATE_SELECTOR_DAYS_COUNT);
