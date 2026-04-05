@@ -43,7 +43,7 @@ const PlannerDateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onDate
       {/* Left arrow */}
       <button
         onClick={() => onDateChange(getPrevDay(selectedDate))}
-        className="mt-1"
+        className="mt-1 text-text-muted hover:text-text-main transition-colors"
         aria-label="Previous day"
         title="Previous day"
       >
@@ -58,13 +58,14 @@ const PlannerDateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onDate
           const isSelected = isSameDay(date, selectedDate);
           const dayLabel = formatDateWeekDayShort(date);
           const dateLabel = date.getDate();
+          const selectedColor = isSelected ? 'text-text-main' : 'text-text-muted';
 
           return (
             <button
               key={date.toLocaleDateString()}
               onClick={() => !isSameDay(date, selectedDate) && onDateChange(date)}
               className={`flex flex-col items-center justify-center h-12 w-10
-                   ${isSelected ? 'text-text-main' : 'text-text-muted'}`}
+                   ${selectedColor} hover:text-text-main transition-colors`}
               aria-current={isSelected ? 'date' : undefined}
               title={formatDateForDisplay(date)}
             >
@@ -86,7 +87,7 @@ const PlannerDateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onDate
       <Dropdown
         buttonIcon={<Icon name="planner" size={20} fill="currentColor" />}
         buttonTitle="Open calendar"
-        className="mt-2 mx-1"
+        className="mt-2 mx-1 text-text-muted hover:text-text-main transition-colors"
       >
         <PlannerCalendar
           selectedDate={selectedDate}
@@ -97,7 +98,7 @@ const PlannerDateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onDate
 
       <button
         onClick={() => onDateChange(getNextDay(selectedDate))}
-        className="mt-1"
+        className="mt-1 text-text-muted hover:text-text-main transition-colors"
         aria-label="Next day"
         title="Next day"
       >
