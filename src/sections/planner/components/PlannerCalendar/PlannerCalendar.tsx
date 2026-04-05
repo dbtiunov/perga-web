@@ -4,7 +4,7 @@ import { useDropdown } from '@common/components/Dropdown';
 import { Icon } from '@common/components/Icon';
 import { formatDateForDisplay, formatDateMonthName } from '@common/utils/date_utils';
 import { useAuth } from '@common/contexts/auth/useAuth.ts';
-import { DAY_NAMES } from '@planner/const';
+import { WEEKDAY_SHORT_NAMES } from '@planner/const';
 
 interface CalendarProps {
   selectedDate: Date;
@@ -30,10 +30,10 @@ const PlannerCalendar: React.FC<CalendarProps> = ({
   const orderedDayNames = useMemo(() => {
     if (user?.week_start_day === 'monday') {
       // Start with Monday: move Sunday to the end
-      return [...DAY_NAMES.slice(1), DAY_NAMES[0]];
+      return [...WEEKDAY_SHORT_NAMES.slice(1), WEEKDAY_SHORT_NAMES[0]];
     }
     // Default to Sunday start
-    return DAY_NAMES;
+    return WEEKDAY_SHORT_NAMES;
   }, [user?.week_start_day]);
 
   const handlePreviousMonth = () => {

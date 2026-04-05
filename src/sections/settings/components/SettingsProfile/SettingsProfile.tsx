@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import type { UserUpdateDTO, UpdatePasswordDTO, WeekStartDayDTO } from '@api/auth';
 import { updateUser, updatePassword } from '@api/auth';
 import { REFRESH_EVENT } from '@common/events';
+import { Toggle, ToggleOption } from '@common/components/Toggle';
 import { useAuth } from '@common/contexts/auth/useAuth.ts';
 import { useToast } from '@common/contexts/toast/useToast.ts';
 
@@ -114,13 +115,21 @@ export const SettingsProfile: React.FC = () => {
     }
   };
 
+  const weekStartDayOptions = useMemo<ToggleOption<WeekStartDayDTO>[]>(
+    () => [
+      { value: 'sunday', label: 'Sunday' },
+      { value: 'monday', label: 'Monday' },
+    ],
+    []
+  );
+
   return (
     <div className="w-full md:max-w-2/5">
       <form onSubmit={handleProfileUpdate}>
         <fieldset className="border border-gray-400 rounded p-8">
           <legend className="px-2 text-text-main">Edit Profile</legend>
 
-          <div className="space-y-5">
+          <div>
             <div className="mb-6">
               <label className="block text-text-main text-sm font-medium mb-1" htmlFor="username">
                 Username
@@ -151,49 +160,18 @@ export const SettingsProfile: React.FC = () => {
               />
             </div>
 
-            <div className="space-y-2">
+            <div className="flex items-center justify-between mt-8 mb-6">
               <h4 className="text-text-main text-sm font-medium">Week Starts On</h4>
 
-              <div className="flex space-x-4">
-                <div className="flex items-center">
-                  <input
-                    id="sunday"
-                    type="radio"
-                    name="weekStartDay"
-                    value="sunday"
-                    checked={weekStartDay === 'sunday'}
-                    onChange={() => setWeekStartDay('sunday')}
-                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 cursor-pointer"
-                  />
-                  <label
-                    htmlFor="sunday"
-                    className="ml-2 block text-sm text-text-main cursor-pointer"
-                  >
-                    Sunday
-                  </label>
-                </div>
-                <div className="flex items-center">
-                  <input
-                    id="monday"
-                    type="radio"
-                    name="weekStartDay"
-                    value="monday"
-                    checked={weekStartDay === 'monday'}
-                    onChange={() => setWeekStartDay('monday')}
-                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 cursor-pointer"
-                  />
-                  <label
-                    htmlFor="monday"
-                    className="ml-2 block text-sm text-text-main cursor-pointer"
-                  >
-                    Monday
-                  </label>
-                </div>
-              </div>
+              <Toggle
+                options={weekStartDayOptions}
+                value={weekStartDay}
+                onChange={setWeekStartDay}
+              />
             </div>
           </div>
 
-          <div className="mt-4 flex">
+          <div className="flex">
             <button
               type="submit"
               disabled={isUpdatingSettings || !hasChanges}
@@ -201,7 +179,7 @@ export const SettingsProfile: React.FC = () => {
                               text-white font-medium py-1.5 px-8 rounded focus:outline-none focus:shadow-outline 
                                 text-sm`}
             >
-              {isUpdatingSettings ? 'Updating...' : 'Update'}
+              {isUpdatingSettings ? 'Saving...' : 'Save Changes'}
             </button>
           </div>
         </fieldset>

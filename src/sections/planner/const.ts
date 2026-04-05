@@ -1,21 +1,6 @@
 import type { PlannerAgendaActionDTO } from '@api/planner';
 
-export const MONTH_NAMES: string[] = [
-  'January',
-  'February',
-  'March',
-  'April',
-  'May',
-  'June',
-  'July',
-  'August',
-  'September',
-  'October',
-  'November',
-  'December',
-];
-
-export const DAY_NAMES: string[] = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
+export const WEEKDAY_SHORT_NAMES: string[] = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
 export const DATE_SELECTOR_DAYS_COUNT: number = 5;
 export const PLANNER_DAYS_COUNT: number = 7;
 
