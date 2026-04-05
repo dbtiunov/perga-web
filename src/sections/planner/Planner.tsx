@@ -1,12 +1,16 @@
+import { useState, useEffect } from 'react';
+
 import { TwoPaneLayout } from '@common/components/TwoPaneLayout';
 import { StorageKeys } from '@common/utils/storage_keys';
 import PlannerAgendas from '@planner/components/PlannerAgendas/PlannerAgendas';
+import PlannerConfig from '@planner/components/PlannerConfig/PlannerConfig';
 import PlannerDay from '@planner/components/PlannerDay/PlannerDay';
 import PlannerDateSelector from '@planner/components/PlannerDateSelector/PlannerDateSelector';
 import { PLANNER_DAYS_COUNT } from '@planner/const.ts';
 import { usePlannerAgendas } from '@planner/hooks/usePlannerAgendas';
 import { usePlannerDays } from '@planner/hooks/usePlannerDays';
 import { useSelectedDate } from '@planner/hooks/useSelectedDate';
+import { PlannerViewMode } from '@planner/types.ts';
 
 const DEFAULT_LEFT_PANE_WIDTH_PERCENT = 66.6667; // w-2/3
 const MIN_LEFT_PANE_WIDTH_PERCENT = 30;
@@ -14,6 +18,15 @@ const MAX_LEFT_PANE_WIDTH_PERCENT = 70;
 
 const Planner = () => {
   const { selectedDate, setSelectedDate } = useSelectedDate();
+
+  const [viewMode, setViewMode] = useState<PlannerViewMode>(() => {
+    const saved = localStorage.getItem(StorageKeys.PlannerViewMode);
+    return (saved as PlannerViewMode) || 'daily';
+  });
+
+  useEffect(() => {
+    localStorage.setItem(StorageKeys.PlannerViewMode, viewMode);
+  }, [viewMode]);
 
   const {
     plannerAgendas,
@@ -53,16 +66,29 @@ const Planner = () => {
       maxLeftWidthPercent={MAX_LEFT_PANE_WIDTH_PERCENT}
       leftPane={
         <>
-          <PlannerDateSelector selectedDate={selectedDate} onDateChange={setSelectedDate} />
+          <div className="flex items-center justify-center relative z-10">
+            <div className="p-5 flex items-center gap-3 text-text-main justify-center">
+              <PlannerDateSelector
+                selectedDate={selectedDate}
+                onDateChange={setSelectedDate}
+              />
+            </div>
+            <div className="absolute right-5 top-1/2 -translate-y-1/2">
+              <PlannerConfig
+                viewMode={viewMode}
+                onViewModeChange={setViewMode}
+              />
+            </div>
+          </div>
 
           {Array.from({ length: PLANNER_DAYS_COUNT }).map((_, index) => {
-            const plannerDate = new Date(selectedDate);
-            plannerDate.setDate(selectedDate.getDate() + index);
+            const plannerDay = new Date(selectedDate);
+            plannerDay.setDate(selectedDate.getDate() + index);
 
             return (
               <PlannerDay
-                key={plannerDate.toISOString()}
-                date={plannerDate}
+                key={plannerDay.toISOString()}
+                date={plannerDay}
                 dayItems={daysItems}
                 dragDayItem={dragDayItem}
                 onDragStartDayItem={handleDayItemDragStart}

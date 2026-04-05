@@ -12,6 +12,7 @@ export enum StorageKeys {
   PlannerSelectedDate = 'planner:selectedDate',
   PlannerCollapsedAgendas = 'planner:collapsedAgendas',
   PlannerLeftPaneWidth = 'planner:leftPaneWidth',
+  PlannerViewMode = 'planner:viewMode',
 
   // Notes
   NotesLeftPaneWidth = 'notes:leftPaneWidth',

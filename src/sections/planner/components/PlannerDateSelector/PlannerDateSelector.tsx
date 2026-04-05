@@ -39,7 +39,7 @@ const PlannerDateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onDate
   };
 
   return (
-    <div className="p-5 flex items-center gap-3 text-text-main justify-center">
+    <>
       {/* Left arrow */}
       <button
         onClick={() => onDateChange(getPrevDay(selectedDate))}
@@ -103,7 +103,7 @@ const PlannerDateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onDate
       >
         <Icon name="rightChevron" size={20} />
       </button>
-    </div>
+    </>
   );
 };
 
