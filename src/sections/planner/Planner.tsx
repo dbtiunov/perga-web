@@ -1,5 +1,3 @@
-import { useState, useEffect } from 'react';
-
 import { TwoPaneLayout } from '@common/components/TwoPaneLayout';
 import { StorageKeys } from '@common/utils/storage_keys';
 import PlannerAgendas from '@planner/components/PlannerAgendas/PlannerAgendas';
@@ -9,8 +7,8 @@ import PlannerDateSelector from '@planner/components/PlannerDateSelector/Planner
 import { PLANNER_DAYS_COUNT } from '@planner/const.ts';
 import { usePlannerAgendas } from '@planner/hooks/usePlannerAgendas';
 import { usePlannerDays } from '@planner/hooks/usePlannerDays';
+import { usePlannerViewMode } from '@planner/hooks/usePlannerViewMode';
 import { useSelectedDate } from '@planner/hooks/useSelectedDate';
-import { PlannerViewMode } from '@planner/types.ts';
 
 const DEFAULT_LEFT_PANE_WIDTH_PERCENT = 66.6667; // w-2/3
 const MIN_LEFT_PANE_WIDTH_PERCENT = 30;
@@ -18,15 +16,7 @@ const MAX_LEFT_PANE_WIDTH_PERCENT = 70;
 
 const Planner = () => {
   const { selectedDate, setSelectedDate } = useSelectedDate();
-
-  const [viewMode, setViewMode] = useState<PlannerViewMode>(() => {
-    const saved = localStorage.getItem(StorageKeys.PlannerViewMode);
-    return (saved as PlannerViewMode) || 'daily';
-  });
-
-  useEffect(() => {
-    localStorage.setItem(StorageKeys.PlannerViewMode, viewMode);
-  }, [viewMode]);
+  const { viewMode, setViewMode } = usePlannerViewMode();
 
   const {
     plannerAgendas,
@@ -71,6 +61,7 @@ const Planner = () => {
               <PlannerDateSelector
                 selectedDate={selectedDate}
                 onDateChange={setSelectedDate}
+                viewMode={viewMode}
               />
             </div>
             <div className="absolute right-5 top-1/2 -translate-y-1/2">

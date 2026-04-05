@@ -2,22 +2,33 @@ import React, { useMemo } from 'react';
 
 import { Dropdown } from '@common/components/Dropdown';
 import { Icon } from '@common/components/Icon';
+import { useAuth } from '@common/contexts/auth/useAuth';
 import {
   formatDateForDisplay,
   formatDateWeekDayShort,
   getNextDay,
   getPrevDay,
   isSameDay,
+  getStartOfWeek,
+  getEndOfWeek,
+  getNextWeek,
+  getPrevWeek,
+  formatWeekRange,
 } from '@common/utils/date_utils';
 import PlannerCalendar from '@planner/components/PlannerCalendar/PlannerCalendar';
 import { DATE_SELECTOR_DAYS_COUNT } from '@planner/const';
+import { PlannerViewMode } from '@planner/types';
 
 interface DateSelectorProps {
   selectedDate: Date;
   onDateChange: (date: Date) => void;
+  viewMode: PlannerViewMode;
 }
 
-const PlannerDateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onDateChange }) => {
+const PlannerDateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onDateChange, viewMode }) => {
+  const { user } = useAuth();
+  const weekStartDay = user?.week_start_day || 'sunday';
+
   const datesList = useMemo(() => {
     const count = Math.max(1, DATE_SELECTOR_DAYS_COUNT);
     const half = Math.floor(count / 2);
@@ -38,51 +49,82 @@ const PlannerDateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onDate
     onDateChange(date);
   };
 
+  const handlePrevClick = () => {
+    if (viewMode === 'daily') {
+      onDateChange(getPrevDay(selectedDate));
+    } else {
+      const prevWeek = getPrevWeek(selectedDate);
+      onDateChange(getStartOfWeek(prevWeek, weekStartDay));
+    }
+  };
+  const handleNextClick = () => {
+    if (viewMode === 'daily') {
+      onDateChange(getNextDay(selectedDate));
+    } else {
+      const nextWeek = getNextWeek(selectedDate);
+      onDateChange(getStartOfWeek(nextWeek, weekStartDay));
+    }
+  };
+
+  const weekRangeTitle = useMemo(() => {
+    const start = getStartOfWeek(selectedDate, weekStartDay);
+    const end = getEndOfWeek(selectedDate, weekStartDay);
+    return formatWeekRange(start, end);
+  }, [selectedDate, weekStartDay]);
+
   return (
     <>
       {/* Left arrow */}
       <button
-        onClick={() => onDateChange(getPrevDay(selectedDate))}
+        onClick={handlePrevClick}
         className="mt-1 text-text-muted hover:text-text-main transition-colors"
-        aria-label="Previous day"
-        title="Previous day"
+        aria-label={viewMode === 'daily' ? 'Previous day' : 'Previous week'}
+        title={viewMode === 'daily' ? 'Previous day' : 'Previous week'}
       >
         <div className="transform rotate-180">
           <Icon name="rightChevron" size={20} />
         </div>
       </button>
 
-      {/* Dates */}
-      <div className="flex items-center justify-center gap-2">
-        {datesList.map((date) => {
-          const isSelected = isSameDay(date, selectedDate);
-          const dayLabel = formatDateWeekDayShort(date);
-          const dateLabel = date.getDate();
-          const selectedColor = isSelected ? 'text-text-main' : 'text-text-muted';
+      {/* Dates or Week Title */}
+      {viewMode === 'daily' ? (
+        <div className="flex items-center justify-center gap-2">
+          {datesList.map((date) => {
+            const isSelected = isSameDay(date, selectedDate);
+            const dayLabel = formatDateWeekDayShort(date);
+            const dateLabel = date.getDate();
+            const selectedColor = isSelected ? 'text-text-main' : 'text-text-muted';
 
-          return (
-            <button
-              key={date.toLocaleDateString()}
-              onClick={() => !isSameDay(date, selectedDate) && onDateChange(date)}
-              className={`flex flex-col items-center justify-center h-12 w-10
-                   ${selectedColor} hover:text-text-main transition-colors`}
-              aria-current={isSelected ? 'date' : undefined}
-              title={formatDateForDisplay(date)}
-            >
-              <span className={`text-2xs md:text-xs ${isSelected ? 'font-semibold' : ''}`}>
-                {dayLabel}
-              </span>
-              <div className="flex items-center gap-1">
-                <span
-                  className={`text-base md:text-lg leading-none ${isSelected ? 'font-semibold' : ''}`}
-                >
-                  {dateLabel}
+            return (
+              <button
+                key={date.toLocaleDateString()}
+                onClick={() => !isSameDay(date, selectedDate) && onDateChange(date)}
+                className={`flex flex-col items-center justify-center h-12 w-10
+                     ${selectedColor} hover:text-text-main transition-colors`}
+                aria-current={isSelected ? 'date' : undefined}
+                title={formatDateForDisplay(date)}
+              >
+                <span className={`text-2xs md:text-xs ${isSelected ? 'font-semibold' : ''}`}>
+                  {dayLabel}
                 </span>
-              </div>
-            </button>
-          );
-        })}
-      </div>
+                <div className="flex items-center gap-1">
+                  <span
+                    className={`text-base md:text-lg leading-none ${isSelected ? 'font-semibold' : ''}`}
+                  >
+                    {dateLabel}
+                  </span>
+                </div>
+              </button>
+            );
+          })}
+        </div>
+      ) : (
+        <div className="flex items-center justify-center py-2">
+          <span className="text-base md:text-lg text-text-main mt-1">
+            {weekRangeTitle}
+          </span>
+        </div>
+      )}
 
       <Dropdown
         buttonIcon={<Icon name="planner" size={20} fill="currentColor" />}
@@ -97,10 +139,10 @@ const PlannerDateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onDate
       </Dropdown>
 
       <button
-        onClick={() => onDateChange(getNextDay(selectedDate))}
+        onClick={handleNextClick}
         className="mt-1 text-text-muted hover:text-text-main transition-colors"
-        aria-label="Next day"
-        title="Next day"
+        aria-label={viewMode === 'daily' ? 'Next day' : 'Next week'}
+        title={viewMode === 'daily' ? 'Next day' : 'Next week'}
       >
         <Icon name="rightChevron" size={20} />
       </button>
