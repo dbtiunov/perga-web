@@ -38,6 +38,23 @@ describe('Toggle', () => {
     expect(onChange).toHaveBeenCalledWith('option2');
   });
 
+  it('disables the active option button', () => {
+    const onChange = vi.fn();
+    render(
+      <Toggle
+        options={options}
+        value="option1"
+        onChange={onChange}
+      />
+    );
+
+    const activeOption = screen.getByText('Option 1') as HTMLButtonElement;
+    expect(activeOption.disabled).toBe(true);
+
+    fireEvent.click(activeOption);
+    expect(onChange).not.toHaveBeenCalled();
+  });
+
   it('applies active styles to the selected option', () => {
     render(
       <Toggle
