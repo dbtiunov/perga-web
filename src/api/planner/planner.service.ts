@@ -28,6 +28,13 @@ export const getItemsByDays = (days: string[]) =>
       indexes: null, // Prevents using square brackets in array params
     },
   });
+export const getItemsByRange = (startDate: string, daysCount: number) =>
+  axios.get<Record<string, PlannerDayItemDTO[]>>(`${DAYS_API_URL}/range/`, {
+    params: {
+      start_date: startDate,
+      days_count: daysCount,
+    },
+  });
 
 export const createPlannerDayItem = (item: PlannerDayItemCreateDTO) =>
   axios.post<PlannerDayItemDTO>(`${DAYS_API_URL}/`, item);

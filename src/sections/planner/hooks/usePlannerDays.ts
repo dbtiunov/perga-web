@@ -3,7 +3,7 @@ import { useToast } from '@common/contexts/toast/useToast.ts';
 
 import type { PlannerItemStateDTO, PlannerDayItemDTO } from '@api/planner';
 import {
-  getItemsByDays,
+  getItemsByRange,
   createPlannerDayItem,
   updatePlannerDayItem,
   deletePlannerDayItem,
@@ -12,7 +12,8 @@ import {
   snoozePlannerDayItem,
 } from '@api/planner';
 import { REFRESH_EVENT } from '@common/events';
-import { formatDateForAPI, getNextDay } from '@common/utils/date_utils';
+import { formatDateForAPI } from '@common/utils/date_utils';
+import { PLANNER_DAYS_COUNT } from '@planner/const.ts';
 
 export const usePlannerDays = (selectedDate: Date) => {
   const [daysItems, setDaysItems] = useState<PlannerDayItemDTO[]>([]);
@@ -26,19 +27,16 @@ export const usePlannerDays = (selectedDate: Date) => {
   const currentItemsOrder = useRef<number[] | null>(null);
   const updatedItemsOrder = useRef<number[] | null>(null);
 
-  // Fetch todos for selected date and next day
+  // Fetch todos for PLANNER_DAYS_COUNT days starting from selected date
   const fetchDaysItems = useCallback(async () => {
     try {
-      const nextDay = getNextDay(selectedDate);
       const selectedDateStr = formatDateForAPI(selectedDate);
-      const nextDayStr = formatDateForAPI(nextDay);
+      const response = await getItemsByRange(selectedDateStr, PLANNER_DAYS_COUNT);
 
-      const response = await getItemsByDays([selectedDateStr, nextDayStr]);
-
-      const combinedItems = [
-        ...(response.data[selectedDateStr] || []),
-        ...(response.data[nextDayStr] || []),
-      ];
+      const combinedItems: PlannerDayItemDTO[] = [];
+      Object.values(response.data).forEach((items) => {
+        combinedItems.push(...items);
+      });
 
       setDaysItems(combinedItems);
     } catch (error) {
@@ -103,8 +101,14 @@ export const usePlannerDays = (selectedDate: Date) => {
     try {
       const response = await copyPlannerDayItem(itemId, formatDateForAPI(day));
 
-      const nextDayStr = formatDateForAPI(getNextDay(selectedDate));
-      if (response.data.day === nextDayStr) {
+      // Add the new item to the current state if its date is currently shown
+      const isDateVisible = Array.from({ length: PLANNER_DAYS_COUNT }).some((_, index) => {
+        const plannerDay = new Date(selectedDate);
+        plannerDay.setDate(plannerDay.getDate() + index);
+        return formatDateForAPI(plannerDay) === response.data.day;
+      });
+
+      if (isDateVisible) {
         setDaysItems([...daysItems, response.data]);
       }
     } catch (error) {
@@ -122,10 +126,13 @@ export const usePlannerDays = (selectedDate: Date) => {
       );
 
       // Add the new item to the current state if its date is currently shown
-      const selectedDateStr = formatDateForAPI(selectedDate);
-      const nextDayStr = formatDateForAPI(getNextDay(selectedDate));
+      const isDateVisible = Array.from({ length: 7 }).some((_, index) => {
+        const plannerDay = new Date(selectedDate);
+        plannerDay.setDate(plannerDay.getDate() + index);
+        return formatDateForAPI(plannerDay) === response.data.day;
+      });
 
-      if (response.data.day === selectedDateStr || response.data.day === nextDayStr) {
+      if (isDateVisible) {
         setDaysItems([...updatedItems, response.data]);
       } else {
         setDaysItems(updatedItems);
