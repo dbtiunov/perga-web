@@ -12,10 +12,12 @@ import {
   snoozePlannerDayItem,
 } from '@api/planner';
 import { REFRESH_EVENT } from '@common/events';
-import { formatDateForAPI } from '@common/utils/date_utils';
+import { useAuth } from '@common/contexts/auth/useAuth.ts';
+import { formatDateForAPI, getNextDay } from '@common/utils/date_utils';
 import { PLANNER_DAYS_COUNT } from '@planner/const.ts';
 
 export const usePlannerDays = (selectedDate: Date) => {
+  const { user } = useAuth();
   const [daysItems, setDaysItems] = useState<PlannerDayItemDTO[]>([]);
   const [dragDayItem, setDragDayItem] = useState<PlannerDayItemDTO | null>(null);
 
@@ -191,7 +193,17 @@ export const usePlannerDays = (selectedDate: Date) => {
 
   const getItemsForDate = (date: Date) => {
     const dateStr = formatDateForAPI(date);
-    return daysItems.filter((item) => item.day === dateStr);
+    const items = daysItems.filter((item) => item.day === dateStr);
+
+    if (user?.merge_weekends && date.getDay() === 6) {
+      // If Saturday and merge_weekends is true, also include Sunday's items
+      const sunday = getNextDay(date);
+      const sundayStr = formatDateForAPI(sunday);
+      const sundayItems = daysItems.filter((item) => item.day === sundayStr);
+      return [...items, ...sundayItems];
+    }
+
+    return items;
   };
 
   // Fetch items when selected date changes

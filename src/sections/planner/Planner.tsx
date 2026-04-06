@@ -1,4 +1,5 @@
 import { TwoPaneLayout } from '@common/components/TwoPaneLayout';
+import { useAuth } from '@common/contexts/auth/useAuth.ts';
 import { StorageKeys } from '@common/utils/storage_keys';
 import PlannerAgendas from '@planner/components/PlannerAgendas/PlannerAgendas';
 import PlannerConfig from '@planner/components/PlannerConfig/PlannerConfig';
@@ -15,6 +16,7 @@ const MIN_LEFT_PANE_WIDTH_PERCENT = 30;
 const MAX_LEFT_PANE_WIDTH_PERCENT = 70;
 
 const Planner = () => {
+  const { user } = useAuth();
   const { selectedDate, setSelectedDate } = useSelectedDate();
   const { viewMode, setViewMode } = usePlannerViewMode();
 
@@ -76,6 +78,13 @@ const Planner = () => {
             const plannerDay = new Date(selectedDate);
             plannerDay.setDate(selectedDate.getDate() + index);
 
+            // skip sunday if merge_weekends is true, it would be displayed with saturday
+            if (user?.merge_weekends && plannerDay.getDay() === 0) {
+              return null;
+            }
+
+            const isMergedWeekend = user?.merge_weekends && plannerDay.getDay() === 6;
+
             return (
               <PlannerDay
                 key={plannerDay.toISOString()}
@@ -91,6 +100,7 @@ const Planner = () => {
                 onDeleteDayItem={handleDeleteDayItem}
                 onCopyDayItem={handleCopyDayItem}
                 onSnoozeDayItem={handleSnoozeDayItem}
+                isMergedWeekend={isMergedWeekend}
               />
             );
           })}

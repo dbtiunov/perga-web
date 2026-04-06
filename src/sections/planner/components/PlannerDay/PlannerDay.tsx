@@ -1,7 +1,7 @@
 import React from 'react';
 
 import type { PlannerItemStateDTO, PlannerDayItemDTO } from '@api/planner';
-import { formatDateForDisplay } from '@common/utils/date_utils';
+import { formatDateForDisplay, getNextDay } from '@common/utils/date_utils';
 import DayItem from '@planner/components/PlannerDay/PlannerDayItem/PlannerDayItem';
 
 interface PlannerDayProps {
@@ -20,6 +20,7 @@ interface PlannerDayProps {
   onDeleteDayItem: (itemId: number) => void;
   onCopyDayItem: (itemId: number, date: Date) => void;
   onSnoozeDayItem: (itemId: number, date: Date) => void;
+  isMergedWeekend?: boolean;
 }
 
 const PlannerDay: React.FC<PlannerDayProps> = ({
@@ -35,6 +36,7 @@ const PlannerDay: React.FC<PlannerDayProps> = ({
   onDeleteDayItem,
   onCopyDayItem,
   onSnoozeDayItem,
+  isMergedWeekend,
 }) => {
   const emptyDayItem: PlannerDayItemDTO = {
     id: -1,
@@ -53,7 +55,10 @@ const PlannerDay: React.FC<PlannerDayProps> = ({
   return (
     <div className="p-8 flex-none basis-1/3 relative">
       <div className="flex justify-between items-center mb-4">
-        <h3>{formatDateForDisplay(date, true)}</h3>
+        <h3>
+          {formatDateForDisplay(date, true)}
+          {isMergedWeekend && ` & ${formatDateForDisplay(getNextDay(date), true)}`}
+        </h3>
       </div>
 
       <div className="space-y-0">
