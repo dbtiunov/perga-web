@@ -1,11 +1,13 @@
+import { useMemo } from 'react';
+
 import { TwoPaneLayout } from '@common/components/TwoPaneLayout';
 import { useAuth } from '@common/contexts/auth/useAuth.ts';
+import { getStartOfWeek } from '@common/utils/date_utils';
 import { StorageKeys } from '@common/utils/storage_keys';
 import PlannerAgendas from '@planner/components/PlannerAgendas/PlannerAgendas';
 import PlannerConfig from '@planner/components/PlannerConfig/PlannerConfig';
-import PlannerDay from '@planner/components/PlannerDay/PlannerDay';
 import PlannerDateSelector from '@planner/components/PlannerDateSelector/PlannerDateSelector';
-import { PLANNER_DAYS_COUNT } from '@planner/const.ts';
+import PlannerView from '@planner/components/PlannerView/PlannerView';
 import { usePlannerAgendas } from '@planner/hooks/usePlannerAgendas';
 import { usePlannerDays } from '@planner/hooks/usePlannerDays';
 import { usePlannerViewMode } from '@planner/hooks/usePlannerViewMode';
@@ -17,8 +19,9 @@ const MAX_LEFT_PANE_WIDTH_PERCENT = 70;
 
 const Planner = () => {
   const { user } = useAuth();
-  const { selectedDate, setSelectedDate } = useSelectedDate();
+  const weekStartDay = user?.week_start_day || 'monday';
   const { viewMode, setViewMode } = usePlannerViewMode();
+  const { selectedDate, setSelectedDate } = useSelectedDate();
 
   const {
     plannerAgendas,
@@ -36,6 +39,10 @@ const Planner = () => {
     fetchAgendaItems,
   } = usePlannerAgendas(selectedDate);
 
+  const startDate = useMemo(
+    () => viewMode === 'daily' ? selectedDate : getStartOfWeek(selectedDate, weekStartDay),
+    [viewMode, selectedDate, weekStartDay]
+  );
   const {
     daysItems,
     dragDayItem,
@@ -48,7 +55,7 @@ const Planner = () => {
     handleDeleteDayItem,
     handleCopyDayItem,
     handleSnoozeDayItem,
-  } = usePlannerDays(selectedDate);
+  } = usePlannerDays(startDate);
 
   return (
     <TwoPaneLayout
@@ -74,36 +81,22 @@ const Planner = () => {
             </div>
           </div>
 
-          {Array.from({ length: PLANNER_DAYS_COUNT }).map((_, index) => {
-            const plannerDay = new Date(selectedDate);
-            plannerDay.setDate(selectedDate.getDate() + index);
-
-            // skip sunday if merge_weekends is true, it would be displayed with saturday
-            if (user?.merge_weekends && plannerDay.getDay() === 0) {
-              return null;
-            }
-
-            const isMergedWeekend = user?.merge_weekends && plannerDay.getDay() === 6;
-
-            return (
-              <PlannerDay
-                key={plannerDay.toISOString()}
-                date={plannerDay}
-                dayItems={daysItems}
-                dragDayItem={dragDayItem}
-                onDragStartDayItem={handleDayItemDragStart}
-                onDragEndDayItem={handleDayItemDragEnd}
-                getItemsForDate={getItemsForDate}
-                onReorderDayItems={handleReorderDayItems}
-                onAddDayItem={handleAddDayItem}
-                onUpdateDayItem={handleUpdateDayItem}
-                onDeleteDayItem={handleDeleteDayItem}
-                onCopyDayItem={handleCopyDayItem}
-                onSnoozeDayItem={handleSnoozeDayItem}
-                isMergedWeekend={isMergedWeekend}
-              />
-            );
-          })}
+          <PlannerView
+            viewMode={viewMode}
+            selectedDate={selectedDate}
+            user={user}
+            daysItems={daysItems}
+            dragDayItem={dragDayItem}
+            handleDayItemDragStart={handleDayItemDragStart}
+            handleDayItemDragEnd={handleDayItemDragEnd}
+            getItemsForDate={getItemsForDate}
+            handleReorderDayItems={handleReorderDayItems}
+            handleAddDayItem={handleAddDayItem}
+            handleUpdateDayItem={handleUpdateDayItem}
+            handleDeleteDayItem={handleDeleteDayItem}
+            handleCopyDayItem={handleCopyDayItem}
+            handleSnoozeDayItem={handleSnoozeDayItem}
+          />
         </>
       }
       rightPane={

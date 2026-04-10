@@ -1,5 +1,4 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { useToast } from '@common/contexts/toast/useToast.ts';
 
 import type { PlannerItemStateDTO, PlannerDayItemDTO } from '@api/planner';
 import {
@@ -11,6 +10,7 @@ import {
   copyPlannerDayItem,
   snoozePlannerDayItem,
 } from '@api/planner';
+import { useToast } from '@common/contexts/toast/useToast.ts';
 import { REFRESH_EVENT } from '@common/events';
 import { useAuth } from '@common/contexts/auth/useAuth.ts';
 import { formatDateForAPI, getNextDay } from '@common/utils/date_utils';
@@ -29,7 +29,7 @@ export const usePlannerDays = (selectedDate: Date) => {
   const currentItemsOrder = useRef<number[] | null>(null);
   const updatedItemsOrder = useRef<number[] | null>(null);
 
-  // Fetch todos for PLANNER_DAYS_COUNT days starting from selected date
+  // Fetch items for PLANNER_DAYS_COUNT days starting from selected date
   const fetchDaysItems = useCallback(async () => {
     try {
       const selectedDateStr = formatDateForAPI(selectedDate);

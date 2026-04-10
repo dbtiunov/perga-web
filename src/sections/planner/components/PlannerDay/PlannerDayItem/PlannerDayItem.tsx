@@ -188,7 +188,7 @@ const PlannerDayItem = ({
       ) : (
         <div
           onClick={() => !isEmptyItem && setIsEditing(true)}
-          className={`flex-1 px-2 cursor-text 
+          className={`flex-1 px-2 cursor-text break-all
                          ${item.state === 'todo' ? 'text-text-main' : 'line-through text-text-muted'}`}
         >
           {item.text}
