@@ -25,7 +25,11 @@ interface DateSelectorProps {
   viewMode: PlannerViewMode;
 }
 
-const PlannerDateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onDateChange, viewMode }) => {
+const PlannerDateSelector: React.FC<DateSelectorProps> = ({
+  selectedDate,
+  onDateChange,
+  viewMode,
+}) => {
   const { user } = useAuth();
   const weekStartDay = user?.week_start_day || 'monday';
 
@@ -120,9 +124,7 @@ const PlannerDateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onDate
         </div>
       ) : (
         <div className="flex items-center justify-center py-2">
-          <span className="text-base md:text-lg text-text-main mt-1">
-            {weekRangeTitle}
-          </span>
+          <span className="text-base md:text-lg text-text-main mt-1">{weekRangeTitle}</span>
         </div>
       )}
 

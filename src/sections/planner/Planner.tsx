@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 
 import { TwoPaneLayout } from '@common/components/TwoPaneLayout';
-import { useAuth } from '@common/contexts/auth/useAuth.ts';
+import { useAuth } from '@common/contexts/auth/useAuth';
 import { getStartOfWeek } from '@common/utils/date_utils';
 import { StorageKeys } from '@common/utils/storage_keys';
 import PlannerAgendas from '@planner/components/PlannerAgendas/PlannerAgendas';
@@ -40,8 +40,8 @@ const Planner = () => {
   } = usePlannerAgendas(selectedDate);
 
   const startDate = useMemo(
-    () => viewMode === 'daily' ? selectedDate : getStartOfWeek(selectedDate, weekStartDay),
-    [viewMode, selectedDate, weekStartDay]
+    () => (viewMode === 'daily' ? selectedDate : getStartOfWeek(selectedDate, weekStartDay)),
+    [viewMode, selectedDate, weekStartDay],
   );
   const {
     daysItems,
@@ -74,10 +74,7 @@ const Planner = () => {
               />
             </div>
             <div className="absolute right-5 top-1/2 -translate-y-1/2">
-              <PlannerConfig
-                viewMode={viewMode}
-                onViewModeChange={setViewMode}
-              />
+              <PlannerConfig viewMode={viewMode} onViewModeChange={setViewMode} />
             </div>
           </div>
 

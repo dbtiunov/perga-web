@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 import { Icon } from '@common/components/Icon';
-import { useAuth } from '@common/contexts/auth/useAuth.ts';
+import { useAuth } from '@common/contexts/auth/useAuth';
 import { triggerRefresh } from '@common/events';
 import Storage from '@common/utils/storage';
 import { StorageKeys } from '@common/utils/storage_keys';

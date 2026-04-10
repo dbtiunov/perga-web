@@ -4,9 +4,8 @@ import type { PlannerItemStateDTO, PlannerDayItemDTO } from '@api/planner';
 import { getStartOfWeek } from '@common/utils/date_utils';
 import PlannerDay from '@planner/components/PlannerDay/PlannerDay';
 import { PLANNER_DAYS_COUNT } from '@planner/const';
-import { PlannerViewMode} from '@planner/types';
+import { PlannerViewMode } from '@planner/types';
 import { UserDTO } from '@api/auth';
-
 
 interface PlannerViewProps {
   viewMode: PlannerViewMode;
@@ -153,12 +152,12 @@ const PlannerView: React.FC<PlannerViewProps> = ({
   });
   if (user?.merge_weekends) {
     // exclude sundays from dates array
-    days = days.filter(plannerDay => plannerDay.getDay() !== 0);
+    days = days.filter((plannerDay) => plannerDay.getDay() !== 0);
   }
 
   return (
     <>
-      {days.map(plannerDay => {
+      {days.map((plannerDay) => {
         const isSaturday = plannerDay.getDay() === 6;
         const isMergedWeekend = user?.merge_weekends && isSaturday;
 

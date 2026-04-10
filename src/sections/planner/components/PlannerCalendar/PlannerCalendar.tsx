@@ -3,7 +3,7 @@ import React, { useState, useMemo } from 'react';
 import { useDropdown } from '@common/components/Dropdown';
 import { Icon } from '@common/components/Icon';
 import { formatDateForDisplay, formatDateMonthName } from '@common/utils/date_utils';
-import { useAuth } from '@common/contexts/auth/useAuth.ts';
+import { useAuth } from '@common/contexts/auth/useAuth';
 import { WEEKDAY_SHORT_NAMES } from '@planner/const';
 
 interface CalendarProps {

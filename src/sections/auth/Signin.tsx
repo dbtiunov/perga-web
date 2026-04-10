@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 
 import { getConfig } from '@/config';
-import { useAuth } from '@common/contexts/auth/useAuth.ts';
+import { useAuth } from '@common/contexts/auth/useAuth';
 
 export const Signin: React.FC = () => {
   const { IS_SIGNUP_DISABLED } = getConfig();

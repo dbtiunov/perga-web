@@ -11,13 +11,7 @@ describe('Toggle', () => {
   ];
 
   it('renders all options', () => {
-    render(
-      <Toggle
-        options={options}
-        value="option1"
-        onChange={() => {}}
-      />
-    );
+    render(<Toggle options={options} value="option1" onChange={() => {}} />);
 
     expect(screen.getByText('Option 1')).toBeDefined();
     expect(screen.getByText('Option 2')).toBeDefined();
@@ -26,13 +20,7 @@ describe('Toggle', () => {
 
   it('calls onChange when an option is clicked', () => {
     const onChange = vi.fn();
-    render(
-      <Toggle
-        options={options}
-        value="option1"
-        onChange={onChange}
-      />
-    );
+    render(<Toggle options={options} value="option1" onChange={onChange} />);
 
     fireEvent.click(screen.getByText('Option 2'));
     expect(onChange).toHaveBeenCalledWith('option2');
@@ -40,13 +28,7 @@ describe('Toggle', () => {
 
   it('disables the active option button', () => {
     const onChange = vi.fn();
-    render(
-      <Toggle
-        options={options}
-        value="option1"
-        onChange={onChange}
-      />
-    );
+    render(<Toggle options={options} value="option1" onChange={onChange} />);
 
     const activeOption = screen.getByText('Option 1') as HTMLButtonElement;
     expect(activeOption.disabled).toBe(true);
@@ -56,13 +38,7 @@ describe('Toggle', () => {
   });
 
   it('applies active styles to the selected option', () => {
-    render(
-      <Toggle
-        options={options}
-        value="option2"
-        onChange={() => {}}
-      />
-    );
+    render(<Toggle options={options} value="option2" onChange={() => {}} />);
 
     const activeOption = screen.getByText('Option 2');
     expect(activeOption.className).toContain('bg-bg-main');

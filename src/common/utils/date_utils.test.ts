@@ -1,5 +1,11 @@
 import { describe, it, expect } from 'vitest';
-import { getStartOfWeek, getEndOfWeek, formatWeekRange, getPrevWeek, getNextWeek } from './date_utils';
+import {
+  getStartOfWeek,
+  getEndOfWeek,
+  formatWeekRange,
+  getPrevWeek,
+  getNextWeek,
+} from './date_utils';
 
 describe('date_utils', () => {
   describe('getStartOfWeek', () => {

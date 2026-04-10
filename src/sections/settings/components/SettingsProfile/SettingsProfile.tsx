@@ -4,8 +4,8 @@ import type { UserUpdateDTO, UpdatePasswordDTO, WeekStartDayDTO } from '@api/aut
 import { updateUser, updatePassword } from '@api/auth';
 import { REFRESH_EVENT } from '@common/events';
 import { Toggle, ToggleOption } from '@common/components/Toggle';
-import { useAuth } from '@common/contexts/auth/useAuth.ts';
-import { useToast } from '@common/contexts/toast/useToast.ts';
+import { useAuth } from '@common/contexts/auth/useAuth';
+import { useToast } from '@common/contexts/toast/useToast';
 
 export const SettingsProfile: React.FC = () => {
   const { user, fetchUser } = useAuth();
@@ -38,7 +38,10 @@ export const SettingsProfile: React.FC = () => {
   useEffect(() => {
     if (user) {
       const hasFieldChanges =
-        username !== user.username || email !== user.email || weekStartDay !== user.week_start_day || mergeWeekends !== user.merge_weekends;
+        username !== user.username ||
+        email !== user.email ||
+        weekStartDay !== user.week_start_day ||
+        mergeWeekends !== user.merge_weekends;
 
       setHasChanges(hasFieldChanges);
     }
@@ -123,7 +126,7 @@ export const SettingsProfile: React.FC = () => {
       { value: 'sunday', label: 'Sunday' },
       { value: 'monday', label: 'Monday' },
     ],
-    []
+    [],
   );
 
   return (

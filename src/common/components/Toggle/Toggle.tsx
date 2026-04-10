@@ -38,7 +38,8 @@ export const Toggle = <T,>({
         if (isActive) {
           activeClass = 'bg-bg-main text-text-main cursor-default';
         } else {
-          activeClass = 'bg-bg-hover text-text-muted cursor-pointer hover:bg-bg-main hover:text-text-main';
+          activeClass =
+            'bg-bg-hover text-text-muted cursor-pointer hover:bg-bg-main hover:text-text-main';
         }
 
         return (

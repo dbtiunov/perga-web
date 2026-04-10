@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { AxiosError } from 'axios';
 
-import { useAuth } from '@common/contexts/auth/useAuth.ts';
+import { useAuth } from '@common/contexts/auth/useAuth';
 
 interface ErrorResponse {
   detail?: string;
@@ -123,7 +123,10 @@ export const Signup: React.FC = () => {
               />
             </div>
             <div>
-              <label htmlFor="confirmPassword" className="block text-sm font-medium text-text-main mb-1">
+              <label
+                htmlFor="confirmPassword"
+                className="block text-sm font-medium text-text-main mb-1"
+              >
                 Confirm Password
               </label>
               <input

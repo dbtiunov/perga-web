@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 
 import { StorageKeys } from '@common/utils/storage_keys';
-import { PlannerViewMode } from '@planner/types.ts';
+import { PlannerViewMode } from '@planner/types';
 
 export const usePlannerViewMode = () => {
   const [viewMode, setViewMode] = useState<PlannerViewMode>(() => {

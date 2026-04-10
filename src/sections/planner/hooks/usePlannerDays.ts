@@ -10,11 +10,11 @@ import {
   copyPlannerDayItem,
   snoozePlannerDayItem,
 } from '@api/planner';
-import { useToast } from '@common/contexts/toast/useToast.ts';
+import { useToast } from '@common/contexts/toast/useToast';
 import { REFRESH_EVENT } from '@common/events';
-import { useAuth } from '@common/contexts/auth/useAuth.ts';
+import { useAuth } from '@common/contexts/auth/useAuth';
 import { formatDateForAPI, getNextDay } from '@common/utils/date_utils';
-import { PLANNER_DAYS_COUNT } from '@planner/const.ts';
+import { PLANNER_DAYS_COUNT } from '@planner/const';
 
 export const usePlannerDays = (selectedDate: Date) => {
   const { user } = useAuth();

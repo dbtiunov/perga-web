@@ -20,7 +20,7 @@ import {
 } from '@api/notes';
 import { REFRESH_EVENT } from '@common/events';
 import { downloadFile } from '@common/utils/download_utils';
-import { NOTES_DEFAULT_EXTENSION, NOTES_EXTENSION_MAP } from '@notes/const.ts';
+import { NOTES_DEFAULT_EXTENSION, NOTES_EXTENSION_MAP } from '@notes/const';
 
 export const useNotesState = () => {
   const [rootFolder, setRootFolder] = useState<NotesFolderResponseDTO | null>(null);

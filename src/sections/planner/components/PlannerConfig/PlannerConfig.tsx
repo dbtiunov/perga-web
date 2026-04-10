@@ -3,7 +3,7 @@ import React, { useMemo } from 'react';
 import { Dropdown } from '@common/components/Dropdown';
 import { Icon } from '@common/components/Icon';
 import { Toggle, ToggleOption } from '@common/components/Toggle';
-import { PlannerViewMode } from '@planner/types.ts';
+import { PlannerViewMode } from '@planner/types';
 
 interface PlannerConfigProps {
   viewMode: PlannerViewMode;
@@ -16,7 +16,7 @@ const PlannerConfig: React.FC<PlannerConfigProps> = ({ viewMode, onViewModeChang
       { value: 'daily', label: 'Daily' },
       { value: 'weekly', label: 'Weekly' },
     ],
-    []
+    [],
   );
 
   return (
@@ -30,11 +30,7 @@ const PlannerConfig: React.FC<PlannerConfigProps> = ({ viewMode, onViewModeChang
         <div className="flex items-center justify-between gap-4">
           <span className="text-sm font-medium text-text-main">Planner View</span>
 
-          <Toggle
-            options={viewModeOptions}
-            value={viewMode}
-            onChange={onViewModeChange}
-          />
+          <Toggle options={viewModeOptions} value={viewMode} onChange={onViewModeChange} />
         </div>
       </Dropdown>
     </>
