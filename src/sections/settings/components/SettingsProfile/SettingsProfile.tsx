@@ -1,9 +1,8 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
-import type { UserUpdateDTO, UpdatePasswordDTO, WeekStartDayDTO } from '@api/auth';
+import type { UserUpdateDTO, UpdatePasswordDTO } from '@api/auth';
 import { updateUser, updatePassword } from '@api/auth';
 import { REFRESH_EVENT } from '@common/events';
-import { Toggle, ToggleOption } from '@common/components/Toggle';
 import { useAuth } from '@common/contexts/auth/useAuth';
 import { useToast } from '@common/contexts/toast/useToast';
 
@@ -13,8 +12,6 @@ export const SettingsProfile: React.FC = () => {
 
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
-  const [weekStartDay, setWeekStartDay] = useState<WeekStartDayDTO>('monday');
-  const [mergeWeekends, setMergeWeekends] = useState(false);
   const [isUpdatingSettings, setIsUpdatingSettings] = useState(false);
   const [hasChanges, setHasChanges] = useState(false);
 
@@ -29,23 +26,17 @@ export const SettingsProfile: React.FC = () => {
     if (user) {
       setUsername(user.username);
       setEmail(user.email);
-      setWeekStartDay(user.week_start_day);
-      setMergeWeekends(user.merge_weekends);
     }
   }, [user]);
 
   // Check if any profile fields have changed
   useEffect(() => {
     if (user) {
-      const hasFieldChanges =
-        username !== user.username ||
-        email !== user.email ||
-        weekStartDay !== user.week_start_day ||
-        mergeWeekends !== user.merge_weekends;
+      const hasFieldChanges = username !== user.username || email !== user.email;
 
       setHasChanges(hasFieldChanges);
     }
-  }, [user, username, email, weekStartDay, mergeWeekends]);
+  }, [user, username, email]);
 
   // Check if password fields have values to enable password update
   useEffect(() => {
@@ -72,8 +63,6 @@ export const SettingsProfile: React.FC = () => {
       const settingsData: UserUpdateDTO = {
         username: username !== user?.username ? username : undefined,
         email: email !== user?.email ? email : undefined,
-        week_start_day: weekStartDay !== user?.week_start_day ? weekStartDay : undefined,
-        merge_weekends: mergeWeekends !== user?.merge_weekends ? mergeWeekends : undefined,
       };
 
       // Only proceed if there are changes to make
@@ -121,14 +110,6 @@ export const SettingsProfile: React.FC = () => {
     }
   };
 
-  const weekStartDayOptions = useMemo<ToggleOption<WeekStartDayDTO>[]>(
-    () => [
-      { value: 'sunday', label: 'Sunday' },
-      { value: 'monday', label: 'Monday' },
-    ],
-    [],
-  );
-
   return (
     <div className="w-full md:max-w-1/3">
       <form onSubmit={handleProfileUpdate}>
@@ -145,7 +126,7 @@ export const SettingsProfile: React.FC = () => {
                 type="text"
                 value={username}
                 required
-                onChange={(e) => setUsername(e.target.value)}
+                onChange={(event) => setUsername(event.target.value)}
                 className="shadow appearance-none border rounded w-full py-1.5 px-2 text-text-main leading-tight
                                 focus:outline-none focus:shadow-outline text-sm"
               />
@@ -160,33 +141,9 @@ export const SettingsProfile: React.FC = () => {
                 type="email"
                 value={email}
                 required
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(event) => setEmail(event.target.value)}
                 className="shadow appearance-none border rounded w-full py-1.5 px-2 text-text-main leading-tight
                                 focus:outline-none focus:shadow-outline text-sm"
-              />
-            </div>
-
-            <div className="flex items-center justify-between mt-8 mb-6">
-              <h4 className="text-text-main text-sm font-medium">Week Starts On</h4>
-
-              <Toggle
-                options={weekStartDayOptions}
-                value={weekStartDay}
-                onChange={setWeekStartDay}
-              />
-            </div>
-
-            <div className="flex items-center justify-between mt-8 mb-6">
-              <label htmlFor="mergeWeekends" className="text-text-main text-sm font-medium">
-                Merge Weekends
-              </label>
-
-              <input
-                id="mergeWeekends"
-                type="checkbox"
-                checked={mergeWeekends}
-                onChange={(e) => setMergeWeekends(e.target.checked)}
-                className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
               />
             </div>
           </div>
@@ -218,7 +175,7 @@ export const SettingsProfile: React.FC = () => {
                 id="currentPassword"
                 type="password"
                 value={currentPassword}
-                onChange={(e) => setCurrentPassword(e.target.value)}
+                onChange={(event) => setCurrentPassword(event.target.value)}
                 className="shadow appearance-none border rounded w-full py-1.5 px-2 text-text-main leading-tight
                                 focus:outline-none focus:shadow-outline text-sm"
               />
@@ -232,7 +189,7 @@ export const SettingsProfile: React.FC = () => {
                 id="newPassword"
                 type="password"
                 value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value)}
+                onChange={(event) => setNewPassword(event.target.value)}
                 className="shadow appearance-none border rounded w-full py-1.5 px-2 text-text-main leading-tight
                                 focus:outline-none focus:shadow-outline text-sm"
               />

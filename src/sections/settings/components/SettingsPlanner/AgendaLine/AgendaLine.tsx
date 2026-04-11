@@ -65,8 +65,8 @@ const AgendaLine: React.FC<AgendaLineProps> = ({
       onDragEnd={!isEmptyLine && !isArchived ? () => onDragEnd?.() : undefined}
       onDragOver={
         !isEmptyLine && !isArchived
-          ? (e) => {
-              e.preventDefault();
+          ? (event) => {
+              event.preventDefault();
               onDragOverAgenda?.(agenda);
             }
           : undefined
@@ -89,7 +89,7 @@ const AgendaLine: React.FC<AgendaLineProps> = ({
           value={value}
           maxLength={AGENDA_NAME_MAX_LENGTH}
           onKeyDown={handleKeyDown}
-          onChange={(e) => setValue(e.target.value)}
+          onChange={(event) => setValue(event.target.value)}
           onBlur={() => {
             if (isEmptyLine) {
               return;

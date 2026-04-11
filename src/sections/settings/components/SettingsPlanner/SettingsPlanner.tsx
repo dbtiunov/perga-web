@@ -1,11 +1,18 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 
+import type { UserUpdateDTO, WeekStartDayDTO } from '@api/auth';
+import { updateUser } from '@api/auth';
 import type { PlannerAgendaDTO } from '@api/planner';
 import { Icon } from '@common/components/Icon';
+import { Toggle, ToggleOption } from '@common/components/Toggle';
+import { useAuth } from '@common/contexts/auth/useAuth';
+import { useToast } from '@common/contexts/toast/useToast';
 import { useSettingsAgendas } from '@planner/hooks/useSettingsAgendas';
 import AgendaLine from '@settings/components/SettingsPlanner/AgendaLine/AgendaLine';
 
 export const SettingsPlanner: React.FC = () => {
+  const { user, fetchUser } = useAuth();
+  const { showToast, showError } = useToast();
   const {
     settingsAgendas,
     handleCreateAgenda,
@@ -13,6 +20,61 @@ export const SettingsPlanner: React.FC = () => {
     handleDeleteAgenda,
     handleReorderAgendas,
   } = useSettingsAgendas();
+
+  const [weekStartDay, setWeekStartDay] = useState<WeekStartDayDTO>('monday');
+  const [mergeWeekends, setMergeWeekends] = useState(false);
+  const [isUpdatingSettings, setIsUpdatingSettings] = useState(false);
+  const [hasChanges, setHasChanges] = useState(false);
+
+  useEffect(() => {
+    if (user) {
+      setWeekStartDay(user.week_start_day);
+      setMergeWeekends(user.merge_weekends);
+    }
+  }, [user]);
+
+  useEffect(() => {
+    if (user) {
+      const hasFieldChanges =
+        weekStartDay !== user.week_start_day || mergeWeekends !== user.merge_weekends;
+
+      setHasChanges(hasFieldChanges);
+    }
+  }, [user, weekStartDay, mergeWeekends]);
+
+  const handlePlannerSettingsUpdate = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    try {
+      setIsUpdatingSettings(true);
+
+      const settingsData: UserUpdateDTO = {
+        week_start_day: weekStartDay !== user?.week_start_day ? weekStartDay : undefined,
+        merge_weekends: mergeWeekends !== user?.merge_weekends ? mergeWeekends : undefined,
+      };
+
+      if (Object.values(settingsData).some((value) => value !== undefined)) {
+        await updateUser(settingsData);
+        showToast('Planner settings updated successfully', 'success');
+        fetchUser();
+      } else {
+        showError('No changes to update.');
+      }
+    } catch (err) {
+      showError('Failed to update planner settings. Please try again.');
+      console.error('Error updating planner settings:', err);
+    } finally {
+      setIsUpdatingSettings(false);
+    }
+  };
+
+  const weekStartDayOptions = useMemo<ToggleOption<WeekStartDayDTO>[]>(
+    () => [
+      { value: 'sunday', label: 'Sunday' },
+      { value: 'monday', label: 'Monday' },
+    ],
+    [],
+  );
 
   const [showArchived, setShowArchived] = useState(false);
 
@@ -94,7 +156,45 @@ export const SettingsPlanner: React.FC = () => {
   };
 
   return (
-    <div className="w-full md:max-w-2/5">
+    <div className="flex flex-col gap-10 w-full md:max-w-2/5">
+      <form onSubmit={handlePlannerSettingsUpdate}>
+        <fieldset className="border border-gray-400 rounded p-8">
+          <legend className="px-2 text-text-main">Preferences</legend>
+
+          <div className="flex items-center justify-between mt-4 mb-6">
+            <h4 className="text-text-main text-sm font-medium">Week Starts On</h4>
+
+            <Toggle options={weekStartDayOptions} value={weekStartDay} onChange={setWeekStartDay} />
+          </div>
+
+          <div className="flex items-center justify-between mt-8 mb-6">
+            <label htmlFor="mergeWeekends" className="text-text-main text-sm font-medium">
+              Merge Weekends
+            </label>
+
+            <input
+              id="mergeWeekends"
+              type="checkbox"
+              checked={mergeWeekends}
+              onChange={(event) => setMergeWeekends(event.target.checked)}
+              className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+            />
+          </div>
+
+          <div className="flex">
+            <button
+              type="submit"
+              disabled={isUpdatingSettings || !hasChanges}
+              className={`${hasChanges ? 'bg-blue-500 hover:bg-blue-700' : 'bg-gray-400 cursor-not-allowed'}
+                              text-white font-medium py-1.5 px-8 rounded focus:outline-none focus:shadow-outline 
+                                text-sm`}
+            >
+              {isUpdatingSettings ? 'Saving...' : 'Save Changes'}
+            </button>
+          </div>
+        </fieldset>
+      </form>
+
       <fieldset className="border border-gray-400 rounded p-8">
         <legend className="px-2 text-text-main">Agendas</legend>
 

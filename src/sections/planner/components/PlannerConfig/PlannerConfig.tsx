@@ -23,7 +23,7 @@ const PlannerConfig: React.FC<PlannerConfigProps> = ({ viewMode, onViewModeChang
     <>
       <Dropdown
         buttonIcon={<Icon name="settings" size={20} />}
-        buttonTitle="Planner Settings"
+        buttonTitle="Preferences"
         buttonClassName="p-2 text-text-muted hover:text-text-main transition-colors"
         dropdownClassName="w-72 p-4"
       >
