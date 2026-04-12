@@ -4,12 +4,14 @@ export interface UserDTO {
   username: string;
   email: string;
   week_start_day: WeekStartDayDTO;
+  merge_weekends: boolean;
 }
 
 export interface UserUpdateDTO {
   username?: string;
   email?: string;
   week_start_day?: WeekStartDayDTO;
+  merge_weekends?: boolean;
 }
 
 export interface UpdatePasswordDTO {

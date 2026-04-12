@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.1.4] - 2026-04-12
+
+### Added
+
+- Added merge_weekends setting
+- Added weekly view for planner
+- Added Toggle component
+
+### Changed
+
+- Updated nginx config for PWA
+- Updated NotesEditor code
+
 ## [1.1.3] - 2026-03-29
 
 ### Added

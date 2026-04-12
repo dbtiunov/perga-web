@@ -1,12 +1,12 @@
 import React from 'react';
 
 import type { PlannerItemStateDTO, PlannerDayItemDTO } from '@api/planner';
-import { formatDateForDisplay } from '@common/utils/date_utils';
+import { formatDateForDisplay, getNextDay } from '@common/utils/date_utils';
 import DayItem from '@planner/components/PlannerDay/PlannerDayItem/PlannerDayItem';
 
 interface PlannerDayProps {
   date: Date;
-  dayItems: PlannerDayItemDTO[];
+  daysItems: PlannerDayItemDTO[];
   dragDayItem: PlannerDayItemDTO | null;
   onDragStartDayItem: (item: PlannerDayItemDTO) => void;
   onDragEndDayItem: () => void;
@@ -20,11 +20,13 @@ interface PlannerDayProps {
   onDeleteDayItem: (itemId: number) => void;
   onCopyDayItem: (itemId: number, date: Date) => void;
   onSnoozeDayItem: (itemId: number, date: Date) => void;
+  isMergedWeekend?: boolean;
+  extraClassName?: string;
 }
 
 const PlannerDay: React.FC<PlannerDayProps> = ({
   date,
-  dayItems,
+  daysItems,
   dragDayItem,
   onDragStartDayItem,
   onDragEndDayItem,
@@ -35,6 +37,8 @@ const PlannerDay: React.FC<PlannerDayProps> = ({
   onDeleteDayItem,
   onCopyDayItem,
   onSnoozeDayItem,
+  isMergedWeekend,
+  extraClassName = '',
 }) => {
   const emptyDayItem: PlannerDayItemDTO = {
     id: -1,
@@ -51,9 +55,12 @@ const PlannerDay: React.FC<PlannerDayProps> = ({
   };
 
   return (
-    <div className="p-8 flex-none basis-1/3 relative">
+    <div className={`p-8 relative ${extraClassName}`}>
       <div className="flex justify-between items-center mb-4">
-        <h3>{formatDateForDisplay(date, true)}</h3>
+        <h3>
+          {formatDateForDisplay(date, true)}
+          {isMergedWeekend && ` & ${formatDateForDisplay(getNextDay(date), true)}`}
+        </h3>
       </div>
 
       <div className="space-y-0">
@@ -62,12 +69,12 @@ const PlannerDay: React.FC<PlannerDayProps> = ({
             key={item.id}
             onDragOver={(e) => {
               e.preventDefault();
-              const draggingItemIndex = dayItems.findIndex((t) => t.id === dragDayItem?.id);
+              const draggingItemIndex = daysItems.findIndex((t) => t.id === dragDayItem?.id);
               if (draggingItemIndex === index) {
                 return;
               }
 
-              const newDayItems = [...dayItems];
+              const newDayItems = [...daysItems];
               const [removed] = newDayItems.splice(draggingItemIndex, 1);
               newDayItems.splice(index, 0, removed);
               onReorderDayItems(newDayItems);
@@ -82,7 +89,7 @@ const PlannerDay: React.FC<PlannerDayProps> = ({
               onDragStartItem={() => onDragStartDayItem(item)}
               onDragEndItem={() => {
                 onDragEndDayItem();
-                onReorderDayItems(dayItems);
+                onReorderDayItems(daysItems);
               }}
             />
           </div>

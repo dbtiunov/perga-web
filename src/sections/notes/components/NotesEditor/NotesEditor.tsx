@@ -9,7 +9,7 @@ import { Markdown } from 'tiptap-markdown';
 
 import type { NoteDTO } from '@api/notes';
 import { cleanEditorHTML } from '@common/utils/string_utils';
-import { NotesEditorMenuBar } from '@notes/components/NotesEditor/NotesEditorMenuBar/NotesEditorMenuBar.tsx';
+import { NotesEditorMenuBar } from '@notes/components/NotesEditor/NotesEditorMenuBar/NotesEditorMenuBar';
 import { useNotesDebounceUpdate } from '@notes/components/NotesEditor/useNotesDebounceUpdate';
 import '@notes/components/NotesEditor/notes_editor.css';
 
@@ -57,27 +57,25 @@ export const NotesEditor: React.FC<NotesEditorProps> = ({ note, onUpdate }) => {
   });
 
   // extract note values for using in dependencies
-  const editorHTML = editor?.getHTML();
   const noteId = note?.id;
   const noteTitle = note?.title;
   const noteBody = note?.body;
 
   // sync external changes to editor
   useEffect(() => {
-    // update values if user switched note or there is no pending update
-    if (lastSyncedNoteIdRef.current !== noteId || !hasPendingUpdate) {
+    // update values if user switched note and there is no pending update
+    if (lastSyncedNoteIdRef.current !== noteId && !hasPendingUpdate) {
       // normalize vars that can be various types for comparing
       const normalizedNoteTitle = noteTitle || '';
       const normalizedNoteBody = noteBody || '';
-      const normalizedEditorHTML = editorHTML || '';
 
+      lastSyncedNoteIdRef.current = noteId;
       setTitle(normalizedNoteTitle);
-      if (editor && normalizedNoteBody !== normalizedEditorHTML) {
-        editor.commands.setContent(normalizedNoteBody);
-        lastSyncedNoteIdRef.current = noteId;
+      if (editor) {
+        editor.commands.setContent(normalizedNoteBody, { emitUpdate: false });
       }
     }
-  }, [noteId, noteTitle, noteBody, editor, editorHTML, hasPendingUpdate]);
+  }, [noteId, noteTitle, noteBody, editor, hasPendingUpdate]);
 
   const handleTitleChange = (newTitle: string) => {
     setTitle(newTitle);

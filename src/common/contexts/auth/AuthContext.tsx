@@ -17,7 +17,7 @@ import {
   getUser,
   updatePassword,
 } from '@api/auth';
-import { AuthContext } from './AuthContext.types.ts';
+import { AuthContext } from './AuthContext.types';
 
 interface AuthProviderProps {
   children: ReactNode;
@@ -33,6 +33,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       username: response.data.username,
       email: response.data.email,
       week_start_day: response.data.week_start_day,
+      merge_weekends: response.data.merge_weekends,
     });
   }, []);
 

@@ -1,11 +1,16 @@
+import { useMemo } from 'react';
+
 import { TwoPaneLayout } from '@common/components/TwoPaneLayout';
-import { getNextDay } from '@common/utils/date_utils';
+import { useAuth } from '@common/contexts/auth/useAuth';
+import { getStartOfWeek } from '@common/utils/date_utils';
 import { StorageKeys } from '@common/utils/storage_keys';
 import PlannerAgendas from '@planner/components/PlannerAgendas/PlannerAgendas';
-import PlannerDay from '@planner/components/PlannerDay/PlannerDay';
+import PlannerConfig from '@planner/components/PlannerConfig/PlannerConfig';
 import PlannerDateSelector from '@planner/components/PlannerDateSelector/PlannerDateSelector';
+import PlannerView from '@planner/components/PlannerView/PlannerView';
 import { usePlannerAgendas } from '@planner/hooks/usePlannerAgendas';
 import { usePlannerDays } from '@planner/hooks/usePlannerDays';
+import { usePlannerViewMode } from '@planner/hooks/usePlannerViewMode';
 import { useSelectedDate } from '@planner/hooks/useSelectedDate';
 
 const DEFAULT_LEFT_PANE_WIDTH_PERCENT = 66.6667; // w-2/3
@@ -13,6 +18,9 @@ const MIN_LEFT_PANE_WIDTH_PERCENT = 30;
 const MAX_LEFT_PANE_WIDTH_PERCENT = 70;
 
 const Planner = () => {
+  const { user } = useAuth();
+  const weekStartDay = user?.week_start_day || 'monday';
+  const { viewMode, setViewMode } = usePlannerViewMode();
   const { selectedDate, setSelectedDate } = useSelectedDate();
 
   const {
@@ -31,6 +39,10 @@ const Planner = () => {
     fetchAgendaItems,
   } = usePlannerAgendas(selectedDate);
 
+  const startDate = useMemo(
+    () => (viewMode === 'daily' ? selectedDate : getStartOfWeek(selectedDate, weekStartDay)),
+    [viewMode, selectedDate, weekStartDay],
+  );
   const {
     daysItems,
     dragDayItem,
@@ -43,7 +55,7 @@ const Planner = () => {
     handleDeleteDayItem,
     handleCopyDayItem,
     handleSnoozeDayItem,
-  } = usePlannerDays(selectedDate);
+  } = usePlannerDays(startDate);
 
   return (
     <TwoPaneLayout
@@ -53,35 +65,34 @@ const Planner = () => {
       maxLeftWidthPercent={MAX_LEFT_PANE_WIDTH_PERCENT}
       leftPane={
         <>
-          <PlannerDateSelector selectedDate={selectedDate} onDateChange={setSelectedDate} />
+          <div className="flex items-center justify-center relative z-10">
+            <div className="p-5 flex items-center gap-3 text-text-main justify-center">
+              <PlannerDateSelector
+                selectedDate={selectedDate}
+                onDateChange={setSelectedDate}
+                viewMode={viewMode}
+              />
+            </div>
+            <div className="absolute right-5 top-1/2 -translate-y-1/2">
+              <PlannerConfig viewMode={viewMode} onViewModeChange={setViewMode} />
+            </div>
+          </div>
 
-          <PlannerDay
-            date={selectedDate}
-            dayItems={daysItems}
+          <PlannerView
+            viewMode={viewMode}
+            selectedDate={selectedDate}
+            user={user}
+            daysItems={daysItems}
             dragDayItem={dragDayItem}
-            onDragStartDayItem={handleDayItemDragStart}
-            onDragEndDayItem={handleDayItemDragEnd}
+            handleDayItemDragStart={handleDayItemDragStart}
+            handleDayItemDragEnd={handleDayItemDragEnd}
             getItemsForDate={getItemsForDate}
-            onReorderDayItems={handleReorderDayItems}
-            onAddDayItem={handleAddDayItem}
-            onUpdateDayItem={handleUpdateDayItem}
-            onDeleteDayItem={handleDeleteDayItem}
-            onCopyDayItem={handleCopyDayItem}
-            onSnoozeDayItem={handleSnoozeDayItem}
-          />
-          <PlannerDay
-            date={getNextDay(selectedDate)}
-            dayItems={daysItems}
-            dragDayItem={dragDayItem}
-            onDragStartDayItem={handleDayItemDragStart}
-            onDragEndDayItem={handleDayItemDragEnd}
-            getItemsForDate={getItemsForDate}
-            onReorderDayItems={handleReorderDayItems}
-            onAddDayItem={handleAddDayItem}
-            onUpdateDayItem={handleUpdateDayItem}
-            onDeleteDayItem={handleDeleteDayItem}
-            onCopyDayItem={handleCopyDayItem}
-            onSnoozeDayItem={handleSnoozeDayItem}
+            handleReorderDayItems={handleReorderDayItems}
+            handleAddDayItem={handleAddDayItem}
+            handleUpdateDayItem={handleUpdateDayItem}
+            handleDeleteDayItem={handleDeleteDayItem}
+            handleCopyDayItem={handleCopyDayItem}
+            handleSnoozeDayItem={handleSnoozeDayItem}
           />
         </>
       }

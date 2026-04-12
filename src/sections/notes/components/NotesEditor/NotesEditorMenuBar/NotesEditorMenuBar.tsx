@@ -1,7 +1,7 @@
 import React from 'react';
 import type { Editor } from '@tiptap/react';
 
-import { editorIcons } from '../notes_editor_icons.tsx';
+import { editorIcons } from '../notes_editor_icons';
 
 interface MenuBarProps {
   editor: Editor | null;

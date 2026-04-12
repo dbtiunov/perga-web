@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 
-import { NotesContext, NotesContextType } from './NotesContext.types.ts';
+import { NotesContext, NotesContextType } from './NotesContext.types';
 
 export const useNotes = (): NotesContextType => {
   const context = useContext(NotesContext);

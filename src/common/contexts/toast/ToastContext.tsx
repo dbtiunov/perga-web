@@ -4,7 +4,7 @@ import {
   ToastContext,
   ToastContextType,
   ToastMessage,
-} from '@common/contexts/toast/ToastContext.types.ts';
+} from '@common/contexts/toast/ToastContext.types';
 
 const ToastItem: React.FC<{ message: ToastMessage; onClose: (id: number) => void }> = ({
   message,

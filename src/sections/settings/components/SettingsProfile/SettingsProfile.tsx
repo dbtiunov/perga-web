@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 
-import type { UserUpdateDTO, UpdatePasswordDTO, WeekStartDayDTO } from '@api/auth';
+import type { UserUpdateDTO, UpdatePasswordDTO } from '@api/auth';
 import { updateUser, updatePassword } from '@api/auth';
 import { REFRESH_EVENT } from '@common/events';
-import { useAuth } from '@common/contexts/auth/useAuth.ts';
-import { useToast } from '@common/contexts/toast/useToast.ts';
+import { useAuth } from '@common/contexts/auth/useAuth';
+import { useToast } from '@common/contexts/toast/useToast';
 
 export const SettingsProfile: React.FC = () => {
   const { user, fetchUser } = useAuth();
@@ -12,7 +12,6 @@ export const SettingsProfile: React.FC = () => {
 
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
-  const [weekStartDay, setWeekStartDay] = useState<WeekStartDayDTO>('monday');
   const [isUpdatingSettings, setIsUpdatingSettings] = useState(false);
   const [hasChanges, setHasChanges] = useState(false);
 
@@ -27,19 +26,17 @@ export const SettingsProfile: React.FC = () => {
     if (user) {
       setUsername(user.username);
       setEmail(user.email);
-      setWeekStartDay(user.week_start_day);
     }
   }, [user]);
 
   // Check if any profile fields have changed
   useEffect(() => {
     if (user) {
-      const hasFieldChanges =
-        username !== user.username || email !== user.email || weekStartDay !== user.week_start_day;
+      const hasFieldChanges = username !== user.username || email !== user.email;
 
       setHasChanges(hasFieldChanges);
     }
-  }, [user, username, email, weekStartDay]);
+  }, [user, username, email]);
 
   // Check if password fields have values to enable password update
   useEffect(() => {
@@ -66,7 +63,6 @@ export const SettingsProfile: React.FC = () => {
       const settingsData: UserUpdateDTO = {
         username: username !== user?.username ? username : undefined,
         email: email !== user?.email ? email : undefined,
-        week_start_day: weekStartDay !== user?.week_start_day ? weekStartDay : undefined,
       };
 
       // Only proceed if there are changes to make
@@ -115,12 +111,12 @@ export const SettingsProfile: React.FC = () => {
   };
 
   return (
-    <div className="w-full md:max-w-2/5">
+    <div className="w-full md:max-w-1/3">
       <form onSubmit={handleProfileUpdate}>
         <fieldset className="border border-gray-400 rounded p-8">
           <legend className="px-2 text-text-main">Edit Profile</legend>
 
-          <div className="space-y-5">
+          <div>
             <div className="mb-6">
               <label className="block text-text-main text-sm font-medium mb-1" htmlFor="username">
                 Username
@@ -130,7 +126,7 @@ export const SettingsProfile: React.FC = () => {
                 type="text"
                 value={username}
                 required
-                onChange={(e) => setUsername(e.target.value)}
+                onChange={(event) => setUsername(event.target.value)}
                 className="shadow appearance-none border rounded w-full py-1.5 px-2 text-text-main leading-tight
                                 focus:outline-none focus:shadow-outline text-sm"
               />
@@ -145,55 +141,14 @@ export const SettingsProfile: React.FC = () => {
                 type="email"
                 value={email}
                 required
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(event) => setEmail(event.target.value)}
                 className="shadow appearance-none border rounded w-full py-1.5 px-2 text-text-main leading-tight
                                 focus:outline-none focus:shadow-outline text-sm"
               />
             </div>
-
-            <div className="space-y-2">
-              <h4 className="text-text-main text-sm font-medium">Week Starts On</h4>
-
-              <div className="flex space-x-4">
-                <div className="flex items-center">
-                  <input
-                    id="sunday"
-                    type="radio"
-                    name="weekStartDay"
-                    value="sunday"
-                    checked={weekStartDay === 'sunday'}
-                    onChange={() => setWeekStartDay('sunday')}
-                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 cursor-pointer"
-                  />
-                  <label
-                    htmlFor="sunday"
-                    className="ml-2 block text-sm text-text-main cursor-pointer"
-                  >
-                    Sunday
-                  </label>
-                </div>
-                <div className="flex items-center">
-                  <input
-                    id="monday"
-                    type="radio"
-                    name="weekStartDay"
-                    value="monday"
-                    checked={weekStartDay === 'monday'}
-                    onChange={() => setWeekStartDay('monday')}
-                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 cursor-pointer"
-                  />
-                  <label
-                    htmlFor="monday"
-                    className="ml-2 block text-sm text-text-main cursor-pointer"
-                  >
-                    Monday
-                  </label>
-                </div>
-              </div>
-            </div>
           </div>
 
-          <div className="mt-4 flex">
+          <div className="flex">
             <button
               type="submit"
               disabled={isUpdatingSettings || !hasChanges}
@@ -201,7 +156,7 @@ export const SettingsProfile: React.FC = () => {
                               text-white font-medium py-1.5 px-8 rounded focus:outline-none focus:shadow-outline 
                                 text-sm`}
             >
-              {isUpdatingSettings ? 'Updating...' : 'Update'}
+              {isUpdatingSettings ? 'Saving...' : 'Save Changes'}
             </button>
           </div>
         </fieldset>
@@ -220,7 +175,7 @@ export const SettingsProfile: React.FC = () => {
                 id="currentPassword"
                 type="password"
                 value={currentPassword}
-                onChange={(e) => setCurrentPassword(e.target.value)}
+                onChange={(event) => setCurrentPassword(event.target.value)}
                 className="shadow appearance-none border rounded w-full py-1.5 px-2 text-text-main leading-tight
                                 focus:outline-none focus:shadow-outline text-sm"
               />
@@ -234,7 +189,7 @@ export const SettingsProfile: React.FC = () => {
                 id="newPassword"
                 type="password"
                 value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value)}
+                onChange={(event) => setNewPassword(event.target.value)}
                 className="shadow appearance-none border rounded w-full py-1.5 px-2 text-text-main leading-tight
                                 focus:outline-none focus:shadow-outline text-sm"
               />

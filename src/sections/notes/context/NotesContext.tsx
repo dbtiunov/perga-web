@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 
-import { useNotesState } from '@notes/hooks/useNotesState.ts';
+import { useNotesState } from '@notes/hooks/useNotesState';
 import { NotesContext } from './NotesContext.types';
 
 export const NotesProvider: React.FC<{ children: ReactNode }> = ({ children }) => {

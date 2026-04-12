@@ -62,6 +62,40 @@ export const getNextWeek = (date: Date): Date => {
   return nextWeek;
 };
 
+export const getPrevWeek = (date: Date): Date => {
+  const prevWeek = new Date(date);
+  prevWeek.setDate(prevWeek.getDate() - 7);
+  return prevWeek;
+};
+
+export const getStartOfWeek = (date: Date, weekStartDay: 'monday' | 'sunday'): Date => {
+  const startOfWeek = new Date(date);
+  const day = startOfWeek.getDay(); // 0: Sunday, 1: Monday
+  const diff = weekStartDay === 'monday' ? (day === 0 ? -6 : 1 - day) : -day;
+  startOfWeek.setDate(startOfWeek.getDate() + diff);
+  return startOfWeek;
+};
+
+export const getEndOfWeek = (date: Date, weekStartDay: 'monday' | 'sunday'): Date => {
+  const startOfWeek = getStartOfWeek(date, weekStartDay);
+  const endOfWeek = new Date(startOfWeek);
+  endOfWeek.setDate(startOfWeek.getDate() + 6);
+  return endOfWeek;
+};
+
+export const formatWeekRange = (startDate: Date, endDate: Date): string => {
+  const startMonth = startDate.toLocaleDateString('en-US', { month: 'short' });
+  const startDay = startDate.getDate();
+  const endMonth = endDate.toLocaleDateString('en-US', { month: 'short' });
+  const endDay = endDate.getDate();
+  const endYear = endDate.getFullYear();
+
+  if (startDate.getMonth() === endDate.getMonth()) {
+    return `${startMonth} ${startDay} - ${endDay}, ${endYear}`;
+  }
+  return `${startMonth} ${startDay} - ${endMonth} ${endDay}, ${endYear}`;
+};
+
 export const getNextMonth = (date: Date): Date => {
   const nextMonth = new Date(date);
   nextMonth.setMonth(nextMonth.getMonth() + 1);

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 
 import { getConfig } from '@/config';
-import { useAuth } from '@common/contexts/auth/useAuth.ts';
+import { useAuth } from '@common/contexts/auth/useAuth';
 
 export const Signin: React.FC = () => {
   const { IS_SIGNUP_DISABLED } = getConfig();
@@ -57,10 +57,10 @@ export const Signin: React.FC = () => {
           </div>
         )}
 
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          <div className="rounded shadow-sm -space-y-px">
+        <form className="mt-8 space-y-4" onSubmit={handleSubmit}>
+          <div className="space-y-4">
             <div>
-              <label htmlFor="username" className="sr-only">
+              <label htmlFor="username" className="block text-sm font-medium text-text-main mb-1">
                 Username
               </label>
               <input
@@ -69,14 +69,14 @@ export const Signin: React.FC = () => {
                 type="text"
                 required
                 value={username}
-                placeholder="Username or email"
+                placeholder="Enter your username or email"
                 onChange={(e) => setUsername(e.target.value)}
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-border-main
-                           placeholder-gray-500 text-text-main rounded-t-md focus:outline-none focus:z-10 sm:text-sm"
+                className="appearance-none rounded relative block w-full px-3 py-2 border border-border-main
+                           placeholder-gray-500 text-text-main focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
               />
             </div>
             <div>
-              <label htmlFor="password" className="sr-only">
+              <label htmlFor="password" className="block text-sm font-medium text-text-main mb-1">
                 Password
               </label>
               <input
@@ -85,10 +85,10 @@ export const Signin: React.FC = () => {
                 type="password"
                 required
                 value={password}
-                placeholder="Password"
+                placeholder="••••••••"
                 onChange={(e) => setPassword(e.target.value)}
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-border-main
-                           placeholder-gray-500 text-text-main rounded-b-md focus:outline-none focus:z-10 sm:text-sm"
+                className="appearance-none rounded relative block w-full px-3 py-2 border border-border-main
+                           placeholder-gray-500 text-text-main focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
               />
             </div>
           </div>

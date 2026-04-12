@@ -1,4 +1,4 @@
-import { useState, useRef, KeyboardEvent } from 'react';
+import { useState, useRef, KeyboardEvent, useEffect } from 'react';
 import * as React from 'react';
 
 import type { PlannerItemStateDTO, PlannerAgendaItemDTO, PlannerAgendaDTO } from '@api/planner';
@@ -45,6 +45,13 @@ const PlannerAgendaItem = ({
   const [isDragging, setIsDragging] = useState(false);
   const [value, setValue] = useState(item.text);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  // focus on input when clicking on item
+  useEffect(() => {
+    if (isEditing) {
+      inputRef.current?.focus({ preventScroll: true });
+    }
+  }, [isEditing]);
 
   const onToggleCheckbox = () => {
     let newState: PlannerItemStateDTO;
@@ -162,7 +169,7 @@ const PlannerAgendaItem = ({
 
   return (
     <div
-      className={`group flex items-center gap-2 min-h-[2.5rem] p-2
+      className={`group flex items-center gap-2 min-h-10 p-2
                      ${isDragging ? 'opacity-50' : 'opacity-100'}
                      transition-opacity duration-200 hover:bg-bg-hover rounded`}
       draggable={canDrag}
@@ -209,7 +216,6 @@ const PlannerAgendaItem = ({
           ref={inputRef}
           type="text"
           value={value}
-          autoFocus
           maxLength={ITEM_TEXT_MAX_LENGTH}
           onChange={(e) => setValue(e.target.value)}
           onBlur={() => {
