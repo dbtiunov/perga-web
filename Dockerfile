@@ -18,6 +18,7 @@ COPY vite.config.ts .
 
 # Copy app code and assets
 COPY index.html .
+COPY public ./public
 COPY src ./src
 
 # Copy config template and generator script
