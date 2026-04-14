@@ -12,14 +12,20 @@ Personal organizer that helps you plan and organize your days and months efficie
 
 ## Features
 
-- Daily planner
+- Daily planner + weekly view
 - Monthly and custom agendas
+- Notes
 - User authentication and settings
 - Responsive design with mobile support
+- PWA support
 - Dark theme
 
 <p>
-  <img src="docs/assets/planner_screenshot.png" alt="Planner Screenshot" width="300" />
+  <img src="docs/assets/planner_screenshot.png" alt="Planner" width="300" />
+  <span>&nbsp;&nbsp;&nbsp;</span>
+  <img src="docs/assets/planner_screenshot.png" alt="Planner Weekly" width="300" />
+  <span>&nbsp;&nbsp;&nbsp;</span>
+  <img src="docs/assets/notes_screenshot.png" alt="Notes" width="300" />
 </p>
 
 ## Demo
