@@ -156,7 +156,7 @@ const PlannerView: React.FC<PlannerViewProps> = ({
   }
 
   return (
-    <>
+    <div className="flex flex-col">
       {days.map((plannerDay) => {
         const isSaturday = plannerDay.getDay() === 6;
         const isMergedWeekend = user?.merge_weekends && isSaturday;
@@ -177,11 +177,11 @@ const PlannerView: React.FC<PlannerViewProps> = ({
             onCopyDayItem={handleCopyDayItem}
             onSnoozeDayItem={handleSnoozeDayItem}
             isMergedWeekend={isMergedWeekend}
-            extraClassName="min-h-[45vh]"
+            extraClassName="min-h-[45vh] flex-none"
           />
         );
       })}
-    </>
+    </div>
   );
 };
 
