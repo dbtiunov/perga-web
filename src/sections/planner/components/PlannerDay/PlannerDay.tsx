@@ -20,6 +20,7 @@ interface PlannerDayProps {
   onDeleteDayItem: (itemId: number) => void;
   onCopyDayItem: (itemId: number, date: Date) => void;
   onSnoozeDayItem: (itemId: number, date: Date) => void;
+  useCompactActions?: boolean;
   isMergedWeekend?: boolean;
   extraClassName?: string;
 }
@@ -37,6 +38,7 @@ const PlannerDay: React.FC<PlannerDayProps> = ({
   onDeleteDayItem,
   onCopyDayItem,
   onSnoozeDayItem,
+  useCompactActions,
   isMergedWeekend,
   extraClassName = '',
 }) => {
@@ -82,20 +84,21 @@ const PlannerDay: React.FC<PlannerDayProps> = ({
           >
             <DayItem
               item={item}
-              onUpdateItem={onUpdateDayItem}
-              onDeleteItem={onDeleteDayItem}
-              onCopyItem={onCopyDayItem}
-              onSnoozeItem={onSnoozeDayItem}
               onDragStartItem={() => onDragStartDayItem(item)}
               onDragEndItem={() => {
                 onDragEndDayItem();
                 onReorderDayItems(daysItems);
               }}
+              onUpdateItem={onUpdateDayItem}
+              onDeleteItem={onDeleteDayItem}
+              onCopyItem={onCopyDayItem}
+              onSnoozeItem={onSnoozeDayItem}
+              useCompactActions={useCompactActions}
             />
           </div>
         ))}
 
-        <DayItem item={emptyDayItem} onUpdateItem={handleEmptyItemEdit} />
+        <DayItem item={emptyDayItem} onUpdateItem={handleEmptyItemEdit} useCompactActions={useCompactActions} />
       </div>
     </div>
   );
