@@ -51,15 +51,15 @@ describe('cleanEditorHTML', () => {
     expect(cleanEditorHTML(html)).toBe('<ul><li>First item</li><li>Second item</li></ul>');
   });
 
-  it('should handle multiple paragraphs inside list item (only first one matched by simple regex)', () => {
-    // Note: The current regex is simple and might only work for single-line/simple content.
-    // If it has multiple <p> it might not match as intended or match too much if not careful.
-    // However, for standard Tiptap "tight" lists, it's usually <li><p>content</p></li>.
-    const html = '<li><p>Line 1</p><p>Line 2</p></li>';
-    // Our regex: /<li><p>(.*?)<\/p><\/li>/g
-    // It won't match <li><p>Line 1</p><p>Line 2</p></li> because of the extra </p> in the middle if it's not greedy,
-    // or it might match too much if it is. (.*?) is non-greedy.
-    // <li><p>Line 1</p> matches but then it expects </li> but finds <p>Line 2</p></li>.
-    expect(cleanEditorHTML(html)).toBe('<li><p>Line 1</p><p>Line 2</p></li>');
+  it('should not match multi-line content if it looks like multiple list items', () => {
+    // Current non-greedy regex with /s would match across lines.
+    // Without /s it should be fine.
+    const html = '<li><p>First</p></li>\n<li><p>Second</p></li>';
+    expect(cleanEditorHTML(html)).toBe('<li>First</li>\n<li>Second</li>');
+  });
+
+  it('should not break code blocks with newlines', () => {
+    const html = '<pre><code>line 1\nline 2</code></pre>';
+    expect(cleanEditorHTML(html)).toBe('<pre><code>line 1\nline 2</code></pre>');
   });
 });

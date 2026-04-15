@@ -98,7 +98,11 @@ const PlannerDay: React.FC<PlannerDayProps> = ({
           </div>
         ))}
 
-        <DayItem item={emptyDayItem} onUpdateItem={handleEmptyItemEdit} useCompactActions={useCompactActions} />
+        <DayItem
+          item={emptyDayItem}
+          onUpdateItem={handleEmptyItemEdit}
+          useCompactActions={useCompactActions}
+        />
       </div>
     </div>
   );

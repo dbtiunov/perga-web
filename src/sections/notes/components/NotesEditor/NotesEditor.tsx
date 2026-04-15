@@ -5,7 +5,6 @@ import Placeholder from '@tiptap/extension-placeholder';
 import Underline from '@tiptap/extension-underline';
 import Link from '@tiptap/extension-link';
 import { TaskItem, TaskList } from '@tiptap/extension-list';
-import { Markdown } from 'tiptap-markdown';
 
 import type { NoteDTO } from '@api/notes';
 import { cleanEditorHTML } from '@common/utils/string_utils';
@@ -42,7 +41,6 @@ export const NotesEditor: React.FC<NotesEditorProps> = ({ note, onUpdate }) => {
       TaskItem.configure({
         nested: true,
       }),
-      Markdown,
     ],
     content: note?.body || '',
     onUpdate: () => {

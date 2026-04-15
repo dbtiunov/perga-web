@@ -56,11 +56,13 @@ You can try out Perga without installation by visiting demo version at [https://
 ### Development
 
 Start the development server:
+
 ```bash
 npm run dev
 ```
 
 Build for production:
+
 ```bash
 npm run build
 ```
