@@ -99,7 +99,8 @@ export const useNotesState = () => {
   const handleCreateNote = useCallback(
     async (folderId: number) => {
       try {
-        await createNote({ body: '', folder_id: folderId });
+        const response = await createNote({ body: '', folder_id: folderId });
+        setSelectedNoteId(response.data.id);
         await fetchFolders();
       } catch (error) {
         console.error('Error creating note:', error);
