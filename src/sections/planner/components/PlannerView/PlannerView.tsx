@@ -75,6 +75,7 @@ const PlannerView: React.FC<PlannerViewProps> = ({
               onDeleteDayItem={handleDeleteDayItem}
               onCopyDayItem={handleCopyDayItem}
               onSnoozeDayItem={handleSnoozeDayItem}
+              useCompactActions={true}
               isMergedWeekend={true}
               extraClassName="min-h-[40vh]"
             />
@@ -99,6 +100,7 @@ const PlannerView: React.FC<PlannerViewProps> = ({
                 onDeleteDayItem={handleDeleteDayItem}
                 onCopyDayItem={handleCopyDayItem}
                 onSnoozeDayItem={handleSnoozeDayItem}
+                useCompactActions={true}
               />
               <PlannerDay
                 date={sunday}
@@ -113,6 +115,7 @@ const PlannerView: React.FC<PlannerViewProps> = ({
                 onDeleteDayItem={handleDeleteDayItem}
                 onCopyDayItem={handleCopyDayItem}
                 onSnoozeDayItem={handleSnoozeDayItem}
+                useCompactActions={true}
               />
             </div>
           );
@@ -133,6 +136,7 @@ const PlannerView: React.FC<PlannerViewProps> = ({
             onDeleteDayItem={handleDeleteDayItem}
             onCopyDayItem={handleCopyDayItem}
             onSnoozeDayItem={handleSnoozeDayItem}
+            useCompactActions={true}
             extraClassName="min-h-[45vh]"
           />
         );
@@ -156,7 +160,7 @@ const PlannerView: React.FC<PlannerViewProps> = ({
   }
 
   return (
-    <>
+    <div className="flex flex-col">
       {days.map((plannerDay) => {
         const isSaturday = plannerDay.getDay() === 6;
         const isMergedWeekend = user?.merge_weekends && isSaturday;
@@ -176,12 +180,13 @@ const PlannerView: React.FC<PlannerViewProps> = ({
             onDeleteDayItem={handleDeleteDayItem}
             onCopyDayItem={handleCopyDayItem}
             onSnoozeDayItem={handleSnoozeDayItem}
+            useCompactActions={false}
             isMergedWeekend={isMergedWeekend}
-            extraClassName="min-h-[45vh]"
+            extraClassName="min-h-[45vh] flex-none"
           />
         );
       })}
-    </>
+    </div>
   );
 };
 

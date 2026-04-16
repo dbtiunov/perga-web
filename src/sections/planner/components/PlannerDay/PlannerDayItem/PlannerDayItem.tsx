@@ -1,7 +1,7 @@
 import { useState, useRef, KeyboardEvent, DragEvent, useEffect } from 'react';
 
 import type { PlannerItemStateDTO, PlannerDayItemDTO } from '@api/planner';
-import { Dropdown, DropdownItem } from '@common/components/Dropdown';
+import { Dropdown, DropdownItem, DropdownSubmenu } from '@common/components/Dropdown';
 import { Icon } from '@common/components/Icon';
 import { getNextDay, getNextMonth, getNextWeek } from '@common/utils/date_utils';
 import PlannerCalendar from '@planner/components/PlannerCalendar/PlannerCalendar';
@@ -18,6 +18,7 @@ interface DayItemProps {
   onDeleteItem?: (itemId: number) => void;
   onCopyItem?: (itemId: number, date: Date) => void;
   onSnoozeItem?: (itemId: number, date: Date) => void;
+  useCompactActions?: boolean;
 }
 
 const PlannerDayItem = ({
@@ -28,6 +29,7 @@ const PlannerDayItem = ({
   onDeleteItem,
   onCopyItem,
   onSnoozeItem,
+  useCompactActions,
 }: DayItemProps) => {
   const itemDate = new Date(item.day);
   const isEmptyItem: boolean = item.id === -1;
@@ -197,41 +199,78 @@ const PlannerDayItem = ({
 
       {showActions && (
         <div className="flex-none relative opacity-100 md:opacity-0 md:group-hover:opacity-100 text-text-main p-2 bg-transparent transition-opacity flex">
-          <Dropdown
-            buttonIcon={<Icon name="copy" size={48} className="h-6 w-6" />}
-            buttonTitle="Copy item"
-            className="ml-2"
-            dropdownClassName="w-64"
-          >
-            <PlannerCalendar
-              selectedDate={new Date()}
-              onDateChange={handleCopyItem}
-              title="Copy to"
-              predefinedDates={predefinedDates}
-            />
-          </Dropdown>
+          {!useCompactActions && (
+            <>
+              <Dropdown
+                buttonIcon={<Icon name="copy" size={48} className="h-6 w-6" />}
+                buttonTitle="Copy item"
+                className="ml-2"
+                dropdownClassName="w-64"
+              >
+                <PlannerCalendar
+                  selectedDate={new Date()}
+                  onDateChange={handleCopyItem}
+                  title="Copy to"
+                  predefinedDates={predefinedDates}
+                />
+              </Dropdown>
 
-          <Dropdown
-            buttonIcon={<Icon name="snooze" size={48} className="h-6 w-6" />}
-            buttonTitle="Snooze item"
-            className="ml-2"
-            dropdownClassName="w-64"
-          >
-            <PlannerCalendar
-              selectedDate={new Date()}
-              onDateChange={handleSnoozeItem}
-              title="Snooze to"
-              predefinedDates={predefinedDates}
-            />
-          </Dropdown>
+              <Dropdown
+                buttonIcon={<Icon name="snooze" size={48} className="h-6 w-6" />}
+                buttonTitle="Snooze item"
+                className="ml-2"
+                dropdownClassName="w-64"
+              >
+                <PlannerCalendar
+                  selectedDate={new Date()}
+                  onDateChange={handleSnoozeItem}
+                  title="Snooze to"
+                  predefinedDates={predefinedDates}
+                />
+              </Dropdown>
+            </>
+          )}
 
           {showExtraActions && (
             <Dropdown
               buttonIcon={<Icon name="dots" size={48} className="h-6 w-6" />}
               buttonTitle="Extra actions"
               className="ml-2"
-              dropdownClassName="w-36"
+              dropdownClassName={useCompactActions ? 'w-64' : 'w-36'}
             >
+              {useCompactActions && (
+                <>
+                  <DropdownSubmenu
+                    label={
+                      <>
+                        <Icon name="copy" size={48} className="h-4 w-4 mr-2" /> Copy item
+                      </>
+                    }
+                  >
+                    <PlannerCalendar
+                      selectedDate={new Date()}
+                      onDateChange={handleCopyItem}
+                      title="Copy to"
+                      predefinedDates={predefinedDates}
+                    />
+                  </DropdownSubmenu>
+
+                  <DropdownSubmenu
+                    label={
+                      <>
+                        <Icon name="snooze" size={48} className="h-4 w-4 mr-2" /> Snooze item
+                      </>
+                    }
+                  >
+                    <PlannerCalendar
+                      selectedDate={new Date()}
+                      onDateChange={handleSnoozeItem}
+                      title="Snooze to"
+                      predefinedDates={predefinedDates}
+                    />
+                  </DropdownSubmenu>
+                </>
+              )}
               <DropdownItem onClick={onDropActionClick} title="Drop item">
                 <Icon name="drop" size={48} className="h-4 w-4 mr-2" /> Drop item
               </DropdownItem>

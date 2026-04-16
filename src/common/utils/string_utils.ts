@@ -23,5 +23,11 @@ export const cleanEditorHTML = (html: string): string => {
   return html
     .replace(/ class="tight"/g, '')
     .replace(/ data-tight="true"/g, '')
-    .replace(/<li><p>(.*?)<\/p><\/li>/g, '<li>$1</li>');
+    .replace(/<li><p>(.*?)<\/p><\/li>/g, (match, content) => {
+      // If content contains another <p>, it's not a simple tight list item
+      if (content.includes('<p>')) {
+        return match;
+      }
+      return `<li>${content}</li>`;
+    });
 };

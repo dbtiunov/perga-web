@@ -38,7 +38,9 @@ const AgendaLine: React.FC<AgendaLineProps> = ({
     if (e.key === 'Enter') {
       if (!isEmptyLine) {
         setIsEditing(false);
-        onUpdateAgenda(agenda.id, { name: value });
+        if (value.trim() !== agenda.name) {
+          onUpdateAgenda(agenda.id, { name: value });
+        }
       } else {
         // For empty line, update but stay in editing mode
         onUpdateAgenda(agenda.id, { name: value });
@@ -95,7 +97,9 @@ const AgendaLine: React.FC<AgendaLineProps> = ({
               return;
             }
             setIsEditing(false);
-            onUpdateAgenda(agenda.id, { name: value });
+            if (value.trim() !== agenda.name) {
+              onUpdateAgenda(agenda.id, { name: value });
+            }
           }}
           className="min-w-0 flex-1 bg-transparent rounded px-2 py-1 text-text-main focus:outline-none
                           focus:ring-0"
@@ -106,8 +110,14 @@ const AgendaLine: React.FC<AgendaLineProps> = ({
           onClick={() => !isEmptyLine && setIsEditing(true)}
           className={`flex-1 px-2 cursor-text truncate hover:cursor-text ${isArchived ? 'text-text-muted' : 'text-text-main'}`}
         >
-          {agenda.name} ({agenda.completed_items_cnt}/
-          {agenda.completed_items_cnt + agenda.todo_items_cnt})
+          {agenda.name}&nbsp;
+          <span
+            className="text-text-muted text-xs font-semibold"
+            title="Completed items / Total items"
+            aria-label="Completed items / Total items"
+          >
+            {agenda.completed_items_cnt}/{agenda.completed_items_cnt + agenda.todo_items_cnt}
+          </span>
         </div>
       )}
 

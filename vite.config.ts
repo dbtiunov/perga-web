@@ -11,7 +11,29 @@ export default defineConfig({
     tailwindcss(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['icons/favicon.ico', 'icons/apple-touch-icon.png', 'icons/logo.svg'],
+      includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'logo.svg', 'config.json'],
+      workbox: {
+        globPatterns: ['**/*.{js,css,html,ico,png,svg,json}'],
+        cleanupOutdatedCaches: true,
+        clientsClaim: true,
+        skipWaiting: true,
+        runtimeCaching: [
+          {
+            urlPattern: /^https:\/\/app\.getperga\.me\/config\.json$/,
+            handler: 'NetworkFirst',
+            options: {
+              cacheName: 'config-cache',
+              expiration: {
+                maxEntries: 1,
+                maxAgeSeconds: 60 * 60 * 24, // 24 hours
+              },
+              cacheableResponse: {
+                statuses: [0, 200],
+              },
+            },
+          },
+        ],
+      },
       manifest: {
         name: 'Perga Web',
         short_name: 'Perga',

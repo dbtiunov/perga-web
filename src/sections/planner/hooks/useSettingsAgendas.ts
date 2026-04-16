@@ -58,9 +58,12 @@ export const useSettingsAgendas = () => {
     // use optimistic update for better ui interactivity
     const prev = settingsAgendas;
     const prevAgenda = prev.find((agenda) => agenda.id === agendaId);
+    if (!prevAgenda) {
+      return;
+    }
     const optimisticAgenda = { ...prevAgenda, ...changes } as PlannerAgendaDTO;
-    setSettingsAgendas(
-      settingsAgendas.map((agenda) => (agenda.id === agendaId ? optimisticAgenda : agenda)),
+    setSettingsAgendas((currentAgendas) =>
+      currentAgendas.map((agenda) => (agenda.id === agendaId ? optimisticAgenda : agenda)),
     );
 
     try {
