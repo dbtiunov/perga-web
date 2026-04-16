@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.1.6] - 2026-04-14
+
+### Changed
+
+- Put copy and move actions into dropdown for weeky view
+- Select new note after creation
+
+### Fixed
+
+- Fixed NotesEditor blocks issues
+- Fixed agenda items counts
+- Fixed nginx config for PWA
+
 ## [1.1.5] - 2026-04-14
 
 ### Added
