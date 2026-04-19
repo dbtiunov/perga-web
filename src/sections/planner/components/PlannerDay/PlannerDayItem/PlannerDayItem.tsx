@@ -240,7 +240,7 @@ const PlannerDayItem = ({
                     <PlannerCalendar
                       selectedDate={new Date()}
                       onDateChange={handleCopyItem}
-                      title={!useCompactActions ? "Copy to" : ""}
+                      title={!useCompactActions ? 'Copy to' : ''}
                       predefinedDates={predefinedDates}
                     />
                   </DropdownSubmenu>
@@ -255,7 +255,7 @@ const PlannerDayItem = ({
                     <PlannerCalendar
                       selectedDate={new Date()}
                       onDateChange={handleSnoozeItem}
-                      title={!useCompactActions ? "Snooze to" : ""}
+                      title={!useCompactActions ? 'Snooze to' : ''}
                       predefinedDates={predefinedDates}
                     />
                   </DropdownSubmenu>

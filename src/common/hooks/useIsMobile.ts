@@ -4,7 +4,7 @@ const MAX_MOBILE_WIDTH = 768;
 
 export const useIsMobile = (breakpoint: number = MAX_MOBILE_WIDTH) => {
   const [isMobile, setIsMobile] = useState(
-    typeof window !== 'undefined' ? window.innerWidth < breakpoint : false
+    typeof window !== 'undefined' ? window.innerWidth < breakpoint : false,
   );
 
   useEffect(() => {

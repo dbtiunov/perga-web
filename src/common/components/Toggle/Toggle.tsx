@@ -25,9 +25,7 @@ export const Toggle = <T,>({
   const isHorizontal = orientation === 'horizontal';
 
   return (
-    <div
-      className={`flex ${isHorizontal ? 'items-center flex-row' : 'flex-col'} ${className}`}
-    >
+    <div className={`flex ${isHorizontal ? 'items-center flex-row' : 'flex-col'} ${className}`}>
       {options.map((option, index) => {
         const isActive = option.value === value;
         const isFirst = index === 0;

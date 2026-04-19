@@ -35,10 +35,10 @@ describe('useIsMobile', () => {
     expect(result.current).toBe(true);
 
     act(() => {
-        vi.stubGlobal('innerWidth', 1024);
-        window.dispatchEvent(new Event('resize'));
-      });
-  
-      expect(result.current).toBe(false);
+      vi.stubGlobal('innerWidth', 1024);
+      window.dispatchEvent(new Event('resize'));
+    });
+
+    expect(result.current).toBe(false);
   });
 });

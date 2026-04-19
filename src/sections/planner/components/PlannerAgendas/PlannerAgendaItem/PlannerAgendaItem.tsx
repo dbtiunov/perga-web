@@ -259,7 +259,9 @@ const PlannerAgendaItem = ({
                 <div className="border-t border-gray-200" />
                 <div>
                   {copyAgendasMap?.currentMonth.id !== item.agenda_id && (
-                    <DropdownItem onClick={() => handleCopyToAgenda(copyAgendasMap?.currentMonth.id)}>
+                    <DropdownItem
+                      onClick={() => handleCopyToAgenda(copyAgendasMap?.currentMonth.id)}
+                    >
                       Current month ({copyAgendasMap?.currentMonth.name})
                     </DropdownItem>
                   )}
@@ -296,7 +298,9 @@ const PlannerAgendaItem = ({
                 <div className="border-t border-gray-200" />
                 <div>
                   {copyAgendasMap?.currentMonth.id !== item.agenda_id && (
-                    <DropdownItem onClick={() => handleMoveToAgenda(copyAgendasMap?.currentMonth.id)}>
+                    <DropdownItem
+                      onClick={() => handleMoveToAgenda(copyAgendasMap?.currentMonth.id)}
+                    >
                       Current month ({copyAgendasMap?.currentMonth.name})
                     </DropdownItem>
                   )}
