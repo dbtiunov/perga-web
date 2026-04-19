@@ -1,6 +1,7 @@
 import React, { KeyboardEvent, useRef, useState, useEffect } from 'react';
 
 import type { PlannerAgendaDTO, PlannerAgendaUpdateDTO } from '@api/planner';
+import { Dropdown, DropdownItem } from '@common/components/Dropdown';
 import { Icon } from '@common/components/Icon';
 import { AGENDA_NAME_MAX_LENGTH } from '@planner/const';
 
@@ -113,27 +114,30 @@ const AgendaLine: React.FC<AgendaLineProps> = ({
 
       {!isEmptyLine && (
         <div className="flex-none opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity p-2 text-text-main flex items-center gap-2">
-          <button
-            type="button"
-            onClick={() =>
-              onUpdateAgenda(agenda.id, { agenda_type: isArchived ? 'custom' : 'archived' })
-            }
-            aria-label={isArchived ? 'Unarchive agenda' : 'Archive agenda'}
-            title={isArchived ? 'Unarchive agenda' : 'Archive agenda'}
-            className="text-sm text-current hover:underline focus:outline-none focus-visible:ring-2
-                          focus-visible:ring-gray-400 rounded"
+          <Dropdown
+            buttonIcon={<Icon name="dots" size={24} className="h-5 w-5" />}
+            buttonTitle="Agenda actions"
+            buttonClassName="p-1 hover:bg-bg-hover rounded-full transition-colors"
+            dropdownClassName="w-48"
           >
-            {isArchived ? 'Unarchive' : 'Archive'}
-          </button>
-          <button
-            type="button"
-            onClick={() => onDeleteAgenda?.(agenda.id)}
-            aria-label="Delete agenda"
-            title="Delete agenda"
-            className="disabled:opacity-50"
-          >
-            <Icon name="trash" size={24} className="h-5 w-5" />
-          </button>
+            <DropdownItem
+              onClick={() =>
+                onUpdateAgenda(agenda.id, { agenda_type: isArchived ? 'custom' : 'archived' })
+              }
+              title={isArchived ? 'Unarchive agenda' : 'Archive agenda'}
+              aria-label={isArchived ? 'Unarchive agenda' : 'Archive agenda'}
+            >
+              {isArchived ? 'Unarchive' : 'Archive'}
+            </DropdownItem>
+            <DropdownItem
+              onClick={() => onDeleteAgenda?.(agenda.id)}
+              title="Delete agenda"
+              aria-label="Delete agenda"
+            >
+              <Icon name="trash" size={20} className="h-4 w-4 mr-2" />
+              Delete
+            </DropdownItem>
+          </Dropdown>
         </div>
       )}
     </div>

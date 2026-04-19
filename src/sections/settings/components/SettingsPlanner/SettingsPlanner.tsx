@@ -7,10 +7,12 @@ import { Icon } from '@common/components/Icon';
 import { Toggle, ToggleOption } from '@common/components/Toggle';
 import { useAuth } from '@common/contexts/auth/useAuth';
 import { useToast } from '@common/contexts/toast/useToast';
+import { useIsMobile } from '@common/hooks/useIsMobile';
 import { useSettingsAgendas } from '@planner/hooks/useSettingsAgendas';
 import AgendaLine from '@settings/components/SettingsPlanner/AgendaLine/AgendaLine';
 
 export const SettingsPlanner: React.FC = () => {
+  const isMobile = useIsMobile();
   const { user, fetchUser } = useAuth();
   const { showToast, showError } = useToast();
   const {
@@ -161,10 +163,15 @@ export const SettingsPlanner: React.FC = () => {
         <fieldset className="border border-gray-400 rounded p-8">
           <legend className="px-2 text-text-main">Preferences</legend>
 
-          <div className="flex items-center justify-between mt-4 mb-6">
+          <div className="flex flex-col md:flex-row md:items-center justify-between mt-4 mb-6 gap-4">
             <h4 className="text-text-main text-sm font-medium">Week Starts On</h4>
 
-            <Toggle options={weekStartDayOptions} value={weekStartDay} onChange={setWeekStartDay} />
+            <Toggle
+              options={weekStartDayOptions}
+              value={weekStartDay}
+              onChange={setWeekStartDay}
+              orientation={isMobile ? 'vertical' : 'horizontal'}
+            />
           </div>
 
           <div className="flex items-center justify-between mt-8 mb-6">
