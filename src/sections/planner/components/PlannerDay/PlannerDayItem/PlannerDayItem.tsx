@@ -124,22 +124,12 @@ const PlannerDayItem = ({
 
   return (
     <div
-      className={`group flex items-center gap-2 min-h-10 transition-opacity duration-200 hover:bg-bg-hover rounded
+      className={`group flex items-center gap-2 min-h-10 transition-opacity duration-200 hover:bg-bg-hover rounded pl-2
                      ${isDragging ? 'opacity-50' : 'opacity-100'}`}
       draggable={canDrag}
       onDragStart={canDrag ? handleDragStart : undefined}
       onDragEnd={canDrag ? handleDragEnd : undefined}
     >
-      {canDrag && (
-        <div
-          className="flex-none cursor-grab opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity"
-          aria-label="Drag to reorder"
-          title="Drag to reorder"
-        >
-          <Icon name="drag" size={24} className="h-4 w-4 text-text-main" />
-        </div>
-      )}
-
       {showCheckbox && (
         <div
           onClick={onToggleCheckbox}
@@ -184,7 +174,7 @@ const PlannerDayItem = ({
             onUpdateItem(item.id, { text: value });
           }}
           className={`min-w-0 flex-1 bg-transparent border-none focus:outline-none focus:ring-0
-                        ${isEmptyItem ? 'px-15' : 'px-2'}`}
+                        ${isEmptyItem ? 'px-9' : 'px-2'}`}
           placeholder={isEmptyItem ? 'Jot something...' : ''}
         />
       ) : (
@@ -250,7 +240,7 @@ const PlannerDayItem = ({
                     <PlannerCalendar
                       selectedDate={new Date()}
                       onDateChange={handleCopyItem}
-                      title="Copy to"
+                      title={!useCompactActions ? 'Copy to' : ''}
                       predefinedDates={predefinedDates}
                     />
                   </DropdownSubmenu>
@@ -265,7 +255,7 @@ const PlannerDayItem = ({
                     <PlannerCalendar
                       selectedDate={new Date()}
                       onDateChange={handleSnoozeItem}
-                      title="Snooze to"
+                      title={!useCompactActions ? 'Snooze to' : ''}
                       predefinedDates={predefinedDates}
                     />
                   </DropdownSubmenu>

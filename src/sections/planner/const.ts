@@ -1,7 +1,7 @@
 import type { PlannerAgendaActionDTO } from '@api/planner';
 
 export const WEEKDAY_SHORT_NAMES: string[] = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
-export const DATE_SELECTOR_DAYS_COUNT: number = 5;
+export const DATE_SELECTOR_DAYS_COUNT: number = 4;
 export const PLANNER_DAYS_COUNT: number = 7;
 
 export const ITEM_TEXT_MAX_LENGTH: number = 256;

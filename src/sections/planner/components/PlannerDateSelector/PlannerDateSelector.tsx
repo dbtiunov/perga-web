@@ -35,12 +35,10 @@ const PlannerDateSelector: React.FC<DateSelectorProps> = ({
 
   const datesList = useMemo(() => {
     const count = Math.max(1, DATE_SELECTOR_DAYS_COUNT);
-    const half = Math.floor(count / 2);
     const dates: Date[] = [];
 
-    // Start from selectedDate - half, move forward
     const start = new Date(selectedDate);
-    start.setDate(start.getDate() - half);
+    start.setDate(start.getDate() - 1);
     for (let i = 0; i < count; i++) {
       const date = new Date(start);
       date.setDate(start.getDate() + i);

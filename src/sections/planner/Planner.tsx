@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 
 import { TwoPaneLayout } from '@common/components/TwoPaneLayout';
 import { useAuth } from '@common/contexts/auth/useAuth';
+import { useIsMobile } from '@common/hooks/useIsMobile';
 import { getStartOfWeek } from '@common/utils/date_utils';
 import { StorageKeys } from '@common/utils/storage_keys';
 import PlannerAgendas from '@planner/components/PlannerAgendas/PlannerAgendas';
@@ -18,6 +19,7 @@ const MIN_LEFT_PANE_WIDTH_PERCENT = 30;
 const MAX_LEFT_PANE_WIDTH_PERCENT = 70;
 
 const Planner = () => {
+  const isMobile = useIsMobile();
   const { user } = useAuth();
   const weekStartDay = user?.week_start_day || 'monday';
   const { viewMode, setViewMode } = usePlannerViewMode();
@@ -74,7 +76,7 @@ const Planner = () => {
               />
             </div>
             <div className="absolute right-5 top-1/2 -translate-y-1/2">
-              <PlannerConfig viewMode={viewMode} onViewModeChange={setViewMode} />
+              {!isMobile && <PlannerConfig viewMode={viewMode} onViewModeChange={setViewMode} />}
             </div>
           </div>
 
@@ -93,6 +95,7 @@ const Planner = () => {
             handleDeleteDayItem={handleDeleteDayItem}
             handleCopyDayItem={handleCopyDayItem}
             handleSnoozeDayItem={handleSnoozeDayItem}
+            useCompactActions={isMobile}
           />
         </>
       }

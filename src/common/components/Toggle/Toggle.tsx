@@ -11,6 +11,7 @@ interface ToggleProps<T> {
   onChange: (value: T) => void;
   className?: string;
   optionClassName?: string;
+  orientation?: 'horizontal' | 'vertical';
 }
 
 export const Toggle = <T,>({
@@ -19,19 +20,34 @@ export const Toggle = <T,>({
   onChange,
   className = '',
   optionClassName = '',
+  orientation = 'horizontal',
 }: ToggleProps<T>) => {
+  const isHorizontal = orientation === 'horizontal';
+
   return (
-    <div className={`flex items-center ${className}`}>
+    <div className={`flex ${isHorizontal ? 'items-center flex-row' : 'flex-col'} ${className}`}>
       {options.map((option, index) => {
         const isActive = option.value === value;
         const isFirst = index === 0;
         const isLast = index === options.length - 1;
 
         let borderClass = '';
-        if (isFirst) {
-          borderClass = 'rounded-l';
-        } else if (isLast) {
-          borderClass = 'rounded-r border-l-0';
+        if (isHorizontal) {
+          if (isFirst) {
+            borderClass = 'rounded-l';
+          } else if (isLast) {
+            borderClass = 'rounded-r border-l-0';
+          } else {
+            borderClass = 'border-l-0';
+          }
+        } else {
+          if (isFirst) {
+            borderClass = 'rounded-t';
+          } else if (isLast) {
+            borderClass = 'rounded-b border-t-0';
+          } else {
+            borderClass = 'border-t-0';
+          }
         }
 
         let activeClass = '';

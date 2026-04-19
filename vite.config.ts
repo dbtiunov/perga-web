@@ -35,7 +35,7 @@ export default defineConfig({
         ],
       },
       manifest: {
-        name: 'Perga Web',
+        name: 'Perga',
         short_name: 'Perga',
         description: 'Perga - Personal organizer app',
         id: '/',

@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.1.7] - 2026-04-19
+
+### Added
+
+- useIsMobile hook
+
+### Changed
+
+- Planner items actions look
+- Planner date selector look
+- SettingsPlanner look
+- Optimized docs screenshots
+
 ## [1.1.6] - 2026-04-14
 
 ### Changed

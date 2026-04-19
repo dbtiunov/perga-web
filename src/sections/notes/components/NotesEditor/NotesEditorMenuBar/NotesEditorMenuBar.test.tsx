@@ -64,7 +64,7 @@ describe('NotesEditorMenuBar', () => {
   it('calls toggleBold when Bold button is clicked', () => {
     const editor = createMockEditor();
     render(<NotesEditorMenuBar editor={editor} />);
-    
+
     fireEvent.click(screen.getByTitle('Bold'));
     expect(editor.chain().focus().toggleBold().run).toHaveBeenCalled();
   });
@@ -72,7 +72,7 @@ describe('NotesEditorMenuBar', () => {
   it('calls toggleItalic when Italic button is clicked', () => {
     const editor = createMockEditor();
     render(<NotesEditorMenuBar editor={editor} />);
-    
+
     fireEvent.click(screen.getByTitle('Italic'));
     expect(editor.chain().focus().toggleItalic().run).toHaveBeenCalled();
   });
@@ -80,7 +80,7 @@ describe('NotesEditorMenuBar', () => {
   it('calls toggleUnderline when Underline button is clicked', () => {
     const editor = createMockEditor();
     render(<NotesEditorMenuBar editor={editor} />);
-    
+
     fireEvent.click(screen.getByTitle('Underline'));
     expect(editor.chain().focus().toggleUnderline().run).toHaveBeenCalled();
   });
@@ -88,7 +88,7 @@ describe('NotesEditorMenuBar', () => {
   it('calls toggleStrike when Strike button is clicked', () => {
     const editor = createMockEditor();
     render(<NotesEditorMenuBar editor={editor} />);
-    
+
     fireEvent.click(screen.getByTitle('Strike'));
     expect(editor.chain().focus().toggleStrike().run).toHaveBeenCalled();
   });
@@ -96,7 +96,7 @@ describe('NotesEditorMenuBar', () => {
   it('calls toggleHeading with level 1 when Heading 1 button is clicked', () => {
     const editor = createMockEditor();
     render(<NotesEditorMenuBar editor={editor} />);
-    
+
     fireEvent.click(screen.getByTitle('Heading 1'));
     expect(editor.chain().focus().toggleHeading).toHaveBeenCalledWith({ level: 1 });
     expect(editor.chain().focus().toggleHeading({ level: 1 }).run).toHaveBeenCalled();
@@ -105,7 +105,7 @@ describe('NotesEditorMenuBar', () => {
   it('calls toggleBulletList when Bullet List button is clicked', () => {
     const editor = createMockEditor();
     render(<NotesEditorMenuBar editor={editor} />);
-    
+
     fireEvent.click(screen.getByTitle('Bullet List'));
     expect(editor.chain().focus().toggleBulletList().run).toHaveBeenCalled();
   });
@@ -113,7 +113,7 @@ describe('NotesEditorMenuBar', () => {
   it('calls toggleOrderedList when Ordered List button is clicked', () => {
     const editor = createMockEditor();
     render(<NotesEditorMenuBar editor={editor} />);
-    
+
     fireEvent.click(screen.getByTitle('Ordered List'));
     expect(editor.chain().focus().toggleOrderedList().run).toHaveBeenCalled();
   });
@@ -121,7 +121,7 @@ describe('NotesEditorMenuBar', () => {
   it('calls toggleTaskList when Todo List button is clicked', () => {
     const editor = createMockEditor();
     render(<NotesEditorMenuBar editor={editor} />);
-    
+
     fireEvent.click(screen.getByTitle('Todo List'));
     expect(editor.chain().focus().toggleTaskList().run).toHaveBeenCalled();
   });
@@ -129,9 +129,9 @@ describe('NotesEditorMenuBar', () => {
   it('correctly identifies active taskList', () => {
     const editor = createMockEditor();
     editor.isActive = vi.fn((name) => name === 'taskList');
-    
+
     render(<NotesEditorMenuBar editor={editor} />);
-    
+
     const todoButton = screen.getByTitle('Todo List');
     expect(todoButton.className).toContain('bg-bg-hover');
   });
@@ -139,7 +139,7 @@ describe('NotesEditorMenuBar', () => {
   it('calls toggleBlockquote when Blockquote button is clicked', () => {
     const editor = createMockEditor();
     render(<NotesEditorMenuBar editor={editor} />);
-    
+
     fireEvent.click(screen.getByTitle('Blockquote'));
     expect(editor.chain().focus().toggleBlockquote().run).toHaveBeenCalled();
   });
@@ -147,7 +147,7 @@ describe('NotesEditorMenuBar', () => {
   it('calls toggleCodeBlock when Code Block button is clicked', () => {
     const editor = createMockEditor();
     render(<NotesEditorMenuBar editor={editor} />);
-    
+
     fireEvent.click(screen.getByTitle('Code Block'));
     expect(editor.chain().focus().toggleCodeBlock().run).toHaveBeenCalled();
   });
@@ -155,7 +155,7 @@ describe('NotesEditorMenuBar', () => {
   it('calls setHorizontalRule when Horizontal Line button is clicked', () => {
     const editor = createMockEditor();
     render(<NotesEditorMenuBar editor={editor} />);
-    
+
     fireEvent.click(screen.getByTitle('Horizontal Line'));
     expect(editor.chain().focus().setHorizontalRule().run).toHaveBeenCalled();
   });
@@ -163,7 +163,7 @@ describe('NotesEditorMenuBar', () => {
   it('calls undo when Undo button is clicked', () => {
     const editor = createMockEditor();
     render(<NotesEditorMenuBar editor={editor} />);
-    
+
     fireEvent.click(screen.getByTitle('Undo'));
     expect(editor.chain().focus().undo().run).toHaveBeenCalled();
   });
@@ -171,7 +171,7 @@ describe('NotesEditorMenuBar', () => {
   it('calls redo when Redo button is clicked', () => {
     const editor = createMockEditor();
     render(<NotesEditorMenuBar editor={editor} />);
-    
+
     fireEvent.click(screen.getByTitle('Redo'));
     expect(editor.chain().focus().redo().run).toHaveBeenCalled();
   });
@@ -181,21 +181,23 @@ describe('NotesEditorMenuBar', () => {
       const editor = createMockEditor();
       vi.spyOn(window, 'prompt').mockReturnValue('https://example.com');
       render(<NotesEditorMenuBar editor={editor} />);
-      
+
       fireEvent.click(screen.getByTitle('Link'));
-      
+
       expect(editor.chain().focus().extendMarkRange).toHaveBeenCalledWith('link');
       expect(editor.chain().focus().setLink).toHaveBeenCalledWith({ href: 'https://example.com' });
-      expect(editor.chain().focus().setLink({ href: 'https://example.com' }).run).toHaveBeenCalled();
+      expect(
+        editor.chain().focus().setLink({ href: 'https://example.com' }).run,
+      ).toHaveBeenCalled();
     });
 
     it('unsets link when URL is empty', () => {
       const editor = createMockEditor();
       vi.spyOn(window, 'prompt').mockReturnValue('');
       render(<NotesEditorMenuBar editor={editor} />);
-      
+
       fireEvent.click(screen.getByTitle('Link'));
-      
+
       expect(editor.chain().focus().extendMarkRange).toHaveBeenCalledWith('link');
       expect(editor.chain().focus().unsetLink().run).toHaveBeenCalled();
     });
@@ -204,9 +206,9 @@ describe('NotesEditorMenuBar', () => {
       const editor = createMockEditor();
       vi.spyOn(window, 'prompt').mockReturnValue(null);
       render(<NotesEditorMenuBar editor={editor} />);
-      
+
       fireEvent.click(screen.getByTitle('Link'));
-      
+
       expect(editor.chain).not.toHaveBeenCalled();
     });
   });
@@ -214,13 +216,13 @@ describe('NotesEditorMenuBar', () => {
   it('applies active class when button is active', () => {
     const editor = createMockEditor();
     editor.isActive = vi.fn((name) => name === 'bold');
-    
+
     render(<NotesEditorMenuBar editor={editor} />);
-    
+
     const boldButton = screen.getByTitle('Bold');
     expect(boldButton.className).toContain('bg-bg-hover');
     expect(boldButton.className).toContain('text-text-main');
-    
+
     const italicButton = screen.getByTitle('Italic');
     expect(italicButton.className).not.toContain('bg-bg-hover');
     expect(italicButton.className).toContain('text-text-muted');
