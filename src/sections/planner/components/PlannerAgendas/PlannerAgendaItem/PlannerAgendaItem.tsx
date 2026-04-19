@@ -176,16 +176,6 @@ const PlannerAgendaItem = ({
       onDragStart={canDrag ? handleDragStart : undefined}
       onDragEnd={canDrag ? handleDragEnd : undefined}
     >
-      {canDrag && (
-        <div
-          className="flex-none cursor-grab opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity"
-          aria-label="Drag to reorder"
-          title="Drag to reorder"
-        >
-          <Icon name="drag" size={24} className="h-4 w-4 text-text-main" />
-        </div>
-      )}
-
       {showCheckbox && (
         <div
           onClick={onToggleCheckbox}
@@ -225,8 +215,8 @@ const PlannerAgendaItem = ({
             }
           }}
           onKeyDown={handleKeyDown}
-          className={`min-w-0 flex-1 bg-transparent border-none focus:outline-none focus:ring-0 
-                           ${isEmptyItem ? 'px-14' : 'px-1'}`}
+          className={`min-w-0 flex-1 bg-transparent border-none focus:outline-none focus:ring-0 pr-1 
+                           ${isEmptyItem ? 'pl-8' : 'pl-1'}`}
           placeholder={isEmptyItem ? 'Plan ahead for the month' : ''}
         />
       ) : (

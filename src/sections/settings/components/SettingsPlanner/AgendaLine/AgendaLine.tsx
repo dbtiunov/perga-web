@@ -74,16 +74,6 @@ const AgendaLine: React.FC<AgendaLineProps> = ({
           : undefined
       }
     >
-      {!isEmptyLine && !isArchived && (
-        <div
-          className="flex-none cursor-grab opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity"
-          aria-label="Drag to reorder"
-          title="Drag to reorder"
-        >
-          <Icon name="drag" size={24} className="h-4 w-4 text-text-main" />
-        </div>
-      )}
-
       {isEditing ? (
         <input
           ref={inputRef}
