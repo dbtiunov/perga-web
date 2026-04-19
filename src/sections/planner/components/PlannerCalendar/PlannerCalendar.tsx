@@ -81,9 +81,14 @@ const PlannerCalendar: React.FC<CalendarProps> = ({
   return (
     <>
       {(title || predefinedDates?.length) && (
-        <div className="border-gray-200 border-b-1">
-          {title && <div className="px-4 py-3 text-xs uppercase text-text-main">{title}</div>}
+        <div className="border-gray-200 border-b">
+          {title && (
+            <>
+              <div className="px-4 py-3 text-xs uppercase text-text-main text-center">{title}</div>
+            </>
+          )}
 
+          <div className="border-t border-gray-200" />
           {predefinedDates?.length && (
             <div className="grid grid-cols-1 gap-2">
               {predefinedDates.map((predefinedDate: { label: string; date: Date }) => (

@@ -25,6 +25,7 @@ interface PlannerViewProps {
   handleDeleteDayItem: (itemId: number) => void;
   handleCopyDayItem: (itemId: number, date: Date) => void;
   handleSnoozeDayItem: (itemId: number, date: Date) => void;
+  useCompactActions?: boolean;
 }
 
 const PlannerView: React.FC<PlannerViewProps> = ({
@@ -42,6 +43,7 @@ const PlannerView: React.FC<PlannerViewProps> = ({
   handleDeleteDayItem,
   handleCopyDayItem,
   handleSnoozeDayItem,
+  useCompactActions,
 }) => {
   if (viewMode === 'weekly') {
     // Weekly View Mode
@@ -180,7 +182,7 @@ const PlannerView: React.FC<PlannerViewProps> = ({
             onDeleteDayItem={handleDeleteDayItem}
             onCopyDayItem={handleCopyDayItem}
             onSnoozeDayItem={handleSnoozeDayItem}
-            useCompactActions={false}
+            useCompactActions={useCompactActions}
             isMergedWeekend={isMergedWeekend}
             extraClassName="min-h-[45vh] flex-none"
           />

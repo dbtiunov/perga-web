@@ -174,7 +174,7 @@ const PlannerDayItem = ({
             onUpdateItem(item.id, { text: value });
           }}
           className={`min-w-0 flex-1 bg-transparent border-none focus:outline-none focus:ring-0
-                        ${isEmptyItem ? 'px-15' : 'px-2'}`}
+                        ${isEmptyItem ? 'px-9' : 'px-2'}`}
           placeholder={isEmptyItem ? 'Jot something...' : ''}
         />
       ) : (
@@ -240,7 +240,7 @@ const PlannerDayItem = ({
                     <PlannerCalendar
                       selectedDate={new Date()}
                       onDateChange={handleCopyItem}
-                      title="Copy to"
+                      title={!useCompactActions ? "Copy to" : ""}
                       predefinedDates={predefinedDates}
                     />
                   </DropdownSubmenu>
@@ -255,7 +255,7 @@ const PlannerDayItem = ({
                     <PlannerCalendar
                       selectedDate={new Date()}
                       onDateChange={handleSnoozeItem}
-                      title="Snooze to"
+                      title={!useCompactActions ? "Snooze to" : ""}
                       predefinedDates={predefinedDates}
                     />
                   </DropdownSubmenu>

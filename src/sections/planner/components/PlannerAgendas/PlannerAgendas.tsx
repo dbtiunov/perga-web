@@ -57,7 +57,7 @@ const PlannerAgendas: React.FC<AgendasProps> = ({
   selectedDate,
   copyAgendasMap,
   fetchAgendaItems,
-}) => {
+}: AgendasProps) => {
   const { collapsedAgendas, setCollapsedAgendas } = useCollapsedAgendas();
 
   // Ensure that newly created custom agendas are collapsed by default
@@ -126,7 +126,7 @@ const PlannerAgendas: React.FC<AgendasProps> = ({
                 buttonTitle="Agenda actions"
                 buttonClassName="p-2 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity"
                 className="inline-flex"
-                dropdownClassName="w-56 mt-8"
+                dropdownClassName="w-64 mt-8"
               >
                 {(Object.keys(AGENDA_ACTION_LABELS) as PlannerAgendaActionDTO[]).map((action) => (
                   <DropdownItem
@@ -134,6 +134,12 @@ const PlannerAgendas: React.FC<AgendasProps> = ({
                     onClick={() => handleAction(agenda, action)}
                     className="py-3"
                   >
+                    {action === 'delete_finished_items' && (
+                      <Icon name="trash" size={48} className="h-4 w-4 mr-2" />
+                    )}
+                    {action === 'sort_items_by_state' && (
+                      <Icon name="refresh" size={48} className="h-4 w-4 mr-2" />
+                    )}
                     {AGENDA_ACTION_LABELS[action]}
                   </DropdownItem>
                 ))}
