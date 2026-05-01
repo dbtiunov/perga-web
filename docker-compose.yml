@@ -10,4 +10,5 @@ services:
     environment:
       API_BASE_URL: ${API_BASE_URL}
       IS_SIGNUP_DISABLED: ${IS_SIGNUP_DISABLED}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
     restart: unless-stopped
