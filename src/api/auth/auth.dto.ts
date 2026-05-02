@@ -39,3 +39,8 @@ export interface TokenDTO {
 export interface RefreshTokenDTO {
   refresh_token: string;
 }
+
+export interface GoogleSigninDTO {
+  id_token?: string;
+  code?: string;
+}

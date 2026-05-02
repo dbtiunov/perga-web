@@ -6,10 +6,12 @@ import type {
   UserSigninDTO,
   UserUpdateDTO,
   UpdatePasswordDTO,
+  GoogleSigninDTO,
 } from '@api/auth';
 import {
   signin,
   signup,
+  googleSignin,
   storeToken,
   removeToken,
   isAuthenticated,
@@ -69,6 +71,18 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
+  const handleGoogleSignin = async (data: GoogleSigninDTO) => {
+    setIsLoading(true);
+    try {
+      const response = await googleSignin(data);
+      storeToken(response.data);
+
+      await handleFetchUser();
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const handleSignup = async (userData: UserSignupDTO) => {
     setIsLoading(true);
     try {
@@ -106,6 +120,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     user,
     signin: handleSignin,
     signup: handleSignup,
+    googleSignin: handleGoogleSignin,
     logout: handleLogout,
     fetchUser: handleFetchUser,
     updateUser: handleUpdateUser,

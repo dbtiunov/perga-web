@@ -12,6 +12,7 @@ import type {
   TokenDTO,
   UpdatePasswordDTO,
   RefreshTokenDTO,
+  GoogleSigninDTO,
 } from './auth.dto';
 
 const { API_BASE_URL } = getConfig();
@@ -23,6 +24,9 @@ export const signup = (userData: UserSignupDTO) =>
 
 export const signin = (userData: UserSigninDTO) =>
   axios.post<TokenDTO>(`${AUTH_API_URL}/access_token_json/`, userData);
+
+export const googleSignin = (data: GoogleSigninDTO) =>
+  axios.post<TokenDTO>(`${AUTH_API_URL}/google/`, data);
 
 export const refreshToken = (refreshTokenData: RefreshTokenDTO) =>
   axios.post<TokenDTO>(`${AUTH_API_URL}/refresh_token/`, refreshTokenData);

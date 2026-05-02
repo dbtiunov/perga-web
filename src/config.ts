@@ -1,6 +1,7 @@
 interface Config {
   API_BASE_URL: string;
   IS_SIGNUP_DISABLED: boolean;
+  GOOGLE_CLIENT_ID: string | null;
 }
 
 let config: Config | null = null;
@@ -27,6 +28,7 @@ export async function initConfig(): Promise<Config> {
     config = {
       API_BASE_URL: 'http://localhost:8080/api/v1',
       IS_SIGNUP_DISABLED: false,
+      GOOGLE_CLIENT_ID: null,
     };
   }
 
