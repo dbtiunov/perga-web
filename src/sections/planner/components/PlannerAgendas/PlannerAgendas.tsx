@@ -154,10 +154,12 @@ const PlannerAgendas: React.FC<AgendasProps> = ({
                       key={item.id}
                       onDragOver={(e) => {
                         e.preventDefault();
-                        if (!dragAgendaItem || dragAgendaItem.agenda_id !== agenda.id) return;
+                        if (!dragAgendaItem || dragAgendaItem.agenda_id !== agenda.id) {
+                          return;
+                        }
 
                         const draggingItemIndex = plannerAgendaItems[agenda.id].findIndex(
-                          (t) => t.id === dragAgendaItem.id,
+                          (agendaItem) => agendaItem.id === dragAgendaItem.id,
                         );
                         if (draggingItemIndex === index) {
                           return;

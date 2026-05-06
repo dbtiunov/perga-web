@@ -34,7 +34,7 @@ const PlannerDayItem = ({
   const itemDate = new Date(item.day);
   const isEmptyItem: boolean = item.id === -1;
 
-  const [isEditing, setIsEditing] = useState(isEmptyItem);
+  const [isEditing, setIsEditing] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [value, setValue] = useState(item.text);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -158,7 +158,7 @@ const PlannerDayItem = ({
         </div>
       )}
 
-      {isEditing ? (
+      {isEditing || isEmptyItem ? (
         <input
           ref={inputRef}
           type="text"
@@ -167,9 +167,6 @@ const PlannerDayItem = ({
           onKeyDown={handleKeyDown}
           onChange={(e) => setValue(e.target.value)}
           onBlur={() => {
-            if (isEmptyItem) {
-              return;
-            }
             setIsEditing(false);
             onUpdateItem(item.id, { text: value });
           }}
@@ -179,7 +176,7 @@ const PlannerDayItem = ({
         />
       ) : (
         <div
-          onClick={() => !isEmptyItem && setIsEditing(true)}
+          onClick={() => setIsEditing(true)}
           className={`flex-1 px-2 cursor-text break-all
                          ${item.state === 'todo' ? 'text-text-main' : 'line-through text-text-muted'}`}
         >
