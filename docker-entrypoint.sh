@@ -4,6 +4,7 @@ set -euo pipefail
 # Defaults (can be overridden by environment)
 : "${API_BASE_URL:=http://localhost:8080}"
 : "${IS_SIGNUP_DISABLED:=false}"
+: "${GOOGLE_CLIENT_ID:=null}"
 
 # Ensure boolean strings like true/True/1 and false/False/0
 case "$(printf %s "$IS_SIGNUP_DISABLED" | tr '[:upper:]' '[:lower:]')" in
@@ -12,7 +13,7 @@ case "$(printf %s "$IS_SIGNUP_DISABLED" | tr '[:upper:]' '[:lower:]')" in
   *) IS_SIGNUP_DISABLED=false ;;
 esac
 
-export API_BASE_URL IS_SIGNUP_DISABLED
+export API_BASE_URL IS_SIGNUP_DISABLED GOOGLE_CLIENT_ID
 
 TEMPLATE="/etc/perga/config.json.template"
 TARGET="/usr/share/nginx/html/config.json"
