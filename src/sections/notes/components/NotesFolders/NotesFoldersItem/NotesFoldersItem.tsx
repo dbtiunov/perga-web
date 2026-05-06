@@ -6,7 +6,12 @@ import type {
   NotesExportTargetDTO,
   NotesImportResponseDTO,
 } from '@api/notes';
-import { Dropdown, DropdownItem, DropdownSubmenu } from '@common/components/Dropdown';
+import {
+  Dropdown,
+  DropdownItem,
+  DropdownSubmenu,
+  useDropdown,
+} from '@common/components/Dropdown';
 import { Icon } from '@common/components/Icon';
 import { useToast } from '@common/contexts/toast/useToast';
 import { StorageKeys } from '@common/utils/storage_keys';
@@ -53,6 +58,7 @@ export const NotesFoldersItem = ({
   wrapperClass = '',
 }: FoldersItemProps) => {
   const { showToast, showError } = useToast();
+  const dropdown = useDropdown();
   const [isEditing, setIsEditing] = useState(false);
   const [isExpanded, setIsExpanded] = useState(() => {
     const saved = localStorage.getItem(StorageKeys.NotesExpandedFolders);
@@ -142,6 +148,7 @@ export const NotesFoldersItem = ({
       // reset state and input
       setIsImporting(false);
       event.target.value = '';
+      dropdown?.close();
     }
   };
 
@@ -313,7 +320,10 @@ export const NotesFoldersItem = ({
           >
             <Icon name="notePlus" size={14} className="h-4 w-4 mr-2" fill="currentColor" /> Add note
           </DropdownItem>
-          <DropdownItem className={isImporting ? 'opacity-50 cursor-not-allowed' : ''}>
+          <DropdownItem
+            className={isImporting ? 'opacity-50 cursor-not-allowed' : ''}
+            closeOnClick={false}
+          >
             <label className="flex items-center w-full cursor-pointer">
               <Icon name="upload" size={14} className="h-4 w-4 mr-2" fill="currentColor" />
               <span>{isImporting ? 'Importing...' : 'Import'}</span>
