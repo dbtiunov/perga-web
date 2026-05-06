@@ -241,7 +241,7 @@ const PlannerAgendaItem = ({
               <DropdownSubmenu
                 label={
                   <>
-                    <Icon name="copy" size={48} className="h-4 w-4 mr-2" /> Copy item
+                    <Icon name="copy" size={48} className="h-4 w-4 mr-2" /> Copy
                   </>
                 }
               >
@@ -291,7 +291,7 @@ const PlannerAgendaItem = ({
               <DropdownSubmenu
                 label={
                   <>
-                    <Icon name="move" size={48} className="h-4 w-4 mr-2" /> Move item
+                    <Icon name="move" size={48} className="h-4 w-4 mr-2" /> Move
                   </>
                 }
               >
@@ -327,10 +327,10 @@ const PlannerAgendaItem = ({
             </>
 
             <DropdownItem onClick={onDropActionClick} className="py-3">
-              <Icon name="drop" size={48} className="h-4 w-4 mr-2" /> Drop item
+              <Icon name="drop" size={48} className="h-4 w-4 mr-2" /> Drop
             </DropdownItem>
             <DropdownItem onClick={onDeleteActionClick} className="py-3">
-              <Icon name="trash" size={48} className="h-4 w-4 mr-2" /> Delete item
+              <Icon name="trash" size={48} className="h-4 w-4 mr-2" /> Delete
             </DropdownItem>
           </Dropdown>
         </div>

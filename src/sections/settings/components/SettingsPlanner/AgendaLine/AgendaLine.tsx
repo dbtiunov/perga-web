@@ -104,8 +104,8 @@ const AgendaLine: React.FC<AgendaLineProps> = ({
           {agenda.name}&nbsp;
           <span
             className="text-text-muted text-xs font-semibold"
-            title="Completed items / Total items"
-            aria-label="Completed items / Total items"
+            title="Completed / Total"
+            aria-label="Completed / Total"
           >
             {agenda.completed_items_cnt}/{agenda.completed_items_cnt + agenda.todo_items_cnt}
           </span>
