@@ -3,6 +3,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import type { NoteMetaDTO, NotesExportTypeDTO, NotesExportTargetDTO } from '@api/notes';
 import { Dropdown, DropdownItem, DropdownSubmenu } from '@common/components/Dropdown';
 import { Icon } from '@common/components/Icon';
+import { useNotes } from '@notes/context';
 
 interface FoldersNoteProps {
   note: NoteMetaDTO;
@@ -23,6 +24,9 @@ export const NotesFoldersNote = ({
   isSelected = false,
   className = '',
 }: FoldersNoteProps) => {
+  const { trashItemIds } = useNotes();
+  const isInTrash = trashItemIds.noteIds.includes(note.id);
+
   const [isEditing, setIsEditing] = useState(false);
   const [renameValue, setRenameValue] = useState(note.title || '');
   const inputRef = useRef<HTMLInputElement>(null);
@@ -81,7 +85,7 @@ export const NotesFoldersNote = ({
           className="flex-1 bg-transparent border-none focus:outline-none focus:ring-0 p-2"
         />
       ) : (
-        <div className="flex items-center flex-1 p-2 max-w-4/5">
+        <div className={`flex items-center flex-1 p-2 max-w-4/5 ${isInTrash ? 'opacity-50' : ''}`}>
           <Icon name="note" size="16" fill="currentColor" className="mr-2 opacity-70 shrink-0" />
           <span className="truncate">{note.title || 'Untitled Note'}</span>
         </div>

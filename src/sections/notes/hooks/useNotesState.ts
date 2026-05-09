@@ -21,10 +21,12 @@ import {
 import { REFRESH_EVENT } from '@common/events';
 import { downloadFile } from '@common/utils/download_utils';
 import { NOTES_DEFAULT_EXTENSION, NOTES_EXTENSION_MAP } from '@notes/const';
+import { NotesTrashItemIds } from '@notes/types.ts';
 
 export const useNotesState = () => {
   const [rootFolder, setRootFolder] = useState<NotesFolderResponseDTO | null>(null);
   const [trashFolder, setTrashFolder] = useState<NotesFolderResponseDTO | null>(null);
+  const [trashItemIds, setTrashItemIds] = useState<NotesTrashItemIds>({ folderIds: [], noteIds: [] });
   const [selectedNoteId, setSelectedNoteId] = useState<number | null>(() => {
     const saved = localStorage.getItem(StorageKeys.NotesSelectedNoteId);
     return saved ? parseInt(saved, 10) : null;
@@ -249,6 +251,29 @@ export const useNotesState = () => {
     }
   }, [selectedNoteId, fetchNoteContent]);
 
+  useEffect(() => {
+    if (!trashFolder) {
+      return;
+    }
+
+    const folderIds: number[] = [];
+    const noteIds: number[] = [];
+
+    const collectIds = (folder: NotesFolderResponseDTO) => {
+      folder.subfolders.forEach((subfolder) => {
+        folderIds.push(subfolder.id);
+        collectIds(subfolder);
+      });
+      folder.notes.forEach((note) => {
+        noteIds.push(note.id);
+      });
+    };
+
+    collectIds(trashFolder);
+
+    setTrashItemIds({ folderIds, noteIds });
+  }, [trashFolder]);
+
   // save selectedNoteId to localStorage
   useEffect(() => {
     if (selectedNoteId) {
@@ -287,5 +312,6 @@ export const useNotesState = () => {
     setSelectedNoteId,
     selectedNote,
     selectedNoteId,
+    trashItemIds,
   };
 };

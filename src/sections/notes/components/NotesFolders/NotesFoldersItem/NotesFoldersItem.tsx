@@ -17,6 +17,7 @@ import { useToast } from '@common/contexts/toast/useToast';
 import { StorageKeys } from '@common/utils/storage_keys';
 import { pluralize } from '@common/utils/string_utils';
 import { NotesFoldersNote } from '@notes/components/NotesFolders/NotesFoldersNote/NotesFoldersNote';
+import { useNotes } from '@notes/context';
 
 interface FoldersItemProps {
   folder: NotesFolderResponseDTO;
@@ -58,6 +59,7 @@ export const NotesFoldersItem = ({
   wrapperClass = '',
 }: FoldersItemProps) => {
   const { showToast, showError } = useToast();
+  const { trashItemIds } = useNotes();
   const dropdown = useDropdown();
   const [isEditing, setIsEditing] = useState(false);
   const [isExpanded, setIsExpanded] = useState(() => {
@@ -283,7 +285,11 @@ export const NotesFoldersItem = ({
               <Icon name="rightChevron" size="24" className="h-4 w-4" />
             </div>
             <Icon name="folder" size="14" fill="currentColor" className="mr-2 shrink-0" />
-            <span className="truncate">{folder.name}</span>
+            <span
+              className={`truncate ${trashItemIds.folderIds.includes(folder.id) ? 'opacity-50' : ''}`}
+            >
+              {folder.name}
+            </span>
           </div>
         )}
 

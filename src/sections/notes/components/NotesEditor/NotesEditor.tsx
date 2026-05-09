@@ -10,6 +10,7 @@ import type { NoteDTO } from '@api/notes';
 import { cleanEditorHTML } from '@common/utils/string_utils';
 import { NotesEditorMenuBar } from '@notes/components/NotesEditor/NotesEditorMenuBar/NotesEditorMenuBar';
 import { useNotesDebounceUpdate } from '@notes/components/NotesEditor/useNotesDebounceUpdate';
+import { useNotes } from '@notes/context';
 import '@notes/components/NotesEditor/notes_editor.css';
 
 interface NotesEditorProps {
@@ -18,6 +19,9 @@ interface NotesEditorProps {
 }
 
 export const NotesEditor: React.FC<NotesEditorProps> = ({ note, onUpdate }) => {
+  const { trashItemIds } = useNotes();
+  const isInTrash = note?.id ? trashItemIds.noteIds.includes(note.id) : false;
+
   const [title, setTitle] = useState(note?.title || '');
   const lastSyncedNoteIdRef = useRef<number | undefined>(undefined);
   const { debounceUpdate, hasPendingUpdate } = useNotesDebounceUpdate({
@@ -48,10 +52,12 @@ export const NotesEditor: React.FC<NotesEditorProps> = ({ note, onUpdate }) => {
     },
     editorProps: {
       attributes: {
-        class:
-          'flex-1 w-full bg-transparent border-none focus:outline-none focus:ring-0 text-text-main resize-none placeholder:text-text-main/30 leading-relaxed overflow-y-auto min-h-[200px]',
+        class: `flex-1 w-full bg-transparent border-none focus:outline-none focus:ring-0 text-text-main resize-none placeholder:text-text-main/30 leading-relaxed overflow-y-auto min-h-[200px] ${
+          isInTrash ? 'opacity-50' : ''
+        }`,
       },
     },
+    editable: !isInTrash,
   });
 
   // extract note values for using in dependencies
@@ -104,7 +110,9 @@ export const NotesEditor: React.FC<NotesEditorProps> = ({ note, onUpdate }) => {
         value={title}
         onChange={(e) => handleTitleChange(e.target.value)}
         placeholder="Note title"
-        className="text-2xl font-bold bg-transparent border-none focus:outline-none focus:ring-0 text-text-main placeholder:text-text-main/30"
+        className={`text-2xl font-bold bg-transparent border-none focus:outline-none focus:ring-0 text-text-main placeholder:text-text-main/30 ${
+          isInTrash ? 'opacity-50' : ''
+        }`}
       />
       <NotesEditorMenuBar editor={editor} />
       <EditorContent editor={editor} className="flex-1 overflow-hidden flex flex-col" />
