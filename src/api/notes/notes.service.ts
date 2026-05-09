@@ -35,7 +35,7 @@ export const createFolder = (folder: NotesFolderCreateDTO) =>
 export const updateFolder = (folderId: number, changes: NotesFolderUpdateDTO) =>
   axios.patch<NotesFolderDTO>(`${NOTES_API_URL}/folders/${folderId}/`, changes);
 
-export const emptyTrash = () => axios.post(`${NOTES_API_URL}/empty-trash/`);
+export const emptyTrash = () => axios.post(`${NOTES_API_URL}/folders/empty-trash/`);
 
 export const exportNotes = (params: NotesExportRequestSchema) =>
   axios.get(`${NOTES_API_URL}/export/`, { params, responseType: 'blob' });
