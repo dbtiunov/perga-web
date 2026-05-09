@@ -130,11 +130,16 @@ export const useNotesState = () => {
   const handleEmptyTrash = useCallback(async () => {
     try {
       await emptyTrash();
+
+      if (selectedNoteId && trashItemIds.noteIds.includes(selectedNoteId)) {
+        setSelectedNoteId(null);
+      }
+
       await fetchFolders();
     } catch (error) {
       console.error('Error emptying trash:', error);
     }
-  }, [fetchFolders]);
+  }, [fetchFolders, selectedNoteId, trashItemIds.noteIds]);
 
   const handleMoveFolder = useCallback(
     async (folderId: number, parentId: number) => {
