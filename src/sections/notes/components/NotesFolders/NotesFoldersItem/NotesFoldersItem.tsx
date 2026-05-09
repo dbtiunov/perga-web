@@ -41,6 +41,36 @@ interface FoldersItemProps {
   wrapperClass?: string;
 }
 
+interface NotesImportDropdownItemProps {
+  folderId: number;
+  isImporting: boolean;
+  onImport: (event: React.ChangeEvent<HTMLInputElement>, closeDropdown?: () => void) => Promise<void>;
+}
+
+const NotesImportDropdownItem = ({ isImporting, onImport }: NotesImportDropdownItemProps) => {
+  const dropdown = useDropdown();
+
+  return (
+    <DropdownItem
+      className={isImporting ? 'opacity-50 cursor-not-allowed' : ''}
+      closeOnClick={false}
+    >
+      <label className="flex items-center w-full cursor-pointer">
+        <Icon name="upload" size={14} className="h-4 w-4 mr-2" fill="currentColor" />
+        <span>{isImporting ? 'Importing...' : 'Import'}</span>
+        <input
+          type="file"
+          multiple
+          accept=".md,.markdown,.html,.htm,.txt,.pdf,.zip"
+          className="hidden"
+          onChange={(event) => void onImport(event, () => dropdown?.close())}
+          disabled={isImporting}
+        />
+      </label>
+    </DropdownItem>
+  );
+};
+
 export const NotesFoldersItem = ({
   folder,
   regularFolders,
@@ -60,7 +90,6 @@ export const NotesFoldersItem = ({
 }: FoldersItemProps) => {
   const { showToast, showError } = useToast();
   const { trashItemIds } = useNotes();
-  const dropdown = useDropdown();
   const [isEditing, setIsEditing] = useState(false);
   const [isExpanded, setIsExpanded] = useState(() => {
     const saved = localStorage.getItem(StorageKeys.NotesExpandedFolders);
@@ -130,7 +159,10 @@ export const NotesFoldersItem = ({
     setIsCreatingSubfolder(false);
   };
 
-  const onImport = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const onImport = async (
+    event: React.ChangeEvent<HTMLInputElement>,
+    closeDropdown?: () => void,
+  ) => {
     const files = event.target.files;
     if (!files || files.length === 0) {
       return;
@@ -150,7 +182,7 @@ export const NotesFoldersItem = ({
       // reset state and input
       setIsImporting(false);
       event.target.value = '';
-      dropdown?.close();
+      closeDropdown?.();
     }
   };
 
@@ -326,23 +358,11 @@ export const NotesFoldersItem = ({
           >
             <Icon name="notePlus" size={14} className="h-4 w-4 mr-2" fill="currentColor" /> Add note
           </DropdownItem>
-          <DropdownItem
-            className={isImporting ? 'opacity-50 cursor-not-allowed' : ''}
-            closeOnClick={false}
-          >
-            <label className="flex items-center w-full cursor-pointer">
-              <Icon name="upload" size={14} className="h-4 w-4 mr-2" fill="currentColor" />
-              <span>{isImporting ? 'Importing...' : 'Import'}</span>
-              <input
-                type="file"
-                multiple
-                accept=".md,.markdown,.html,.htm,.txt,.pdf,.zip"
-                className="hidden"
-                onChange={onImport}
-                disabled={isImporting}
-              />
-            </label>
-          </DropdownItem>
+          <NotesImportDropdownItem
+            folderId={folder.id}
+            isImporting={isImporting}
+            onImport={onImport}
+          />
           <DropdownSubmenu
             label={
               <>
