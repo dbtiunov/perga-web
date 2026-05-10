@@ -20,11 +20,11 @@
   padding-left: 0;
 }
 .tiptap ul[data-type='taskList'] li {
-  align-items: center;
   display: flex;
 }
 .tiptap ul[data-type='taskList'] li label {
   cursor: pointer;
+  margin-top: 1px;
 }
 .tiptap ul[data-type='taskList'] li div {
   margin-bottom: 5px;
