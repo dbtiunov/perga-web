@@ -208,9 +208,14 @@ export const useNotesState = () => {
         const contentDisposition = response.headers['content-disposition'] as string;
         let filename = '';
         if (contentDisposition) {
-          const filenameMatch = contentDisposition.match(/filename=(.+)/);
-          if (filenameMatch?.[1]) {
-            filename = filenameMatch[1].replace(/['"]/g, '');
+          const filenameStarMatch = contentDisposition.match(/filename\*=UTF-8''([^;]+)/i);
+          if (filenameStarMatch?.[1]) {
+            filename = decodeURIComponent(filenameStarMatch[1]);
+          } else {
+            const filenameMatch = contentDisposition.match(/filename=([^;]+)/);
+            if (filenameMatch?.[1]) {
+              filename = filenameMatch[1].replace(/['"]/g, '').trim();
+            }
           }
         }
 
