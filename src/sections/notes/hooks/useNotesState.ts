@@ -21,10 +21,12 @@ import {
 import { REFRESH_EVENT } from '@common/events';
 import { downloadFile } from '@common/utils/download_utils';
 import { NOTES_DEFAULT_EXTENSION, NOTES_EXTENSION_MAP } from '@notes/const';
+import { NotesTrashItemIds } from '@notes/types.ts';
 
 export const useNotesState = () => {
   const [rootFolder, setRootFolder] = useState<NotesFolderResponseDTO | null>(null);
   const [trashFolder, setTrashFolder] = useState<NotesFolderResponseDTO | null>(null);
+  const [trashItemIds, setTrashItemIds] = useState<NotesTrashItemIds>({ folderIds: [], noteIds: [] });
   const [selectedNoteId, setSelectedNoteId] = useState<number | null>(() => {
     const saved = localStorage.getItem(StorageKeys.NotesSelectedNoteId);
     return saved ? parseInt(saved, 10) : null;
@@ -128,11 +130,16 @@ export const useNotesState = () => {
   const handleEmptyTrash = useCallback(async () => {
     try {
       await emptyTrash();
+
+      if (selectedNoteId && trashItemIds.noteIds.includes(selectedNoteId)) {
+        setSelectedNoteId(null);
+      }
+
       await fetchFolders();
     } catch (error) {
       console.error('Error emptying trash:', error);
     }
-  }, [fetchFolders]);
+  }, [fetchFolders, selectedNoteId, trashItemIds.noteIds]);
 
   const handleMoveFolder = useCallback(
     async (folderId: number, parentId: number) => {
@@ -201,9 +208,14 @@ export const useNotesState = () => {
         const contentDisposition = response.headers['content-disposition'] as string;
         let filename = '';
         if (contentDisposition) {
-          const filenameMatch = contentDisposition.match(/filename=(.+)/);
-          if (filenameMatch?.[1]) {
-            filename = filenameMatch[1].replace(/['"]/g, '');
+          const filenameStarMatch = contentDisposition.match(/filename\*=UTF-8''([^;]+)/i);
+          if (filenameStarMatch?.[1]) {
+            filename = decodeURIComponent(filenameStarMatch[1]);
+          } else {
+            const filenameMatch = contentDisposition.match(/filename=([^;]+)/);
+            if (filenameMatch?.[1]) {
+              filename = filenameMatch[1].replace(/['"]/g, '').trim();
+            }
           }
         }
 
@@ -249,6 +261,29 @@ export const useNotesState = () => {
     }
   }, [selectedNoteId, fetchNoteContent]);
 
+  useEffect(() => {
+    if (!trashFolder) {
+      return;
+    }
+
+    const folderIds: number[] = [];
+    const noteIds: number[] = [];
+
+    const collectIds = (folder: NotesFolderResponseDTO) => {
+      folder.subfolders.forEach((subfolder) => {
+        folderIds.push(subfolder.id);
+        collectIds(subfolder);
+      });
+      folder.notes.forEach((note) => {
+        noteIds.push(note.id);
+      });
+    };
+
+    collectIds(trashFolder);
+
+    setTrashItemIds({ folderIds, noteIds });
+  }, [trashFolder]);
+
   // save selectedNoteId to localStorage
   useEffect(() => {
     if (selectedNoteId) {
@@ -287,5 +322,6 @@ export const useNotesState = () => {
     setSelectedNoteId,
     selectedNote,
     selectedNoteId,
+    trashItemIds,
   };
 };

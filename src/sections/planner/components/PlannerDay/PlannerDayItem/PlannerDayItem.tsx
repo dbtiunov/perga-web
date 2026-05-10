@@ -34,7 +34,7 @@ const PlannerDayItem = ({
   const itemDate = new Date(item.day);
   const isEmptyItem: boolean = item.id === -1;
 
-  const [isEditing, setIsEditing] = useState(isEmptyItem);
+  const [isEditing, setIsEditing] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [value, setValue] = useState(item.text);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -158,7 +158,7 @@ const PlannerDayItem = ({
         </div>
       )}
 
-      {isEditing ? (
+      {isEditing || isEmptyItem ? (
         <input
           ref={inputRef}
           type="text"
@@ -167,9 +167,6 @@ const PlannerDayItem = ({
           onKeyDown={handleKeyDown}
           onChange={(e) => setValue(e.target.value)}
           onBlur={() => {
-            if (isEmptyItem) {
-              return;
-            }
             setIsEditing(false);
             onUpdateItem(item.id, { text: value });
           }}
@@ -179,7 +176,7 @@ const PlannerDayItem = ({
         />
       ) : (
         <div
-          onClick={() => !isEmptyItem && setIsEditing(true)}
+          onClick={() => setIsEditing(true)}
           className={`flex-1 px-2 cursor-text break-all
                          ${item.state === 'todo' ? 'text-text-main' : 'line-through text-text-muted'}`}
         >
@@ -193,7 +190,7 @@ const PlannerDayItem = ({
             <>
               <Dropdown
                 buttonIcon={<Icon name="copy" size={48} className="h-6 w-6" />}
-                buttonTitle="Copy item"
+                buttonTitle="Copy"
                 className="ml-2"
                 dropdownClassName="w-64"
               >
@@ -207,7 +204,7 @@ const PlannerDayItem = ({
 
               <Dropdown
                 buttonIcon={<Icon name="snooze" size={48} className="h-6 w-6" />}
-                buttonTitle="Snooze item"
+                buttonTitle="Snooze"
                 className="ml-2"
                 dropdownClassName="w-64"
               >
@@ -233,7 +230,7 @@ const PlannerDayItem = ({
                   <DropdownSubmenu
                     label={
                       <>
-                        <Icon name="copy" size={48} className="h-4 w-4 mr-2" /> Copy item
+                        <Icon name="copy" size={48} className="h-4 w-4 mr-2" /> Copy
                       </>
                     }
                   >
@@ -248,7 +245,7 @@ const PlannerDayItem = ({
                   <DropdownSubmenu
                     label={
                       <>
-                        <Icon name="snooze" size={48} className="h-4 w-4 mr-2" /> Snooze item
+                        <Icon name="snooze" size={48} className="h-4 w-4 mr-2" /> Snooze
                       </>
                     }
                   >
@@ -261,11 +258,11 @@ const PlannerDayItem = ({
                   </DropdownSubmenu>
                 </>
               )}
-              <DropdownItem onClick={onDropActionClick} title="Drop item">
-                <Icon name="drop" size={48} className="h-4 w-4 mr-2" /> Drop item
+              <DropdownItem onClick={onDropActionClick} title="Drop">
+                <Icon name="drop" size={48} className="h-4 w-4 mr-2" /> Drop
               </DropdownItem>
-              <DropdownItem onClick={onDeleteActionClick} title="Delete item">
-                <Icon name="trash" size={48} className="h-4 w-4 mr-2" /> Delete item
+              <DropdownItem onClick={onDeleteActionClick} title="Delete">
+                <Icon name="trash" size={48} className="h-4 w-4 mr-2" /> Delete
               </DropdownItem>
             </Dropdown>
           )}

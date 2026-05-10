@@ -6,6 +6,8 @@ import { Icon } from '@common/components/Icon';
 import { StorageKeys } from '@common/utils/storage_keys';
 import { NotesFoldersTrashItem } from '@notes/components/NotesFolders/NotesFoldersTrash/NotesFoldersTrashItem/NotesFoldersTrashItem';
 
+import { useNotes } from '@notes/context';
+
 interface TrashProps {
   folder: NotesFolderResponseDTO;
   onEmptyTrash: () => Promise<void>;
@@ -27,6 +29,8 @@ export const NotesFoldersTrash: React.FC<TrashProps> = ({
   onSelectNote,
   selectedNoteId,
 }) => {
+  const { trashItemIds } = useNotes();
+
   const [isExpanded, setIsExpanded] = useState(() => {
     const saved = localStorage.getItem(StorageKeys.NotesExpandedFolders);
     if (saved) {
@@ -134,13 +138,15 @@ export const NotesFoldersTrash: React.FC<TrashProps> = ({
                   onClick={() => onSelectNote(note.id)}
                   className={`ml-4 mb-3 flex items-center p-2 hover:bg-bg-hover rounded text-text-main cursor-pointer ${note.id === selectedNoteId ? 'bg-bg-hover' : ''}`}
                 >
-                  <Icon
-                    name="note"
-                    size="16"
-                    fill="currentColor"
-                    className="mr-2 opacity-70 shrink-0"
-                  />
-                  <span className="truncate">{note.title || 'Untitled Note'}</span>
+                  <div className={`flex items-center flex-1 truncate ${trashItemIds.noteIds.includes(note.id) ? 'opacity-50' : ''}`}>
+                    <Icon
+                      name="note"
+                      size="16"
+                      fill="currentColor"
+                      className="mr-2 opacity-70 shrink-0"
+                    />
+                    <span className="truncate">{note.title || 'Untitled Note'}</span>
+                  </div>
                 </div>
               ))}
           </>

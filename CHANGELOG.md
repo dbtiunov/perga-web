@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.9] - 2026-05-10
+
+### Fixed
+
+- Planner items actions
+- Notes: import, export, styles
+
 ## [1.1.8] - 2026-05-02
 
 ### Added

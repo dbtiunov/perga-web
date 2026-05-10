@@ -41,7 +41,7 @@ const PlannerAgendaItem = ({
 }: AgendaItemProps) => {
   const isEmptyItem: boolean = item.id === -1;
 
-  const [isEditing, setIsEditing] = useState(isEmptyItem);
+  const [isEditing, setIsEditing] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [value, setValue] = useState(item.text);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -201,7 +201,7 @@ const PlannerAgendaItem = ({
         </div>
       )}
 
-      {isEditing ? (
+      {isEditing || isEmptyItem ? (
         <input
           ref={inputRef}
           type="text"
@@ -209,10 +209,8 @@ const PlannerAgendaItem = ({
           maxLength={ITEM_TEXT_MAX_LENGTH}
           onChange={(e) => setValue(e.target.value)}
           onBlur={() => {
-            if (!isEmptyItem) {
-              setIsEditing(false);
-              onUpdateItem(item.id, { text: value });
-            }
+            setIsEditing(false);
+            onUpdateItem(item.id, { text: value });
           }}
           onKeyDown={handleKeyDown}
           className={`min-w-0 flex-1 bg-transparent border-none focus:outline-none focus:ring-0 pr-1 
@@ -221,7 +219,7 @@ const PlannerAgendaItem = ({
         />
       ) : (
         <div
-          onClick={() => !isEmptyItem && setIsEditing(true)}
+          onClick={() => setIsEditing(true)}
           className={`flex-1 px-1 cursor-text break-all
                            ${item.state === 'completed' ? 'line-through text-text-muted' : 'text-text-main'}`}
         >
@@ -241,7 +239,7 @@ const PlannerAgendaItem = ({
               <DropdownSubmenu
                 label={
                   <>
-                    <Icon name="copy" size={48} className="h-4 w-4 mr-2" /> Copy item
+                    <Icon name="copy" size={48} className="h-4 w-4 mr-2" /> Copy
                   </>
                 }
               >
@@ -291,7 +289,7 @@ const PlannerAgendaItem = ({
               <DropdownSubmenu
                 label={
                   <>
-                    <Icon name="move" size={48} className="h-4 w-4 mr-2" /> Move item
+                    <Icon name="move" size={48} className="h-4 w-4 mr-2" /> Move
                   </>
                 }
               >
@@ -327,10 +325,10 @@ const PlannerAgendaItem = ({
             </>
 
             <DropdownItem onClick={onDropActionClick} className="py-3">
-              <Icon name="drop" size={48} className="h-4 w-4 mr-2" /> Drop item
+              <Icon name="drop" size={48} className="h-4 w-4 mr-2" /> Drop
             </DropdownItem>
             <DropdownItem onClick={onDeleteActionClick} className="py-3">
-              <Icon name="trash" size={48} className="h-4 w-4 mr-2" /> Delete item
+              <Icon name="trash" size={48} className="h-4 w-4 mr-2" /> Delete
             </DropdownItem>
           </Dropdown>
         </div>

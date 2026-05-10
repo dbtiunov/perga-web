@@ -8,6 +8,7 @@ interface DropdownItemProps {
   className?: string;
   title?: string;
   disabled?: boolean;
+  closeOnClick?: boolean;
 }
 
 export const DropdownItem: React.FC<DropdownItemProps> = ({
@@ -16,6 +17,7 @@ export const DropdownItem: React.FC<DropdownItemProps> = ({
   className = '',
   title = '',
   disabled = false,
+  closeOnClick = true,
 }) => {
   const dropdown = useDropdown();
 
@@ -26,7 +28,9 @@ export const DropdownItem: React.FC<DropdownItemProps> = ({
       onClick={(e) => {
         e.stopPropagation();
         onClick?.(e);
-        dropdown?.close();
+        if (closeOnClick) {
+          dropdown?.close();
+        }
       }}
       title={title}
       aria-label={title}
